@@ -1,6 +1,6 @@
 object frmHold: TfrmHold
-  Left = 401
-  Top = 290
+  Left = 303
+  Top = 174
   BorderIcons = []
   BorderStyle = bsSingle
   Caption = 'Facturas en HOLD'
@@ -566,6 +566,11 @@ object frmHold: TfrmHold
     LockType = ltBatchOptimistic
     Parameters = <
       item
+        Name = 'caja'
+        Size = -1
+        Value = Null
+      end
+      item
         Name = 'caj'
         DataType = ftInteger
         Size = -1
@@ -573,7 +578,11 @@ object frmHold: TfrmHold
       end>
     SQL.Strings = (
       'declare @caja int'
-      'set @caja = :caj'
+      'declare @cajero int'
+      ''
+      'set @caja = :caja'
+      'set @cajero= :caj'
+      ''
       'select f.FacturaID, f.Fecha, '
       
         'RTRIM(m.Nombre)+ISNULL(CASE WHEN ISNULL(F.NOMBRE,'#39#39')<>'#39#39' THEN '#39'/' +
@@ -581,10 +590,10 @@ object frmHold: TfrmHold
       'f.Total, f.CajeroID, f.CajaID, f.Abierta, f.AbiertaPor'
       'from Factura_RestBar f'
       'left outer join Mesas m on (f.MesaID = m.MesaID)'
-      'where f.Hold = 1 and (f.CajeroID = @caja or f.CajeroID = 0)'
+      'where f.Hold = 1 and (f.CajeroID = @cajero or  f.CajeroID = 0)'
       'and f.CajaID = @caja and f.estatus <> '#39'ANU'#39
       'order by f.Fecha')
-    Left = 136
+    Left = 104
     Top = 176
     object QFacturasFacturaID: TIntegerField
       FieldName = 'FacturaID'
@@ -724,6 +733,11 @@ object frmHold: TfrmHold
     LockType = ltBatchOptimistic
     Parameters = <
       item
+        Name = 'caja'
+        Size = -1
+        Value = Null
+      end
+      item
         Name = 'caj'
         DataType = ftInteger
         Size = -1
@@ -731,7 +745,11 @@ object frmHold: TfrmHold
       end>
     SQL.Strings = (
       'declare @caja int'
-      'set @caja = :caj'
+      'declare @cajero int'
+      ''
+      'set @caja = :caja'
+      'set @cajero= :caj'
+      ''
       'select f.FacturaID, f.Fecha, '
       
         'RTRIM(m.Nombre)+ISNULL(CASE WHEN ISNULL(F.NOMBRE,'#39#39')<>'#39#39' THEN '#39'/' +
@@ -739,7 +757,7 @@ object frmHold: TfrmHold
       'f.Total, f.CajeroID, f.CajaID, f.Abierta, f.AbiertaPor'
       'from Factura_RestBar f'
       'left outer join Mesas m on (f.MesaID = m.MesaID)'
-      'where f.Hold = 1 and (f.CajeroID = @caja or f.CajeroID = 0)'
+      'where f.Hold = 1 and (f.CajeroID = @cajero or f.CajeroID = 0)'
       'and f.CajaID = @caja and f.estatus <> '#39'ANU'#39
       'order by f.Fecha')
     Left = 384

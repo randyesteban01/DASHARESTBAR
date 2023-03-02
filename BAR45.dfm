@@ -1,6 +1,6 @@
 object frmConsDev: TfrmConsDev
-  Left = 230
-  Top = 172
+  Left = 206
+  Top = 154
   BorderIcons = []
   BorderStyle = bsSingle
   Caption = 'Consulta de Devoluciones'

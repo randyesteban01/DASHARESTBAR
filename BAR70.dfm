@@ -1,6 +1,6 @@
 object FrmSeleccionarImpresora: TFrmSeleccionarImpresora
-  Left = 575
-  Top = 238
+  Left = 576
+  Top = 239
   BorderIcons = [biSystemMenu]
   BorderStyle = bsToolWindow
   Caption = 'Seleccionar Impresora para enviar a otro BAR'
@@ -13,6 +13,7 @@ object FrmSeleccionarImpresora: TFrmSeleccionarImpresora
   Font.Name = 'MS Sans Serif'
   Font.Style = []
   OldCreateOrder = False
+  OnActivate = FormActivate
   OnCreate = FormCreate
   PixelsPerInch = 96
   TextHeight = 13
@@ -258,5 +259,36 @@ object FrmSeleccionarImpresora: TFrmSeleccionarImpresora
     ItemHeight = 24
     ParentFont = False
     TabOrder = 0
+  end
+  object QPrinter_Remoto: TADOQuery
+    Connection = DM.ADOBar
+    CursorType = ctStatic
+    Parameters = <>
+    SQL.Strings = (
+      'Select * From Printer_remoto'
+      'order by IDPrinter')
+    Left = 96
+    Top = 160
+    object QPrinter_RemotoIDPRINTER: TAutoIncField
+      FieldName = 'IDPRINTER'
+      ReadOnly = True
+    end
+    object QPrinter_RemotoDescripcion: TWideStringField
+      FieldName = 'Descripcion'
+      Size = 50
+    end
+    object QPrinter_RemotoPath_Printer: TWideStringField
+      FieldName = 'Path_Printer'
+      Size = 100
+    end
+    object QPrinter_Remotonombre_printer: TWideStringField
+      FieldName = 'nombre_printer'
+      Size = 255
+    end
+  end
+  object dsPrinterRemoto: TDataSource
+    DataSet = QPrinter_Remoto
+    Left = 168
+    Top = 160
   end
 end

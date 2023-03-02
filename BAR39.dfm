@@ -1,10 +1,10 @@
 object frmImpuestos: TfrmImpuestos
-  Left = 510
-  Top = 391
+  Left = 570
+  Top = 313
   BorderIcons = [biSystemMenu]
   BorderStyle = bsSingle
   Caption = 'Impuestos'
-  ClientHeight = 227
+  ClientHeight = 275
   ClientWidth = 335
   Color = clBtnFace
   Font.Charset = ANSI_CHARSET

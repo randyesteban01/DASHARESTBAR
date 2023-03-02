@@ -1,6 +1,6 @@
 object frmActImpresoraRemota: TfrmActImpresoraRemota
-  Left = 424
-  Top = 172
+  Left = 425
+  Top = 173
   ActiveControl = DBEdit2
   BorderIcons = []
   BorderStyle = bsSingle

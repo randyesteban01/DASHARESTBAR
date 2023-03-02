@@ -1,6 +1,6 @@
 object FrmHabitaciones: TFrmHabitaciones
   Left = 382
-  Top = 533
+  Top = 351
   Width = 554
   Height = 384
   BorderIcons = [biSystemMenu, biMinimize]

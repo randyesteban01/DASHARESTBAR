@@ -1,6 +1,6 @@
 object frmActProducto: TfrmActProducto
-  Left = 481
-  Top = 104
+  Left = 429
+  Top = 38
   BorderIcons = []
   BorderStyle = bsSingle
   Caption = 'Actualizando Producto'

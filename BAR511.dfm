@@ -1,6 +1,6 @@
 object frmConfImpFiscal: TfrmConfImpFiscal
-  Left = 239
-  Top = 257
+  Left = 302
+  Top = 208
   BorderIcons = []
   BorderStyle = bsSingle
   Caption = 'Printer'

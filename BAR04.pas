@@ -282,6 +282,7 @@ type
     QParametrosPAR_IMPCODBARRAFAM: TBooleanField;
     QParametrospar_banca_apuestas: TBooleanField;
     QEmpresaPrecioIncluyeItbis: TStringField;
+    QParametrosRestBar_FactConItbis: TBooleanField;
     procedure ADOBarAfterConnect(Sender: TObject);
     procedure ADOBarBeforeConnect(Sender: TObject);
     procedure DataModuleCreate(Sender: TObject);

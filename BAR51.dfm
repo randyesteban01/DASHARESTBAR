@@ -1,10 +1,10 @@
 object frmImpresoraRemota: TfrmImpresoraRemota
-  Left = 488
-  Top = 311
+  Left = 489
+  Top = 294
   BorderIcons = []
   BorderStyle = bsSingle
   Caption = 'Printer'
-  ClientHeight = 362
+  ClientHeight = 380
   ClientWidth = 719
   Color = clBtnFace
   Font.Charset = ANSI_CHARSET
@@ -402,7 +402,7 @@ object frmImpresoraRemota: TfrmImpresoraRemota
     Left = 0
     Top = 88
     Width = 719
-    Height = 274
+    Height = 292
     Align = alBottom
     Anchors = [akLeft, akTop, akRight, akBottom]
     TabOrder = 0
@@ -410,7 +410,7 @@ object frmImpresoraRemota: TfrmImpresoraRemota
       Left = 1
       Top = 1
       Width = 717
-      Height = 272
+      Height = 290
       Align = alClient
       DataSource = dsPrinterRemoto
       Options = [dgTitles, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit]

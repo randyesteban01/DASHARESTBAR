@@ -1,8 +1,8 @@
 object frmMain: TfrmMain
-  Left = 330
-  Top = 266
+  Left = 215
+  Top = 118
   Width = 1022
-  Height = 556
+  Height = 571
   Caption = 'DASHA RESTBAR'
   Color = clWhite
   Font.Charset = DEFAULT_CHARSET
@@ -19464,14 +19464,13 @@ object frmMain: TfrmMain
     Top = 0
     Width = 1109
     Height = 26
-    UseSystemFont = False
     ActionManager = ActionManager1
     Caption = 'ActionMainMenuBar1'
     ColorMap.HighlightColor = clWhite
     ColorMap.BtnSelectedColor = clBtnFace
     ColorMap.UnusedColor = clWhite
     Font.Charset = DEFAULT_CHARSET
-    Font.Color = clWindowText
+    Font.Color = clMenuText
     Font.Height = -12
     Font.Name = 'Segoe UI'
     Font.Style = []
@@ -19482,7 +19481,7 @@ object frmMain: TfrmMain
     Left = 0
     Top = 26
     Width = 71
-    Height = 455
+    Height = 470
     Align = alLeft
     TabOrder = 1
     object btsalir: TSpeedButton
@@ -19940,7 +19939,7 @@ object frmMain: TfrmMain
   end
   object stBar1: TStatusBar
     Left = 0
-    Top = 481
+    Top = 496
     Width = 1109
     Height = 19
     Panels = <

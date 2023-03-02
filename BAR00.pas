@@ -409,7 +409,6 @@ type
     QDetalleSubTotal: TCurrencyField;
     QDetalleTotalItbis: TCurrencyField;
     CkCantidad: TcxCheckBox;
-    CurrencyEdit1: TCurrencyEdit;
     Label2: TLabel;
     lbGrabado: TLabel;
     QProductosPrecio2: TCurrencyField;
@@ -430,6 +429,8 @@ type
     QDetalleemp_codigo: TIntegerField;
     QFormaemp_codigo: TIntegerField;
     QFormasuc_codigo: TIntegerField;
+    Edit1: TEdit;
+    ckConItbis: TcxCheckBox;
     procedure Timer1Timer(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure btsumacatClick(Sender: TObject);
@@ -504,11 +505,11 @@ type
     procedure QFacturaBeforePost(DataSet: TDataSet);
     procedure QDetalleTotalBeforeOpen(DataSet: TDataSet);
     procedure QFormaNewRecord(DataSet: TDataSet);
+    procedure ckConItbisClick(Sender: TObject);
   private
     Bookmark : TBookmark;
     vl_mesa : Integer;
     vl_cuenta : Boolean;
-
 
     function  getActivaComanda(ID: integer): boolean;
     procedure ImpComanda(ID:integer;reimprimir:boolean =false);
@@ -518,6 +519,7 @@ type
 //procedure PrintStrings(Strings: TStrings);
     function getSecuencia(ID: integer): integer;
     function getProducto_IDPrinter(ID: integer): integer;
+    function getProducto_NamePrinter(ID: integer): string;
 
     { Private declarations }
   public
@@ -550,10 +552,7 @@ type
     function ImprimeCtaTicketNoFiscal():boolean;
     function ImprimeCtaTicketNoFiscalBixolon(ImpFiscal:TImpresora):boolean;
     function getPrinterFiscalBixolonStatus: boolean;
-
-
-
-
+    procedure CargarCategorias();
   end;
 
 Const
@@ -624,6 +623,21 @@ begin
       result := FieldByName('maximo').AsInteger + 1
     else
       Result :=1;
+    close;
+  end;
+end;
+
+function TfrmPOS.getProducto_NamePrinter(ID:integer):string ;
+begin
+  With dm.Query1 do begin
+    Close;
+    Sql.Clear;
+    Sql.Add('Select nombre_printer From Printer_remoto Where IDPrinter = '+IntToStr(ID));
+    open;
+    if not IsEmpty then
+      result := FieldByName('nombre_printer').AsString
+    else
+      Result :='';
     close;
   end;
 end;
@@ -926,6 +940,9 @@ begin
          adoComandaD.Post;
          adoComandaD.UpdateBatch;
 
+         //Buscamos el nombre de la impresora
+         vl_impresoraN := getProducto_NamePrinter(adoComandaDIDPrinter.Value);
+
          With DM.Query1 do begin
            close;
            Sql.clear;
@@ -1022,7 +1039,39 @@ begin
   QDetalle.EnableControls;
 end;
 
+ procedure TfrmPOS.CargarCategorias();
+ var
+  a, BgColor, FgColor : integer;
+ begin
+     //Categorias
+  BuscaCategorias;
 
+  for a:= 1 to 8 do
+  begin
+    (frmPOS.FindComponent('lbcat'+inttostr(a)) as TStatictext).Caption    := Categorias[a];
+    (frmPOS.FindComponent('lbcat'+inttostr(a)) as TStatictext).Font.Color := clWhite;
+    (frmPOS.FindComponent('lbcat'+inttostr(a)) as TStatictext).Color      := clBlue;
+
+    if FgColorCat[a] <> '' then
+    begin
+      FgColor := StringToColor(FgColorCat[a]);
+      (frmPOS.FindComponent('lbcat'+inttostr(a)) as TStatictext).Font.Color := FgColor;
+      (frmPOS.FindComponent('pncat'+inttostr(a)) as TPanel).Font.Color := FgColor;
+    end;
+    if BgColorCat[a] <> '' then
+    begin
+      BgColor := StringToColor(BgColorCat[a]);
+      (frmPOS.FindComponent('lbcat'+inttostr(a)) as TStatictext).Color := BgColor;
+      (frmPOS.FindComponent('pncat'+inttostr(a)) as TPanel).Color := BgColor;
+    end;
+  end;
+
+  UltCategoria := 8;
+  CatActual    := 1;
+  lbcatactual.Caption := NombreCat[CatActual];
+  lbpanelactual1.Parent := pncat1;
+  BuscarProducto(CatActual);
+ end   ;
 
 
 
@@ -1032,7 +1081,9 @@ var
 begin
   titulo_cuenta := '*** PRE-CUENTA ***';
   ckNCF := true;
-  ckItbis := true;
+
+  ckItbis := DM.QParametrosRestBar_FactConItbis.value;// true;
+  ckConItbis.Checked:=  ckItbis ;
   ckPropina := False;
   lbrnc.Caption  := 'COMPROBANTE CONSUMIDOR FINAL';
   lbmesa.Caption := 'FACTURA DIRECTA';
@@ -1084,7 +1135,7 @@ begin
   lbpanelactual1.Parent := pncat1;
   BuscarProducto(CatActual);
 
-  (frmPOS.FindComponent('StaticText'+inttostr(1)) as TStatictext).Caption    := 'mIERDA...';
+  (frmPOS.FindComponent('StaticText'+inttostr(1)) as TStatictext).Caption    := '...';
 
   dm.ADOBar.Connected := True;
 end;
@@ -1300,6 +1351,7 @@ begin
   if key = vk_f9  then btmesasClick(Self);
   if key = vk_f10 then btopcionesClick(Self);
   if key = vk_f11 then btCombinadoClick(Self);
+ 
 end;
 
 procedure TfrmPOS.BuscarProducto(Cat: integer);
@@ -1581,9 +1633,10 @@ NumItbis := 0;
   end;
   QDetalleTotalDescuento.Value := (Venta * QDetalleDescuento.Value)/100;
   QDetalleSubTotal.Value := Venta;
-  if ckItbis = True then
-  QDetalleTotalItbis.Value := (Venta-QDetalleTotalDescuento.Value) * (NumItbis-1) else
-  QDetalleTotalItbis.Value := 0;
+  //if ckItbis = True then
+  QDetalleTotalItbis.Value := (Venta-QDetalleTotalDescuento.Value) * (NumItbis-1);
+  //else
+  //QDetalleTotalItbis.Value := 0;
 
   QDetalleValor.Value := Round(Venta - QDetalleTotalDescuento.Value + QDetalleTotalItbis.Value);
 
@@ -1629,17 +1682,16 @@ begin
         TPropina := 0;
     end;
 
-    if QDetalleMontoItbis.Value > 0 then
-    TItbis := TItbis + QDetalleTotalItbis.Value;
-
+    if frmpos.ckItbis then begin
+      if QDetalleMontoItbis.Value > 0 then
+      TItbis := TItbis + QDetalleTotalItbis.Value;
+    end;
     QDetalle.Next;
     end;
+
     QDetalle.First;
     QDetalle.GotoBookmark(t);
     QDetalle.EnableControls;
-
-
-
 
     if QFacturaDecuentoGlobal.Value then begin
     if TDescuento > 0 then begin
@@ -1648,10 +1700,10 @@ begin
     QFactura.Post;
     end;
     end;
-
+    if frmpos.ckItbis = false then begin
+      TItbis:=0.0;
+    end ;
     Total := (TGrabado+TExento + TItbis + TPropina) - tDescuento;
-
-
     QFactura.Edit;
     QFacturaExento.Value    := TExento;
     QFacturaGrabado.Value   := TGrabado;
@@ -1793,8 +1845,7 @@ If QDetalleComanda_Impreso.AsBoolean = false then
         begin {2}
           QProductos.Close;
           QProductos.Parameters.ParamByName('nom').Value := QDetalleNombre.Value;
-          QProductos.Open;
-
+          QProductos.Open;        
 
           QDetalle.Edit;
           QDetalleCantidad.Value := QDetalleCantidad.Value - 1;
@@ -2072,7 +2123,7 @@ var
 begin
   dm.Query1.Close;
   dm.Query1.SQL.Clear;
-  dm.Query1.SQL.Add('select par_digitos_precio_pesar, par_forma_ticket_peso, par_digitos_entero, par_digitos_decimal');
+  dm.Query1.SQL.Add('select par_digitos_precio_pesar, par_forma_ticket_peso, par_digitos_entero, par_digitos_decimal, RestBar_FactConItbis');
   dm.Query1.SQL.Add('from parametros where emp_codigo = :emp');
   dm.Query1.Parameters.ParamByName('emp').Value := DM.QEmpresaEmpresaID.Value;
   dm.Query1.Open;
@@ -2080,7 +2131,7 @@ begin
   FormaTicketPeso := dm.Query1.FieldByName('par_forma_ticket_peso').AsString;
   digitos_entero  := dm.Query1.FieldByName('par_digitos_entero').AsInteger;
   digitos_decimal := dm.Query1.FieldByName('par_digitos_decimal').AsInteger;
-
+  ckItbis         := ckConItbis.Checked;//dm.Query1.FieldByName('RestBar_FactConItbis').AsBoolean;
 
   Application.CreateForm(tfrmBuscarProducto, frmBuscarProducto);
   frmBuscarProducto.ShowModal;
@@ -2550,15 +2601,15 @@ begin
     QDetalleDetalleID.Value := dm.Query1.FieldByName('maximo').AsInteger + 1;
 end;
 
-  if ckItbis = True then begin
+  //if ckItbis = True then begin
   QDetalleMontoItbis.Value := QDetalleTotalItbis.Value;
   QDetalleItbis.Value := ckItbis;
-  end
-  else
-  begin
-  QDetalleMontoItbis.Value := 0;
-  QDetalleItbis.Value := False;
-  end;
+ // end
+ // else
+ // begin
+ // QDetalleMontoItbis.Value := 0;
+ // QDetalleItbis.Value := False;
+ // end;
 
 end;
 
@@ -2812,6 +2863,9 @@ begin
     ckPropina  := False;
     QFacturaConPropina.Value := ckPropina;
     QFacturaimprimeNCF.Value := ckNCF;
+    QFacturaCajaID.Value     := 1;
+    //QFactura.Parameters.ParamByName('caja').Value := 1;
+
     QFactura.Post;
 
     rnc := '';
@@ -2872,6 +2926,8 @@ begin
     CkDividirCta.Enabled := False;
     vl_mesa := 0;
     end;
+    ckItbis := DM.QParametrosRestBar_FactConItbis.value;// true;
+    ckConItbis.Checked:=  ckItbis ;
 
     edproducto.SetFocus;
   end
@@ -2896,11 +2952,16 @@ begin
       frmHold.QFacturas.SQL.Add(frmHold.qQuery.SQL.GetText);
       frmHold.QFacturas.Parameters.ParamByName('caj').DataType := ftInteger;
       frmHold.QFacturas.Parameters.ParamByName('caj').Value  := frmMain.Usuario;
+      
+      frmHold.QFacturas.Parameters.ParamByName('caja').DataType := ftInteger;
+      frmHold.QFacturas.Parameters.ParamByName('caja').Value := 1;
     end
     else
-      frmHold.QFacturas.Parameters.ParamByName('caj').Value  := 0;
-
-    frmHold.QFacturas.Parameters.ParamByName('caj').Value := 1;
+    begin
+      frmHold.QFacturas.Parameters.ParamByName('caj').Value  := frmMain.Usuario;
+      frmHold.QFacturas.Parameters.ParamByName('caja').Value := 1;
+    end  ;
+    //frmHold.QFacturas.Parameters.ParamByName('caj').Value := 1;
     frmHold.QFacturas.Open;
     frmHold.QDetalle.Open;
 
@@ -2914,7 +2975,12 @@ begin
       QFactura.Parameters.ParamByName('caja').Value := 1;
       QFactura.Open;
       vl_mesa := QFacturaMesaID.Value;
+      
       ckItbis := QFacturaConItbis.Value;
+      ckConItbis.Checked := ckItbis;
+     // ckConItbisClick(self);
+
+      //ckConItbis.Checked:=  ckItbis ;
 
       if QFacturaMesaID.Value > 0 then
       if QFacturaConPropina.Value = False then begin
@@ -2941,9 +3007,7 @@ begin
         dm.Query1.SQL.Add('where MESAID IN ');
         DM.Query1.SQL.Add('(select MesaID from Factura_RestBar WHERE ESTATUS = ''ABI'' AND MESAID > 0 AND HOLD = 1)');
         dm.Query1.Parameters.ParamByName('st').Value   := 'ABI';
-        dm.Query1.ExecSQL;
-
-
+        dm.Query1.ExecSQL;   
 
       ckPropina := QFacturaConPropina.Value;
       ckNCF     := QFacturaimprimeNCF.Value;
@@ -2996,8 +3060,7 @@ begin
       else begin
         lbmesa.Caption := 'FACTURA DIRECTA';
       end;
-      edproducto.SetFocus;
-
+      edproducto.SetFocus;       
 
 
 
@@ -3018,6 +3081,9 @@ begin
       vl_precio := dm.Query1.FieldByname('Precio').Value;
       end;
 
+
+ //Recargar Categorias
+ CargarCategorias();
 end;
 
 procedure TfrmPOS.btcashClick(Sender: TObject);
@@ -3197,6 +3263,8 @@ else
     frmCash.Release;
     edproducto.SetFocus;
   end;
+  ckItbis := DM.QParametrosRestBar_FactConItbis.value;// true;
+  ckConItbis.Checked:=  ckItbis ;
 end;
 
 procedure TfrmPOS.btmesasClick(Sender: TObject);
@@ -3465,6 +3533,9 @@ else
     frmTarjeta.Release;
     edproducto.SetFocus;
   end;
+  ckItbis := DM.QParametrosRestBar_FactConItbis.value;// true;
+  ckConItbis.Checked:=  ckItbis ;
+
 end;
 
 procedure TfrmPOS.ImpTicket;
@@ -3981,6 +4052,8 @@ else
     end;
     frmNombreCliente.Release;
     edproducto.SetFocus;
+     ckItbis := DM.QParametrosRestBar_FactConItbis.value;// true;
+  ckConItbis.Checked:=  ckItbis ;
   end;
 end;
 
@@ -4094,16 +4167,17 @@ procedure TfrmPOS.btnImpComandaClick(Sender: TObject);
 begin
   if getActivaComanda(QFactura['FacturaID']) then   begin
   setImprimeComanda(QFactura['FacturaID']);
-//  ImpComanda(QFacturaFacturaID.Value);
+  //ImpComanda(QFacturaFacturaID.Value);
     end
   else
     begin
-      if dm.adoMultiUso.State <> dsinactive then {Esta validacion es para evitar errores de programacion - fernando 20170628}
-         begin
-           MessageDlg('ERROR - [900] Contacte a Soporte Tecnico del DASHA',mtError,[mbok],0);
-           Exit;
-         end
-      else
+     // if dm.adoMultiUso.State <> dsinactive then {Esta validacion es para evitar errores de programacion - fernando 20170628}
+       //  begin
+         //  MessageDlg('ERROR - [900] Contacte a Soporte Tecnico del DASHA',mtError,[mbok],0);
+           //Exit;
+        // end
+      //else
+
       With dm.adoMultiUso do begin
         Close;
         Sql.Clear;
@@ -4314,6 +4388,8 @@ else
   end;
   frmCombinado.Release;
   edproducto.SetFocus;
+  ckItbis := DM.QParametrosRestBar_FactConItbis.value;// true;
+  ckConItbis.Checked:=  ckItbis ;
 end;
 
 procedure TfrmPOS.IniTicket;
@@ -4325,7 +4401,7 @@ begin
       TDescuento := 0;
       Total      := 0;
       ckPropina  := False;
-      ckItbis    := True;
+      ckItbis    := DM.QParametrosRestBar_FactConItbis.value;//True;
 
       lbtotal.Caption     := '0.00';
       lbpropina.Caption   := '0.00';
@@ -4524,28 +4600,28 @@ end;
 procedure TfrmPOS.CkCantidadClick(Sender: TObject);
 begin
 if CkCantidad.Checked then begin
-CurrencyEdit1.Visible := True;
+//CurrencyEdit1.Visible := True;
 if QDetalle.RecordCount > 0 then
-CurrencyEdit1.Value := QDetalleCantidad.Value;
-CurrencyEdit1.SetFocus;
+//CurrencyEdit1.Value := QDetalleCantidad.Value;
+//CurrencyEdit1.SetFocus;
 Exit;
 end
 else
 begin
-CurrencyEdit1.Visible := False;
+//CurrencyEdit1.Visible := False;
 end;
 end;
 
 procedure TfrmPOS.QFacturaNewRecord(DataSet: TDataSet);
 begin
-CurrencyEdit1.Visible := False;
+//CurrencyEdit1.Visible := False;
 CkCantidad.Checked := False;
 vl_mesa := 0;
 QFacturaPropina.Value := 0;
 ckPropina := False;
-ckItbis   := True;
+ckItbis   := ckConItbis.Checked; // DM.QParametrosRestBar_FactConItbis.value;//True;
 ckNCF     := True;
-QFacturaConItbis.Value := True;
+QFacturaConItbis.Value := ckItbis;
 QFacturaimprimeNCF.Value := True;
 QFacturaNCF.Value := '';
 QFacturaAbierta.Value := False;
@@ -4566,7 +4642,7 @@ begin
     QProductos.Open;
 
     QDetalle.Edit;
-    QDetalleCantidad.Value := CurrencyEdit1.Value;
+   // QDetalleCantidad.Value := CurrencyEdit1.Value;
     QDetalle.Post;
     QDetalle.UpdateBatch;
     Totalizar;
@@ -4585,7 +4661,7 @@ begin
                 dm.Query1.ExecSQL;
     end;
     CkCantidad.Checked := False;
-    CurrencyEdit1.Visible := False;
+   // CurrencyEdit1.Visible := False;
 
     if QDetalleCantidadIngredientes.Value > 0 then
     begin
@@ -6157,6 +6233,12 @@ begin
 QFormaemp_codigo.Value := frmMain.vp_cia;
 QFormasuc_codigo.Value := frmMain.vp_suc;
 
+end;
+
+procedure TfrmPOS.ckConItbisClick(Sender: TObject);
+begin
+ ckItbis := ckConItbis.Checked;
+ if not QDetalleProductoID.IsNull then Totalizar;
 end;
 
 end.

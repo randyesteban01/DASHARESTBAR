@@ -1,8 +1,8 @@
 object DM: TDM
   OldCreateOrder = False
   OnCreate = DataModuleCreate
-  Left = 715
-  Top = 293
+  Left = 639
+  Top = 263
   Height = 258
   Width = 418
   object ADOBar: TADOConnection
@@ -1113,6 +1113,9 @@ object DM: TDM
     end
     object QParametrospar_banca_apuestas: TBooleanField
       FieldName = 'par_banca_apuestas'
+    end
+    object QParametrosRestBar_FactConItbis: TBooleanField
+      FieldName = 'RestBar_FactConItbis'
     end
   end
 end

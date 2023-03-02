@@ -90,7 +90,7 @@ MaxStackSize=1048576
 ImageBase=4194304
 ExeDescription=
 [Directories]
-OutputDir=F:\D&RTecnologic\Ejecutables
+OutputDir=C:\Users\randy\Desktop\Ejecutables
 UnitOutputDir=
 PackageDLLOutputDir=
 PackageDCPOutputDir=
@@ -147,6 +147,7 @@ C:\Program Files (x86)\Borland\Delphi7\Projects\Bpl\dcldxPSdxLCLnkD7.bpl=Express
 Count=1
 Item0=WinTypes=Windows;WinProcs=Windows;DbiTypes=BDE;DbiProcs=BDE;DbiErrs=BDE;
 [HistoryLists\hlOutputDirectorry]
-Count=2
-Item0=F:\D&RTecnologic\Ejecutables
-Item1=d:\Ejecutables\RestBar
+Count=3
+Item0=C:\Users\randy\Desktop\Ejecutables
+Item1=F:\D&RTecnologic\Ejecutables
+Item2=d:\Ejecutables\RestBar

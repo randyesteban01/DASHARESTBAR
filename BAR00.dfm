@@ -1,8 +1,8 @@
 object frmPOS: TfrmPOS
-  Left = 230
-  Top = 111
-  Width = 1233
-  Height = 757
+  Left = 187
+  Top = 0
+  Width = 1126
+  Height = 735
   ActiveControl = edproducto
   BorderIcons = []
   Caption = 'DASHA RESTBAR'
@@ -1121,7 +1121,7 @@ object frmPOS: TfrmPOS
     Left = 0
     Top = 0
     Width = 267
-    Height = 683
+    Height = 661
     Align = alLeft
     BevelInner = bvLowered
     BevelOuter = bvNone
@@ -1194,7 +1194,7 @@ object frmPOS: TfrmPOS
       Left = 1
       Top = 170
       Width = 265
-      Height = 321
+      Height = 299
       Align = alClient
       Ctl3D = True
       DataSource = dsDetalle
@@ -1238,7 +1238,7 @@ object frmPOS: TfrmPOS
     end
     object Panel12: TPanel
       Left = 1
-      Top = 491
+      Top = 469
       Width = 265
       Height = 191
       Align = alBottom
@@ -1876,13 +1876,13 @@ object frmPOS: TfrmPOS
   end
   object pnAbajo: TPanel
     Left = 0
-    Top = 683
-    Width = 1217
+    Top = 661
+    Width = 1110
     Height = 35
     Align = alBottom
     TabOrder = 1
     object lbfechahora: TLabel
-      Left = 1080
+      Left = 973
       Top = 1
       Width = 136
       Height = 33
@@ -2470,10 +2470,10 @@ object frmPOS: TfrmPOS
     end
   end
   object pnDerecho: TPanel
-    Left = 1138
+    Left = 1031
     Top = 0
     Width = 79
-    Height = 683
+    Height = 661
     Align = alRight
     BevelInner = bvLowered
     BevelOuter = bvNone
@@ -3165,8 +3165,8 @@ object frmPOS: TfrmPOS
   object pnCentral: TPanel
     Left = 267
     Top = 0
-    Width = 871
-    Height = 683
+    Width = 764
+    Height = 661
     Align = alClient
     BevelInner = bvLowered
     BevelOuter = bvNone
@@ -3174,7 +3174,7 @@ object frmPOS: TfrmPOS
     object Panel9: TPanel
       Left = 1
       Top = 1
-      Width = 869
+      Width = 762
       Height = 27
       Align = alTop
       BevelOuter = bvNone
@@ -3182,7 +3182,7 @@ object frmPOS: TfrmPOS
       object lbempresa: TLabel
         Left = 0
         Top = 0
-        Width = 869
+        Width = 762
         Height = 27
         Align = alClient
         Alignment = taCenter
@@ -3199,8 +3199,8 @@ object frmPOS: TfrmPOS
     object Panel10: TPanel
       Left = 1
       Top = 90
-      Width = 869
-      Height = 592
+      Width = 762
+      Height = 570
       Align = alClient
       BevelInner = bvLowered
       BevelOuter = bvLowered
@@ -4576,6 +4576,15 @@ object frmPOS: TfrmPOS
           TabOrder = 0
           OnClick = lbprod1Click
         end
+        object Edit1: TEdit
+          Left = 24
+          Top = 32
+          Width = 121
+          Height = 23
+          TabOrder = 1
+          Text = 'Edit1'
+          Visible = False
+        end
       end
       object Panel50: TPanel
         Left = 337
@@ -5339,14 +5348,14 @@ object frmPOS: TfrmPOS
     object Panel11: TPanel
       Left = 1
       Top = 28
-      Width = 869
+      Width = 762
       Height = 62
       Align = alTop
       BevelInner = bvRaised
       BevelOuter = bvLowered
       TabOrder = 2
       DesignSize = (
-        869
+        762
         62)
       object btrestacat: TSpeedButton
         Left = 90
@@ -5645,7 +5654,7 @@ object frmPOS: TfrmPOS
         TabOrder = 0
       end
       object Panel65: TPanel
-        Left = 400
+        Left = 293
         Top = 2
         Width = 467
         Height = 58
@@ -5933,11 +5942,19 @@ object frmPOS: TfrmPOS
           OnClick = CkCantidadClick
           Width = 51
         end
+        object ckConItbis: TcxCheckBox
+          Left = 367
+          Top = 24
+          Caption = 'Itbis'
+          TabOrder = 1
+          OnClick = ckConItbisClick
+          Width = 98
+        end
       end
       object lbrnc: TStaticText
         Left = 178
         Top = 3
-        Width = 223
+        Width = 116
         Height = 55
         Alignment = taCenter
         Anchors = [akLeft, akTop, akRight]
@@ -6213,21 +6230,25 @@ object frmPOS: TfrmPOS
         'odigo and alm_codigo = pa.par_almacenventa and pro_codigo = p.pr' +
         'o_codigo) Existencia, '
       
-        'case when pa.par_itbisincluido = '#39'False'#39' then isnull(pro_precio1' +
-        ',0) else isnull(pro_precio1,0)/(1+(p.pro_montoitbis/100)) end Pr' +
-        'ecio, '
+        '--case when pa.par_itbisincluido = '#39'False'#39' then isnull(pro_preci' +
+        'o1,0) else isnull(pro_precio1,0)/(1+(p.pro_montoitbis/100)) end ' +
+        'Precio, '
       
-        'case when pa.par_itbisincluido = '#39'False'#39' then isnull(pro_precio2' +
-        ',0) else isnull(pro_precio2,0)/(1+(p.pro_montoitbis/100)) end Pr' +
-        'ecio2, '
+        'case when pa.RestBar_FactConItbis = '#39'False'#39' then isnull(pro_prec' +
+        'io1,0) else isnull(pro_precio1,0)/(1+(p.pro_montoitbis/100)) end' +
+        ' Precio, '
       
-        'case when pa.par_itbisincluido = '#39'False'#39' then isnull(pro_precio3' +
-        ',0) else isnull(pro_precio3,0)/(1+(p.pro_montoitbis/100)) end Pr' +
-        'ecio3, '
+        'case when pa.RestBar_FactConItbis = '#39'False'#39' then isnull(pro_prec' +
+        'io2,0) else isnull(pro_precio2,0)/(1+(p.pro_montoitbis/100)) end' +
+        ' Precio2, '
       
-        'case when pa.par_itbisincluido = '#39'False'#39' then isnull(pro_precio4' +
-        ',0) else isnull(pro_precio4,0)/(1+(p.pro_montoitbis/100)) end Pr' +
-        'ecio4, '
+        'case when pa.RestBar_FactConItbis = '#39'False'#39' then isnull(pro_prec' +
+        'io3,0) else isnull(pro_precio3,0)/(1+(p.pro_montoitbis/100)) end' +
+        ' Precio3, '
+      
+        'case when pa.RestBar_FactConItbis = '#39'False'#39' then isnull(pro_prec' +
+        'io4,0) else isnull(pro_precio4,0)/(1+(p.pro_montoitbis/100)) end' +
+        ' Precio4, '
       'p.pro_costo Costo, '
       
         'cast(case when p.pro_itbis = '#39'S'#39' then 1 else 0 end as bit) Itbis' +
@@ -6246,6 +6267,7 @@ object frmPOS: TfrmPOS
         'as numeric(18,2)) pro_itbis, ImpresoraRemota2'
       'from Productos P '
       'inner join Parametros PA on p.emp_codigo = pa.emp_codigo'
+      ''
       'where pro_nombre = :nom')
     Left = 376
     Top = 320
