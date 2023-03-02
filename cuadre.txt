@@ -1,0 +1,25 @@
+          RESTAURANTE TRES LUNAS
+   Pueblo Los Pescadores, Las Terrenas
+               809-240-9598
+             RNC:13400025519
+ 
+          *** CUADRE DE CAJA ***
+ 
+       De 10/10/2017 06:00:00 a.m.
+       Al 10/10/2017 11:59:59 p.m.
+          Cajero: D&R TECHNOLOGY
+----------------------------------------
+TOTAL EFECTIVO  :          $2,625.50
+TOTAL TARJETA   :          $2,625.50
+TOTAL CREDITO   :              $0.00
+ 
+CANTIDAD DE TKs :                  4
+TOTAL EXENTO    :              $0.00
+TOTAL GRABADO   :          $3,025.00
+TOTAL DESCUENTO :              $0.00
+TOTAL ITBIS     :            $544.50
+TOTAL PROPINA   :              $0.00
+----------------------------------------
+TOTAL EN VENTA  :          $3,569.50
+TOTAL DESEMBOLSO:              $0.00
+TOTAL EN CAJA   :          $3,569.50

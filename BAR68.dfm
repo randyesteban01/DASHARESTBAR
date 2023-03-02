@@ -1,0 +1,234 @@
+object FrmHabitaciones: TFrmHabitaciones
+  Left = 382
+  Top = 533
+  Width = 554
+  Height = 384
+  BorderIcons = [biSystemMenu, biMinimize]
+  Caption = 'Cargo de Habitaciones'
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'MS Sans Serif'
+  Font.Style = []
+  OldCreateOrder = False
+  PixelsPerInch = 96
+  TextHeight = 13
+  object lblHab: TLabel
+    Left = 16
+    Top = 24
+    Width = 201
+    Height = 46
+    Caption = 'Habitacion'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -40
+    Font.Name = 'MS Sans Serif'
+    Font.Style = [fsBold]
+    ParentFont = False
+  end
+  object edtHab: TEdit
+    Left = 16
+    Top = 72
+    Width = 241
+    Height = 72
+    Font.Charset = ANSI_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -53
+    Font.Name = 'Calibri'
+    Font.Style = []
+    ParentFont = False
+    TabOrder = 0
+    OnKeyPress = edtHabKeyPress
+  end
+  object pnl1: TPanel
+    Left = 288
+    Top = 16
+    Width = 244
+    Height = 328
+    TabOrder = 1
+    object bt7: TSpeedButton
+      Left = 1
+      Top = 4
+      Width = 80
+      Height = 80
+      Caption = '7'
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -19
+      Font.Name = 'Arial'
+      Font.Style = [fsBold]
+      ParentFont = False
+      OnClick = bt7Click
+    end
+    object bt8: TSpeedButton
+      Left = 82
+      Top = 4
+      Width = 80
+      Height = 80
+      Caption = '8'
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -19
+      Font.Name = 'Arial'
+      Font.Style = [fsBold]
+      ParentFont = False
+      OnClick = bt8Click
+    end
+    object bt9: TSpeedButton
+      Left = 163
+      Top = 4
+      Width = 80
+      Height = 80
+      Caption = '9'
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -19
+      Font.Name = 'Arial'
+      Font.Style = [fsBold]
+      ParentFont = False
+      OnClick = bt9Click
+    end
+    object bt6: TSpeedButton
+      Left = 163
+      Top = 85
+      Width = 80
+      Height = 80
+      Caption = '6'
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -19
+      Font.Name = 'Arial'
+      Font.Style = [fsBold]
+      ParentFont = False
+      OnClick = bt6Click
+    end
+    object bt5: TSpeedButton
+      Left = 82
+      Top = 85
+      Width = 80
+      Height = 80
+      Caption = '5'
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -19
+      Font.Name = 'Arial'
+      Font.Style = [fsBold]
+      ParentFont = False
+      OnClick = bt5Click
+    end
+    object bt4: TSpeedButton
+      Left = 1
+      Top = 85
+      Width = 80
+      Height = 80
+      Caption = '4'
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -19
+      Font.Name = 'Arial'
+      Font.Style = [fsBold]
+      ParentFont = False
+      OnClick = bt4Click
+    end
+    object bt1: TSpeedButton
+      Left = 1
+      Top = 166
+      Width = 80
+      Height = 80
+      Caption = '1'
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -19
+      Font.Name = 'Arial'
+      Font.Style = [fsBold]
+      ParentFont = False
+      OnClick = bt1Click
+    end
+    object bt2: TSpeedButton
+      Left = 82
+      Top = 166
+      Width = 80
+      Height = 80
+      Caption = '2'
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -19
+      Font.Name = 'Arial'
+      Font.Style = [fsBold]
+      ParentFont = False
+      OnClick = bt2Click
+    end
+    object bt3: TSpeedButton
+      Left = 163
+      Top = 166
+      Width = 80
+      Height = 80
+      Caption = '3'
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -19
+      Font.Name = 'Arial'
+      Font.Style = [fsBold]
+      ParentFont = False
+      OnClick = bt3Click
+    end
+    object btok: TSpeedButton
+      Left = 163
+      Top = 247
+      Width = 80
+      Height = 80
+      Caption = 'OK'
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clGreen
+      Font.Height = -19
+      Font.Name = 'Arial'
+      Font.Style = [fsBold]
+      ParentFont = False
+      OnClick = btokClick
+    end
+    object btclear: TSpeedButton
+      Left = 82
+      Top = 247
+      Width = 80
+      Height = 80
+      Caption = 'CLR'
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clRed
+      Font.Height = -19
+      Font.Name = 'Arial'
+      Font.Style = [fsBold]
+      ParentFont = False
+      OnClick = btclearClick
+    end
+    object bt0: TSpeedButton
+      Left = 1
+      Top = 247
+      Width = 80
+      Height = 80
+      Caption = '0'
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -19
+      Font.Name = 'Arial'
+      Font.Style = [fsBold]
+      ParentFont = False
+      OnClick = bt0Click
+    end
+  end
+  object ADO: TADOConnection
+    IsolationLevel = ilReadCommitted
+    LoginPrompt = False
+    Mode = cmShareDenyNone
+    Provider = 'SQLOLEDB.1'
+    BeforeConnect = ADOBeforeConnect
+    Left = 32
+    Top = 168
+  end
+  object Query: TADOQuery
+    Connection = ADO
+    Parameters = <>
+    Left = 64
+    Top = 168
+  end
+end

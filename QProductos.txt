@@ -1,0 +1,17 @@
+select
+d.Nombre,
+sum(d.Cantidad) as Cantidad,
+sum(d.Cantidad*d.Precio) as Precio,
+sum((d.Precio*d.Descuento)/100) as Descuento,
+sum(d.Cantidad*d.costo) as Costo
+from
+Factura_Items d, Factura f
+where
+d.FacturaID = f.FacturaID
+and d.CajaID = f.CajaID
+and d.CajeroID = f.CajeroID
+and f.hora between :fec1 and :fec2
+
+and d.Ingrediente = 0
+group by d.Nombre
+order by d.Nombre

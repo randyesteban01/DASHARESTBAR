@@ -1,0 +1,3 @@
+select sum(f.Total) as total from Factura f, Factura_Forma_Pago p where f.FacturaID = p.FacturaID
+and f.CajaID = p.CajaID and f.CajeroID = p.CajeroID and f.hora between :fec1
+and :fec2 and f.CajeroID = :caj and p.Forma = 'Tarjeta'

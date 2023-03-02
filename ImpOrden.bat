@@ -1,0 +1,1 @@
+type ORDEN_76_PRINTER_1.txt > \\10.0.0.110\LP1

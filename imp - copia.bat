@@ -1,0 +1,1 @@
+PRINT "c:\fac.txt" 

@@ -1,0 +1,8 @@
+select count(*) cant,
+sum(f.Exento) TExento, sum(f.Grabado) TGrabado, sum(f.Itbis) 
+TItbis,
+sum(f.Descuento) TDescuento, sum(f.Propina) TPropina, sum
+(f.Total) TTotal
+from
+Factura f
+where f.hora between :fec1 and :fec2
