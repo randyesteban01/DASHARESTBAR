@@ -1,0 +1,60 @@
+# Delphi 7 - compilados y temporales
+*.dcu
+*.ddp
+*.dcp
+*.drc
+*.map
+*.tds
+*.exe
+*.dll
+*.bpl
+*.bpi
+*.lib
+*.a
+*.o
+*.obj
+*.pch
+*.res.bak
+
+# Backups del IDE (BAR00.~pas, BAR00.~dfm, etc.)
+*~*
+*.~*
+
+# Carpetas de salida
+dcu/
+__history/
+ModelSupport/
+
+# Proyecto Delphi 7 - preferencias locales del IDE
+*.cfg
+*.dof
+*.local
+*.identcache
+*.projdata
+DCC32.CFG
+
+# Logs y depuración
+*.log
+ConsultaRNC_DGII.log
+
+# Configuración local de la máquina / impresora
+puerto.ini
+
+# Windows
+Thumbs.db
+Desktop.ini
+ehthumbs.db
+
+# Editor / IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Credenciales y secretos
+.env
+*.env
+*.pem
+*.p12
+config.ini
