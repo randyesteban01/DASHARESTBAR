@@ -44,7 +44,7 @@ type
     procedure btaddClick(Sender: TObject);
     procedure bteditClick(Sender: TObject);
   private
-    { Private declarations }
+    procedure AplicarConsultaDGIIPorRNC;
   public
     { Public declarations }
     Acepto : integer;
@@ -56,7 +56,7 @@ var
 
 implementation
 
-uses BAR04, BAR33, BAR44;
+uses BAR04, BAR33, BAR44, uConsultaRNCDGII;
 
 {$R *.dfm}
 
@@ -93,6 +93,7 @@ begin
   Busqueda := 'rnc_cedula';
   lbtipo.Caption := 'Buscar por: RNC';
   Application.ProcessMessages;
+  AplicarConsultaDGIIPorRNC;
   QRNC.Close;
   QRNC.SQL.Clear;
   QRNC.SQL := Memo1.Lines;
@@ -101,6 +102,20 @@ begin
   QRNC.Open;
   Screen.Cursor := crDefault;
   edbusca.SetFocus;
+end;
+
+procedure TfrmBuscaRNC.AplicarConsultaDGIIPorRNC;
+var
+  RncNorm, Nombre, Mensaje: string;
+begin
+  if Length(NormalizarRNC(edbusca.Text)) < 9 then
+    Exit;
+
+  if ConsultarRNCClienteDGII(DM.ADOBar, edbusca.Text, DM.QEmpresaRNC.AsString,
+    DM.QEmpresaEmpresaID.AsInteger, RncNorm, Nombre, Mensaje) then
+    edbusca.Text := RncNorm
+  else if Trim(Mensaje) <> '' then
+    ShowMessage(Mensaje);
 end;
 
 procedure TfrmBuscaRNC.btrazonClick(Sender: TObject);

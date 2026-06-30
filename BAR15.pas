@@ -48,6 +48,7 @@ type
     WideStringField1: TWideStringField;
     BooleanField1: TBooleanField;
     StringField1: TStringField;
+    btneliminar: TSpeedButton;
     procedure FormCreate(Sender: TObject);
     procedure btcloseClick(Sender: TObject);
     procedure btaceptarClick(Sender: TObject);
@@ -58,6 +59,7 @@ type
     procedure SpeedButton1Click(Sender: TObject);
     procedure SpeedButton2Click(Sender: TObject);
     procedure DBGrid1DblClick(Sender: TObject);
+    procedure btneliminarClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -160,4 +162,25 @@ begin
   btaceptarClick(self);
 end;
 
+procedure TfrmHold.btneliminarClick(Sender: TObject);
+begin
+if not QFacturas.IsEmpty then
+begin
+  //Eliminamos el registro de la Base de datos
+
+   dm.Query1.Close;
+   dm.Query1.SQL.Clear;
+   dm.Query1.SQL.Add('DELETE Factura_Items  WHERE FacturaID = :id ');
+   dm.Query1.Parameters.ParamByName('id').Value   := QFacturasFacturaID.Value;
+   dm.Query1.ExecSQL;
+
+   dm.Query1.Close;
+   dm.Query1.SQL.Clear;
+   dm.Query1.SQL.Add('DELETE Factura_RestBar  WHERE FacturaID = :id ');
+   dm.Query1.Parameters.ParamByName('id').Value   := QFacturasFacturaID.Value;
+   dm.Query1.ExecSQL;
+
+  QFacturas.Delete;   
+end;
+end;
 end.

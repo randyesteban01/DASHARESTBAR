@@ -28,6 +28,7 @@ type
     QProductosExistencia: TFloatField;
     btimprimir: TSpeedButton;
     btresta: TSpeedButton;
+    QProductosImpresoraRemota2: TBooleanField;
     procedure FormCreate(Sender: TObject);
     procedure btcloseClick(Sender: TObject);
     procedure FormKeyDown(Sender: TObject; var Key: Word;

@@ -1,6 +1,6 @@
 object frmConfirm: TfrmConfirm
-  Left = 192
-  Top = 103
+  Left = 527
+  Top = 151
   BorderIcons = []
   BorderStyle = bsSingle
   Caption = 'Confirmar'

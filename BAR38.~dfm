@@ -1,6 +1,6 @@
 object frmBuscaFactura: TfrmBuscaFactura
-  Left = 289
-  Top = 301
+  Left = 267
+  Top = 163
   BorderIcons = []
   BorderStyle = bsSingle
   Caption = 'Buscar factura'
@@ -1159,6 +1159,11 @@ object frmBuscaFactura: TfrmBuscaFactura
     end
     object QDetalleMontoItbis: TCurrencyField
       FieldName = 'MontoItbis'
+    end
+    object QDetalleTotalItbis: TCurrencyField
+      FieldKind = fkCalculated
+      FieldName = 'TotalItbis'
+      Calculated = True
     end
   end
   object QDetalleTotales: TADOQuery

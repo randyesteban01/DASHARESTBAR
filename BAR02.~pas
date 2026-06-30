@@ -20,7 +20,7 @@ type
     btunifmesa: TSpeedButton;
     btDividirCuenta: TSpeedButton;
     SpeedButton3: TSpeedButton;
-    SpeedButton4: TSpeedButton;
+    btdevolucion: TSpeedButton;
     qFormaPag: TADOQuery;
     procedure btcloseClick(Sender: TObject);
     procedure FormKeyDown(Sender: TObject; var Key: Word;
@@ -35,8 +35,9 @@ type
     procedure FormActivate(Sender: TObject);
     procedure btunifmesaClick(Sender: TObject);
     procedure btDividirCuentaClick(Sender: TObject);
-    procedure SpeedButton4Click(Sender: TObject);
+    procedure btdevolucionClick(Sender: TObject);
     procedure SpeedButton3Click(Sender: TObject);
+    procedure btdrawerClick(Sender: TObject);
   private
     { Private declarations }
     vl_cuenta : Boolean;
@@ -54,9 +55,135 @@ var
 implementation
 
 uses BAR03, BAR00, BAR34, BAR14, BAR04, BAR38, BAR01, BAR39, BAR40,
-  Math, BAR52, BAR15, BAR55, BAR17, BAR16;
+  Math, BAR52, BAR15, BAR55, BAR17, BAR16, BAR520;
 
 {$R *.dfm}
+
+function ESC_QR(const b: Byte): AnsiString;
+begin
+  Result := AnsiChar(#27) + AnsiChar(b);
+end;
+
+function GS_QR(const b: Byte): AnsiString;
+begin
+  Result := AnsiChar(#29) + AnsiChar(b);
+end;
+
+procedure WriteQR_Bar02(var F: TextFile; const Data: AnsiString; ModuleSize: Byte = 6; ECLevel: Byte = 48);
+var
+  pL, pH: AnsiChar;
+begin
+  Write(F, ESC_QR($61) + AnsiChar(#1));
+
+  Write(F, GS_QR($28) + 'k' + #04#00 + #49#65#50#00);
+  Write(F, GS_QR($28) + 'k' + #03#00 + #49#67 + AnsiChar(ModuleSize));
+  Write(F, GS_QR($28) + 'k' + #03#00 + #49#69 + AnsiChar(ECLevel));
+
+  pL := AnsiChar((Length(Data) + 3) and $FF);
+  pH := AnsiChar((Length(Data) + 3) shr 8);
+  Write(F, GS_QR($28) + 'k' + pL + pH + #49#80#48 + Data);
+
+  Write(F, GS_QR($28) + 'k' + #03#00 + #49#81 + #48);
+
+  Writeln(F);
+
+  Write(F, ESC_QR($61) + AnsiChar(#0));
+end;
+
+function BuscaFactura_ObtenerCajaID: Integer;
+begin
+  Result := 1;
+  dm.Query1.Close;
+  dm.Query1.SQL.Text :=
+    'select top 1 CajaID from Factura_RestBar where EMP_CODIGO = :emp and SUC_CODIGO = :suc ' +
+    'and FacturaID = :ticket and CajeroID = :usu';
+  dm.Query1.Parameters.ParamByName('emp').Value := DM.QEmpresaEmpresaID.Value;
+  dm.Query1.Parameters.ParamByName('suc').Value := frmMain.vp_suc;
+  dm.Query1.Parameters.ParamByName('ticket').Value := frmBuscaFactura.QFacturaFacturaID.Value;
+  dm.Query1.Parameters.ParamByName('usu').Value := frmBuscaFactura.QFacturaCajeroID.Value;
+  dm.Query1.Open;
+  if not dm.Query1.IsEmpty then
+    Result := dm.Query1.Fields[0].AsInteger;
+  dm.Query1.Close;
+  dm.Query1.SQL.Clear;
+end;
+
+procedure BuscaFactura_AppendBloqueElectronico(var arch: TextFile);
+var
+  qrURL, codSeg, fechaFirma, codDGII: string;
+  aceptado: Boolean;
+  qrData: AnsiString;
+  vCaja: Integer;
+begin
+  if not dm.QParametrosUsa_FacturacionElectronica.Value then
+    Exit;
+
+  vCaja := BuscaFactura_ObtenerCajaID;
+  dm.Query1.SQL.Add('SELECT');
+  dm.Query1.SQL.Add('    rb.eNCF,');
+  dm.Query1.SQL.Add('    rb.codigoseguridad,');
+  dm.Query1.SQL.Add('    rb.fechafirma,');
+  dm.Query1.SQL.Add('    t.cod_dgii,');
+  dm.Query1.SQL.Add('    ISNULL(rb.AceptadoDGII, 0) AS AceptadoDGII,');
+  dm.Query1.SQL.Add('    dbo.fnGenerarUrlTimbre(');
+  dm.Query1.SQL.Add('        1,');
+  dm.Query1.SQL.Add('        e.emp_rnc,');
+  dm.Query1.SQL.Add('        ISNULL(NULLIF(LTRIM(RTRIM(rb.rnc)), ''''), ''0''),');
+  dm.Query1.SQL.Add('        ISNULL(rb.eNCF, ''''),');
+  dm.Query1.SQL.Add('        ISNULL(rb.fechafirma, rb.Fecha),');
+  dm.Query1.SQL.Add('        ISNULL(rb.DGII_MontoEnviado, 0),');
+  dm.Query1.SQL.Add('        rb.fechafirma,');
+  dm.Query1.SQL.Add('        ISNULL(rb.codigoseguridad, '''')');
+  dm.Query1.SQL.Add('    ) AS UrlCodigoQR');
+  dm.Query1.SQL.Add('FROM Factura_RestBar rb');
+  dm.Query1.SQL.Add('INNER JOIN Empresas e ON e.emp_codigo = rb.EMP_CODIGO');
+  dm.Query1.SQL.Add('LEFT JOIN TipoNCF t ON t.emp_codigo = rb.EMP_CODIGO AND t.tip_codigo = rb.TipoNCF');
+  dm.Query1.SQL.Add('WHERE rb.EMP_CODIGO = :emp');
+  dm.Query1.SQL.Add('  AND rb.SUC_CODIGO = :suc');
+  dm.Query1.SQL.Add('  AND rb.FacturaID  = :ticket');
+  dm.Query1.SQL.Add('  AND rb.CajeroID   = :usu');
+  dm.Query1.SQL.Add('  AND rb.CajaID     = :caja');
+
+  dm.Query1.Parameters.ParamByName('emp').Value := DM.QEmpresaEmpresaID.Value;
+  dm.Query1.Parameters.ParamByName('suc').Value := frmMain.vp_suc;
+  dm.Query1.Parameters.ParamByName('ticket').Value := frmBuscaFactura.QFacturaFacturaID.Value;
+  dm.Query1.Parameters.ParamByName('usu').Value := frmBuscaFactura.QFacturaCajeroID.Value;
+  dm.Query1.Parameters.ParamByName('caja').Value := vCaja;
+  dm.Query1.Open;
+
+  if dm.Query1.IsEmpty then
+    Exit;
+
+  qrURL := dm.Query1.FieldByName('UrlCodigoQR').AsString;
+  codSeg := dm.Query1.FieldByName('codigoseguridad').AsString;
+  fechaFirma := dm.Query1.FieldByName('fechafirma').AsString;
+  codDGII := dm.Query1.FieldByName('cod_dgii').AsString;
+  aceptado := dm.Query1.FieldByName('AceptadoDGII').AsBoolean;
+
+  if aceptado and (Trim(qrURL) <> '') then
+  begin
+    qrData := AnsiString(Trim(qrURL));
+    WriteQR_Bar02(arch, qrData, 6, 48);
+    Writeln(arch, 'Fecha firma: ' + fechaFirma);
+    Writeln(arch, 'Cod. seguridad: ' + codSeg);
+    Writeln(arch, ' ');
+    Writeln(arch, ' ');
+    Writeln(arch, ' ');
+  end
+  else
+  begin
+    if Trim(fechaFirma) <> '' then
+      Writeln(arch, 'Fecha firma: ' + fechaFirma);
+    if Trim(codSeg) <> '' then
+      Writeln(arch, 'Cod. seguridad: ' + codSeg);
+    if Trim(codDGII) <> '' then
+      Writeln(arch, 'Cod. DGII: ' + codDGII);
+    if not aceptado then
+      Writeln(arch, 'DGII: pendiente o error - verifique en sistema')
+    else if Trim(qrURL) = '' then
+      Writeln(arch, 'Codigo QR: no disponible');
+  end;
+end;
 
 procedure TfrmOpciones.btcloseClick(Sender: TObject);
 begin
@@ -85,7 +212,7 @@ begin
 
 
     Application.CreateForm(tfrmConfirm, frmConfirm);
-    frmConfirm.lbtitulo.Caption := 'Est· seguro que desea salir del Sistema?';
+    frmConfirm.lbtitulo.Caption := 'Estù seguro que desea salir del Sistema?';
     frmConfirm.ShowModal;
     if frmConfirm.accion = 'S' then
     begin
@@ -141,7 +268,7 @@ begin
       dm.Query1.sql.clear;
       dm.Query1.sql.add('select usu_codigo UsuarioID, usu_nombre Nombre, usu_supervisor Supervisor, usu_cajero Cajero, usu_camarero Camarero, usu_status Estatus');
 
-      {if (copy(frmAcceso.edclave.Text,1,1) = ';') or (copy(frmAcceso.edclave.Text,1,1) = '—') then
+      {if (copy(frmAcceso.edclave.Text,1,1) = ';') or (copy(frmAcceso.edclave.Text,1,1) = 'ù') then
       begin
         dm.Query1.sql.add('from usuarios where tarjetaSupervisorID = :cla');
         dm.Query1.Parameters.parambyname('cla').Value := copy(frmAcceso.edclave.Text,2,10);
@@ -215,7 +342,7 @@ begin
       dm.Query1.sql.clear;
       dm.Query1.sql.add('select usu_codigo UsuarioID, usu_nombre Nombre, usu_supervisor Supervisor, usu_cajero Cajero, usu_camarero Camarero, usu_status Estatus');
 
-      {if (copy(frmAcceso.edclave.Text,1,1) = ';') or (copy(frmAcceso.edclave.Text,1,1) = '—') then
+      {if (copy(frmAcceso.edclave.Text,1,1) = ';') or (copy(frmAcceso.edclave.Text,1,1) = 'ù') then
       begin
         dm.Query1.sql.add('from usuarios where tarjetaSupervisorID = :cla');
         dm.Query1.Parameters.parambyname('cla').Value := copy(frmAcceso.edclave.Text,2,10);
@@ -306,7 +433,7 @@ begin
     dm.Query1.sql.clear;
     dm.Query1.sql.add('select UsuarioID, Nombre, Supervisor, Cajero, Camarero, Estatus');
 
-    if (copy(frmAcceso.edclave.Text,1,1) = ';') or (copy(frmAcceso.edclave.Text,1,1) = '—') then
+    if (copy(frmAcceso.edclave.Text,1,1) = ';') or (copy(frmAcceso.edclave.Text,1,1) = 'ù') then
     begin
       dm.Query1.sql.add('from usuarios where tarjetaSupervisorID = :cla');
       dm.Query1.Parameters.parambyname('cla').Value := copy(frmAcceso.edclave.Text,2,10);
@@ -348,7 +475,8 @@ var
   TFac, MontoItbis, Venta, tCambio : double;
   PuntosPrinc, FactorPrin, TotalPuntos, CalcDesc, NumItbis, TotalDescuento, MPagado : Double;
   Puntos, a : integer;
-  Msg1, Msg2, Msg3, Msg4, Puerto, Forma, ImpItbis, lbItbis : String;
+  Msg1, Msg2, Msg3, Msg4, Puerto, Forma, ImpItbis, lbItbis, encf : String;
+  vCajaTicket : Integer;
 begin
   if not FileExists( '.\puerto.ini') then
   begin
@@ -447,24 +575,63 @@ begin
       writeln(arch, 'RNC ...: '+frmBuscaFactura.QFacturarnc.Value);
   end;
 
-   //buscar vencimiento
-      with frmPOS.qEjecutar do begin
+  if dm.QParametrosUsa_FacturacionElectronica.Value then
+  begin
+    vCajaTicket := BuscaFactura_ObtenerCajaID;
+    dm.Query1.Close;
+    dm.Query1.SQL.Clear;
+    dm.Query1.SQL.Add('select eNCF');
+    dm.Query1.SQL.Add('from Factura_RestBar');
+    dm.Query1.SQL.Add('where FacturaID = :FacturaID');
+    dm.Query1.SQL.Add('and CajaID = :caja');
+    dm.Query1.SQL.Add('and CajeroID = :cajero');
+    dm.Query1.Parameters.ParamByName('caja').Value := vCajaTicket;
+    dm.Query1.Parameters.ParamByName('cajero').Value := frmBuscaFactura.QFacturaCajeroID.Value;
+    dm.Query1.Parameters.ParamByName('FacturaID').Value := frmBuscaFactura.QFacturaFacturaID.Value;
+    dm.Query1.Open;
+    encf := dm.Query1.FieldByName('eNCF').AsString;
+    if Trim(encf) <> '' then
+    begin
+      writeln(arch, ' ');
+      writeln(arch, 'eNCF: ' + encf);
+    end;
+    with frmPOS.qEjecutar do
+    begin
+      Close;
+      SQL.Clear;
+      SQL.Add('SELECT TOP 1');
+      SQL.Add('    FechaVencimientoSecuenciaDGII');
+      SQL.Add('FROM SecuenciaDGII');
+      SQL.Add('WHERE FechaVencimientoSecuenciaDGII IS NOT NULL');
+      SQL.Add('  AND emp_codigo = :emp_codigo');
+      SQL.Add('  AND tipo       = :tipo');
+      SQL.Add('ORDER BY FechaVencimientoSecuenciaDGII');
+      Parameters.ParamByName('emp_codigo').Value := DM.QEmpresaEmpresaID.Value;
+      Parameters.ParamByName('tipo').Value := frmBuscaFactura.QFacturaTipoNCF.Value;
+      Open;
+      if not IsEmpty then
+        Writeln(arch, 'Fecha Venc.: ' + FieldByName('FechaVencimientoSecuenciaDGII').AsString);
+    end;
+  end
+  else
+  begin
+    with frmPOS.qEjecutar do
+    begin
       Close;
       sql.Clear;
       SQL.Add('select FechaVenc ');
       sql.Add('from NCF ');
       sql.Add('where VerificaVenc = 1');
       sql.Add('and NCF_Fijo   = LEFT(:NCF,3)');
-      Parameters.ParamByName('NCF').Value        := frmBuscaFactura.QFacturaNCF.Text;
+      Parameters.ParamByName('NCF').Value := frmBuscaFactura.QFacturaNCF.Text;
       Open;
       if not IsEmpty then
-      writeln(arch,'Fecha Venc.: '+FieldByName('FechaVenc').text);
-      end;
-      writeln(arch,'');
-
-
-  if frmBuscaFactura.QFacturaNCF.Value <> '' then
-    writeln(arch, 'NCF    : '+frmBuscaFactura.QFacturaNCF.Value);
+        writeln(arch, 'Fecha Venc.: ' + FieldByName('FechaVenc').text);
+    end;
+    writeln(arch, '');
+    if frmBuscaFactura.QFacturaNCF.Value <> '' then
+      writeln(arch, 'NCF    : ' + frmBuscaFactura.QFacturaNCF.Value);
+  end;
 
   writeln(arch, '----------------------------------------');
   writeln(arch, 'CANT.       DESCRIPCION            TOTAL');
@@ -582,7 +749,7 @@ begin
     begin
       s6:= '';
       FillChar(s6, 10-length(trim(FORMAT('%n',[(frmBuscaFactura.QFacturaTotal.Value/dm.QEmpresaTasaUS.Value)]))), ' ');
-      writeln(arch,'                    DÛlares : '+s6+format('%n',[(frmBuscaFactura.QFacturaTotal.Value/dm.QEmpresaTasaUS.Value)]));
+      writeln(arch,'                    Dùlares : '+s6+format('%n',[(frmBuscaFactura.QFacturaTotal.Value/dm.QEmpresaTasaUS.Value)]));
     end;
 
     if dm.QEmpresaTasaEU.Value > 0 then
@@ -620,7 +787,7 @@ begin
     begin
       s6:= '';
       FillChar(s6, 10-length(trim(FORMAT('%n',[(frmBuscaFactura.QFacturaTotal.Value/dm.QEmpresaTasaUS.Value)]))), ' ');
-      writeln(arch,'                    DÛlares : '+s6+format('%n',[(frmBuscaFactura.QFacturaTotal.Value/dm.QEmpresaTasaUS.Value)]));
+      writeln(arch,'                    Dùlares : '+s6+format('%n',[(frmBuscaFactura.QFacturaTotal.Value/dm.QEmpresaTasaUS.Value)]));
     end;
 
     if dm.QEmpresaTasaEU.Value > 0 then
@@ -638,6 +805,7 @@ begin
   writeln(arch, ' ');
   writeln(arch, dm.centro('<< COPYRIGHT DASHA RESTBAR 809-240-5197 >>'));
   writeln(arch, ' ');
+  BuscaFactura_AppendBloqueElectronico(arch);
   writeln(arch, ' ');
   writeln(arch, ' ');
   writeln(arch, ' ');
@@ -669,7 +837,7 @@ begin
       dm.Query1.sql.clear;
       dm.Query1.sql.add('select usu_codigo UsuarioID, usu_nombre Nombre, usu_supervisor Supervisor, usu_cajero Cajero, usu_camarero Camarero, usu_status Estatus');
 
-      {if (copy(frmAcceso.edclave.Text,1,1) = ';') or (copy(frmAcceso.edclave.Text,1,1) = '—') then
+      {if (copy(frmAcceso.edclave.Text,1,1) = ';') or (copy(frmAcceso.edclave.Text,1,1) = 'ù') then
       begin
         dm.Query1.sql.add('from usuarios where tarjetaSupervisorID = :cla');
         dm.Query1.Parameters.parambyname('cla').Value := copy(frmAcceso.edclave.Text,2,10);
@@ -710,6 +878,9 @@ begin
   btimpuestos.Enabled := (frmMain.Supervisor) or (frmMain.Cajero);
   btdrawer.Enabled := (frmMain.Supervisor) or (frmMain.Cajero);
   btdesembolso.Enabled := (frmMain.Supervisor);
+  btDividirCuenta.Enabled := (frmMain.Supervisor) or (frmMain.Cajero);
+  btdevolucion.Enabled := (frmMain.Supervisor) or (frmMain.Cajero);
+
   //if frmPOS.QFactura.Active then
   //   btunifmesa.Enabled := frmPOS.QFacturaMesaID.AsInteger <> 0;
 end;
@@ -873,7 +1044,7 @@ end;
 
 procedure TfrmOpciones.btDividirCuentaClick(Sender: TObject);
 begin
-{  if frmPOS.Total > 0 then
+  if frmPOS.Total > 0 then
   begin
     Application.CreateForm(TfrmDividirPago, frmDividirPago);
     frmDividirPago.Facturo    := 0;
@@ -895,28 +1066,135 @@ begin
 
     if frmDividirPago.Facturo = 1 then
     Begin {20170421}
- {     frmPOS.QFactura.Edit;
+
+      frmPOS.TExento    := 0;
+      frmPOS.TItbis     := 0;
+      frmPOS.TPropina   := 0;
+      frmPOS.TGrabado   := 0;
+      frmPOS.TDescuento := 0;
+      frmPOS.Total      := 0;
+
+      frmPOS.lbtotal.Caption     := '0.00';
+      frmPOS.lbpropina.Caption   := '0.00';
+      frmPOS.lbGrabado.Caption   := '0.00';
+      frmPOS.lbsubtotal.Caption  := '0.00';
+      frmPOS.lbdescuento.Caption := '0.00';
+      frmPOS.lbitbis.Caption     := '0.00';
+      frmPOS.lbexento.Caption    := '0.00';
+
+      frmPOS.QFactura.Close;
+      frmPOS.QFactura.Parameters.ParamByName('caj').Value := frmMain.Usuario;
+      frmPOS.QFactura.Parameters.ParamByName('fac').Value := -1;
+      frmPOS.QFactura.Parameters.ParamByName('caja').Value := 1;
+      frmPOS.QFactura.Open;
+
+
+      frmPOS.ckPropina  := False;
+      frmPOS.vl_incluirpropina := False;
+
+      frmPOS.QForma.Close;
+      frmPOS.QForma.Parameters.ParamByName('caj').Value := frmMain.Usuario;
+      frmPOS.QForma.Parameters.ParamByName('fac').Value := -1;
+      frmPOS.QForma.Parameters.ParamByName('caja').Value := 1;
+      frmPOS.QForma.Open;
+
+      frmPOS.QDetalle.Close;
+      frmPOS.QDetalle.Parameters.ParamByName('caj').Value := frmMain.Usuario;
+      frmPOS.QDetalle.Parameters.ParamByName('fac').Value := -1;
+      frmPOS.QDetalle.Parameters.ParamByName('caja').Value := 1;
+      frmPOS.QDetalle.Open;
+
+      frmPOS.QDetalleTotal.Close;
+      frmPOS.QDetalleTotal.Open;
+
+      frmPOS.lbmesa.Caption := 'FACTURA DIRECTA' + ' ' +  frmPOS.QFacturaalias.Value ;
+      frmPOS.TipoNCF := 1;
+
+      dm.Query1.Close;
+      dm.Query1.SQL.Clear;
+      dm.Query1.SQL.Add('select tip_nombre Nombre from TipoNCF');
+      dm.Query1.SQL.Add('where emp_codigo = :emp and tip_codigo = :tipo');
+      dm.Query1.Parameters.ParamByName('emp').Value := DM.QEmpresaEmpresaID.Value;
+      dm.Query1.Parameters.ParamByName('tipo').Value := frmPOS.TipoNCF;
+      dm.Query1.Open;
+     frmPOS. lbrnc.Caption := dm.Query1.FieldByName('nombre').AsString;
+
+      frmPOS.rnc := '';
+      frmPOS.razon_social := '';
+
+     { frmPOS.UltCategoria := 8;
+      frmPOS.CatActual    := 1;
+      frmPOS.QFactura.Close;
+      frmPOS.QFactura.Open;
+      frmPOS.QFactura.Edit;
+      frmPOS.QFacturaHold.Value    := True;
+      frmPOS.QFacturarnc.Value     := frmPOS.rnc;
+      if not frmPOS.CkDividirCta.Checked then
+      frmPOS.QFacturaNombre.Value  := frmPOS.razon_social;
+
+      if (frmPOS.CkDividirCta.Checked) and (frmPOS.edtCliente.Text <> '') then begin
+      frmPOS.QFacturaNombre.Text := frmPOS.edtCliente.Text;
+      frmPOS.edtCliente.Clear;
+      frmPOS.edtCliente.SetFocus;
+      end;
+      frmPOS.QFacturaTipoNCF.Value := frmPOS.TipoNCF;
+      if not frmPOS.CkDividirCta.Checked then
+      frmPOS.lbmesa.Caption := 'FACTURA DIRECTA' + ' ' +  frmPOS.QFacturaalias.Value ;
+      frmPOS.QFacturaConItbis.Value   := frmPOS.ckItbis;
+      if frmPOS.QFacturaMesaID.Value > 0 then
+      frmPOS.ckPropina  := true else
+      frmPOS.ckPropina  := False;
+      frmPOS.QFacturaConPropina.Value := frmPOS.ckPropina;
+      frmPOS.QFacturaimprimeNCF.Value := frmPOS.ckNCF;
+      frmPOS.QFacturaCajaID.Value     := 1;
+      frmPOS.QFacturaalias.Value := frmPOS.vl_aliasmesa;
+      frmPOS.QFacturaFacturaID.Value :=0;
+      frmPOS.QFactura.Post;
+
+      frmPOS.rnc := '';
+      frmPOS.razon_social := '';
+
+      frmPOS.TExento    := 0;
+      frmPOS.TItbis     := 0;
+      frmPOS.TPropina   := 0;
+      frmPOS.TGrabado   := 0;
+      frmPOS.TDescuento := 0;
+      frmPOS.Total      := 0;
+
+      frmPOS.lbtotal.Caption     := '0.00';
+      frmPOS.lbpropina.Caption   := '0.00';
+      frmPOS.lbGrabado.Caption   := '0.00';
+      frmPOS.lbsubtotal.Caption  := '0.00';
+      frmPOS.lbdescuento.Caption := '0.00';
+      frmPOS.lbitbis.Caption     := '0.00';
+      frmPOS.lbexento.Caption    := '0.00';
+
+      frmPOS.QFactura.Edit;
       frmPOS.QFacturaHold.Value    := True;
       frmPOS.QFacturarnc.Value     := frmPOS.rnc;
       frmPOS.QFacturaNombre.Value  := frmPOS.razon_social;
       frmPOS.QFacturaTipoNCF.Value := frmPOS.TipoNCF;
-      frmPOS.lbmesa.Caption        := 'FACTURA DIRECTA';
+      frmPOS.lbmesa.Caption := 'FACTURA DIRECTA' ;
       frmPOS.QFacturaConItbis.AsBoolean   := frmPOS.ckItbis;
       frmPOS.QFacturaConPropina.AsBoolean := frmPOS.ckPropina;
       frmPOS.QFacturaimprimeNCF.AsBoolean := frmPOS.ckNCF;
       frmPOS.QFactura.Post;
-      frmPOS.IniTicket;
+      frmPOS.IniTicket;   }
     end;
 
-
+    frmPOS.ckItbis := DM.QParametrosRestBar_FactConItbis.value;// true;
+    frmPOS.ckConItbis.Checked:=  frmPOS.ckItbis ;
     frmPOS.edproducto.SetFocus;
     close;
-  end;}
+  end;
 end;
 
-procedure TfrmOpciones.SpeedButton4Click(Sender: TObject);
+procedure TfrmOpciones.btdevolucionClick(Sender: TObject);
 begin
-if (frmPOS.QFactura.Active)and(frmPOS.QFactura.RecordCount > 0) then
+
+ Application.CreateForm(TfrmDev, frmDev);
+  frmDev.ShowModal;
+{if (frmPOS.QFactura.Active)and(frmPOS.QFactura.RecordCount > 0) then
   if(Trim(frmPOS.lbtotal.Caption) = '0.00') and (frmPOS.QFacturaMesaID.Value <> 0) then begin
     if frmPOS.liberarMesa(frmPOS.QFacturaMesaID.AsString) then
        begin
@@ -929,7 +1207,7 @@ if (frmPOS.QFactura.Active)and(frmPOS.QFactura.RecordCount > 0) then
        end;
     end
     else
-    ShowMessage('Para liberar la mesa no deben haber productos.....');
+    ShowMessage('Para liberar la mesa no deben haber productos.....');   }
 
 end;
 
@@ -941,6 +1219,8 @@ DM.ADOBar.Execute('DELETE factura_restbar where estatus = ''ABI'' AND TOTAL = 0'
 end;
 with frmPOS do begin
 TExento    := 0;
+vl_incluirpropina := False;
+  
       TItbis     := 0;
       TPropina   := 0;
       TGrabado   := 0;
@@ -979,7 +1259,26 @@ TExento    := 0;
       QDetalleTotal.Open;
 
 
-      lbmesa.Caption := 'FACTURA DIRECTA';
+      lbmesa.Caption := 'FACTURA DIRECTA' + ' ' +  QFacturaalias.Value ;
+
+       if  (vl_mesero=0) then vl_mesero:=frmMain.Usuario;
+
+     IF (vl_mesero>0) then
+      begin
+      dm.Query1.Close;
+      dm.Query1.SQL.Clear;
+      dm.Query1.SQL.Add('select usu_nombre ven_nombre from Usuarios');
+      dm.Query1.SQL.Add('where usu_codigo = :mese');
+      dm.Query1.Parameters.ParamByName('mese').Value := vl_mesero;
+      dm.Query1.Open;
+
+      vl_NMesero := dm.Query1.FieldByname('ven_nombre').Value;
+      lblMesero.Caption := 'MESERO: '+vl_NMesero;
+
+      end;
+
+    btnmeserofd.Visible := True;
+    
       TipoNCF := 1;
 
       dm.Query1.Close;
@@ -1003,7 +1302,8 @@ var
   TFac, MontoItbis, Venta, tCambio : double;
   PuntosPrinc, FactorPrin, TotalPuntos, CalcDesc, NumItbis, TotalDescuento, MPagado : Double;
   Puntos, a, x : integer;
-  Msg1, Msg2, Msg3, Msg4, Puerto, Forma, ImpItbis, lbItbis, codigoabre, Mesa : String;
+  Msg1, Msg2, Msg3, Msg4, Puerto, Forma, ImpItbis, lbItbis, codigoabre, Mesa, encf : String;
+  vCajaTicket : Integer;
 begin
   if not FileExists( '.\puerto.ini') then
   begin
@@ -1117,25 +1417,63 @@ begin
       writeln(arch, 'RNC ...: '+frmBuscaFactura.QFacturarnc.Value);
   end;
 
-  if frmBuscaFactura.QFacturaNCF.Value <> '' then
-    writeln(arch, 'NCF    : '+frmBuscaFactura.QFacturaNCF.Value);
-
-  //buscar vencimiento
-      with dm.Query1 do begin
+  if dm.QParametrosUsa_FacturacionElectronica.Value then
+  begin
+    vCajaTicket := BuscaFactura_ObtenerCajaID;
+    dm.Query1.Close;
+    dm.Query1.SQL.Clear;
+    dm.Query1.SQL.Add('select eNCF');
+    dm.Query1.SQL.Add('from Factura_RestBar');
+    dm.Query1.SQL.Add('where FacturaID = :FacturaID');
+    dm.Query1.SQL.Add('and CajaID = :caja');
+    dm.Query1.SQL.Add('and CajeroID = :cajero');
+    dm.Query1.Parameters.ParamByName('caja').Value := vCajaTicket;
+    dm.Query1.Parameters.ParamByName('cajero').Value := frmBuscaFactura.QFacturaCajeroID.Value;
+    dm.Query1.Parameters.ParamByName('FacturaID').Value := frmBuscaFactura.QFacturaFacturaID.Value;
+    dm.Query1.Open;
+    encf := dm.Query1.FieldByName('eNCF').AsString;
+    if Trim(encf) <> '' then
+    begin
+      writeln(arch, ' ');
+      writeln(arch, 'eNCF: ' + encf);
+    end;
+    with frmPOS.qEjecutar do
+    begin
+      Close;
+      SQL.Clear;
+      SQL.Add('SELECT TOP 1');
+      SQL.Add('    FechaVencimientoSecuenciaDGII');
+      SQL.Add('FROM SecuenciaDGII');
+      SQL.Add('WHERE FechaVencimientoSecuenciaDGII IS NOT NULL');
+      SQL.Add('  AND emp_codigo = :emp_codigo');
+      SQL.Add('  AND tipo       = :tipo');
+      SQL.Add('ORDER BY FechaVencimientoSecuenciaDGII');
+      Parameters.ParamByName('emp_codigo').Value := DM.QEmpresaEmpresaID.Value;
+      Parameters.ParamByName('tipo').Value := frmBuscaFactura.QFacturaTipoNCF.Value;
+      Open;
+      if not IsEmpty then
+        Writeln(arch, 'Fecha Venc.: ' + FieldByName('FechaVencimientoSecuenciaDGII').AsString);
+    end;
+  end
+  else
+  begin
+    with frmPOS.qEjecutar do
+    begin
       Close;
       sql.Clear;
       SQL.Add('select FechaVenc ');
       sql.Add('from NCF ');
       sql.Add('where VerificaVenc = 1');
       sql.Add('and NCF_Fijo   = LEFT(:NCF,3)');
-      Parameters.ParamByName('NCF').Value        := frmBuscaFactura.QFacturaNCF.Text;
+      Parameters.ParamByName('NCF').Value := frmBuscaFactura.QFacturaNCF.Text;
       Open;
       if not IsEmpty then
-      writeln(arch,'Fecha Venc.: '+FieldByName('FechaVenc').text);
-      end;
-      writeln(arch,'');
-
-
+        writeln(arch, 'Fecha Venc.: ' + FieldByName('FechaVenc').text);
+    end;
+    writeln(arch, '');
+    if frmBuscaFactura.QFacturaNCF.Value <> '' then
+      writeln(arch, 'NCF    : ' + frmBuscaFactura.QFacturaNCF.Value);
+  end;
 
   writeln(arch, '------------------------------------------');
   writeln(arch, 'CANT.       DESCRIPCION              TOTAL');
@@ -1250,7 +1588,7 @@ begin
     begin
       s6:= '';
       FillChar(s6, 10-length(trim(FormatCurr('#,0.00',(frmBuscaFactura.QFacturaTotal.Value/dm.QEmpresaTasaUS.Value)))), ' ');
-      writeln(arch,'                    DÛlares : '+s6+FormatCurr('#,0.00',(frmBuscaFactura.QFacturaTotal.Value/dm.QEmpresaTasaUS.Value)));
+      writeln(arch,'                    Dùlares : '+s6+FormatCurr('#,0.00',(frmBuscaFactura.QFacturaTotal.Value/dm.QEmpresaTasaUS.Value)));
     end;
 
     if dm.QEmpresaTasaEU.Value > 0 then
@@ -1288,7 +1626,7 @@ begin
     begin
       s6:= '';
       FillChar(s6, 10-length(trim(FormatCurr('#,0.00',(frmBuscaFactura.QFacturaTotal.Value/dm.QEmpresaTasaUS.Value)))), ' ');
-      writeln(arch,'                    DÛlares : '+s6+FormatCurr('#,0.00',(frmBuscaFactura.QFacturaTotal.Value/dm.QEmpresaTasaUS.Value)));
+      writeln(arch,'                    Dùlares : '+s6+FormatCurr('#,0.00',(frmBuscaFactura.QFacturaTotal.Value/dm.QEmpresaTasaUS.Value)));
     end;
 
     if dm.QEmpresaTasaEU.Value > 0 then
@@ -1305,6 +1643,8 @@ begin
   writeln(arch, dm.centro(dm.QEmpresaMensaje4.AsString));
   writeln(arch, ' ');
   writeln(arch, dm.centro('<< COPYRIGHT DASHA RESTBAR 809-240-5197 >>'));
+  writeln(arch, ' ');
+  BuscaFactura_AppendBloqueElectronico(arch);
   for x:=1 to 7 do begin
   writeln(arch, ' ');
   end;
@@ -1320,7 +1660,11 @@ begin
   codigoabre := dm.Query1.FieldByName('codigo_abre_caja').AsString;
 
   if codigoabre = 'Termica' then
-  writeln(arch,chr(27)+chr(109));
+  begin
+    Writeln(arch, ' ');
+    Writeln(arch, ' ');
+    writeln(arch, chr(27) + chr(109));
+  end;
 
   IF vl_cuenta =  False THEN
   pnabrircaja;
@@ -1391,6 +1735,11 @@ begin
     end;
   
 
+end;
+
+procedure TfrmOpciones.btdrawerClick(Sender: TObject);
+begin
+pnabrircaja;
 end;
 
 end.

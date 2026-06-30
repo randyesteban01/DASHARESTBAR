@@ -40,7 +40,7 @@ var
 
 implementation
 
-uses BAR04;
+uses BAR04, uConsultaRNCDGII;
 
 {$R *.dfm}
 
@@ -60,7 +60,29 @@ begin
 end;
 
 procedure TfrmActRNC.btpostClick(Sender: TObject);
+var
+  RncNorm, Nombre, Mensaje: string;
 begin
+  if QRNC.State in [dsInsert, dsEdit] then
+  begin
+    RncNorm := NormalizarRNC(QRNCrnc_cedula.AsString);
+    if RncNorm <> '' then
+      QRNCrnc_cedula.AsString := RncNorm;
+
+    if Length(RncNorm) >= 9 then
+    begin
+      if ConsultarRNCClienteDGIIEx(DM.ADOBar, RncNorm, DM.QEmpresaRNC.AsString,
+        DM.QEmpresaEmpresaID.AsInteger, False, RncNorm, Nombre, Mensaje) then
+      begin
+        QRNCrnc_cedula.AsString := RncNorm;
+        QRNCrazon_social.AsString := Nombre;
+        QRNCnombre_comercial.AsString := Nombre;
+      end
+      else if Trim(Mensaje) <> '' then
+        ShowMessage(Mensaje);
+    end;
+  end;
+
   QRNC.Post;
   QRNC.UpdateBatch;
   Close;

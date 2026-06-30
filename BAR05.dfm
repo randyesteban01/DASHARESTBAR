@@ -1,6 +1,6 @@
 object frmProductos: TfrmProductos
-  Left = 301
-  Top = 122
+  Left = 491
+  Top = 128
   BorderIcons = []
   BorderStyle = bsSingle
   Caption = 'Productos'

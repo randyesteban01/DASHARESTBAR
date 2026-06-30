@@ -1,6 +1,6 @@
 object FrmSeleccionarImpresora: TFrmSeleccionarImpresora
-  Left = 576
-  Top = 239
+  Left = 577
+  Top = 240
   BorderIcons = [biSystemMenu]
   BorderStyle = bsToolWindow
   Caption = 'Seleccionar Impresora para enviar a otro BAR'

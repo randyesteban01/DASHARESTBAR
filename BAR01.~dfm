@@ -1,8 +1,8 @@
 object frmMain: TfrmMain
-  Left = 213
-  Top = 136
-  Width = 1022
-  Height = 556
+  Left = 163
+  Top = 151
+  Width = 1028
+  Height = 571
   Caption = 'DASHA RESTBAR'
   Color = clWhite
   Font.Charset = DEFAULT_CHARSET
@@ -19476,13 +19476,12 @@ object frmMain: TfrmMain
     Font.Name = 'Segoe UI'
     Font.Style = []
     Spacing = 0
-    OnClick = admcuadreExecute
   end
   object Panel1: TPanel
     Left = 0
     Top = 26
     Width = 71
-    Height = 455
+    Height = 470
     Align = alLeft
     TabOrder = 1
     object btsalir: TSpeedButton
@@ -19940,7 +19939,7 @@ object frmMain: TfrmMain
   end
   object stBar1: TStatusBar
     Left = 0
-    Top = 481
+    Top = 496
     Width = 1109
     Height = 19
     Panels = <
@@ -20006,8 +20005,20 @@ object frmMain: TfrmMain
                     Caption = '&Categorias'
                   end
                   item
+                    Action = actsubcategorias
+                    Caption = '&SubCategorias'
+                  end
+                  item
                     Action = aproductos
                     Caption = '&Productos'
+                  end
+                  item
+                    Action = aguarnicion
+                    Caption = '&Terminos - Cocina'
+                  end
+                  item
+                    Action = aterminos
+                    Caption = 'T&erminos - BAR'
                   end
                   item
                     Caption = '-'
@@ -20032,7 +20043,6 @@ object frmMain: TfrmMain
               item
                 Items = <
                   item
-                    Visible = False
                     Action = segusuarios
                     Caption = '&Usuarios'
                   end>
@@ -20066,6 +20076,27 @@ object frmMain: TfrmMain
               end
               item
                 Action = admcuadre
+                Caption = '&Cuadre'
+              end
+              item
+                Action = admCierreTurno
+              end
+              item
+                Action = acierrejornada
+                Caption = 'Cie&rre jornada fiscal'
+              end
+              item
+                Action = acancelar
+                Caption = 'Ca&ncelar documento fiscal en curso'
+              end
+              item
+                Action = aherramienta
+                Caption = 'E&xtracci'#243'n de libro'
+              end
+              item
+                Visible = False
+                Action = actPrinterFiscal
+                Caption = '&Printer Fiscal'
               end>
             Caption = '&Administraci'#243'n'
           end
@@ -20079,6 +20110,10 @@ object frmMain: TfrmMain
                 Visible = False
                 Action = consentradas
                 Caption = '&Entradas'
+              end
+              item
+                Action = consdev
+                Caption = '&Devoluciones'
               end>
             Caption = '&Consultas'
           end>
@@ -20108,6 +20143,7 @@ object frmMain: TfrmMain
     end
     object acategoria: TAction
       Caption = 'Categorias'
+      Enabled = False
       OnExecute = acategoriaExecute
     end
     object acerrar: TAction
@@ -20121,15 +20157,16 @@ object frmMain: TfrmMain
     object segusuarios: TAction
       Caption = 'Usuarios'
       Enabled = False
-      Visible = False
       OnExecute = segusuariosExecute
     end
     object admmesas: TAction
       Caption = 'Mesas'
+      Enabled = False
       OnExecute = admmesasExecute
     end
     object admareas: TAction
       Caption = 'Areas'
+      Enabled = False
       OnExecute = admareasExecute
     end
     object admempresa: TAction
@@ -20145,6 +20182,7 @@ object frmMain: TfrmMain
     end
     object admcuadre: TAction
       Caption = 'Cuadre'
+      Enabled = False
       OnExecute = admcuadreExecute
     end
     object admprinter: TAction
@@ -20177,13 +20215,57 @@ object frmMain: TfrmMain
     end
     object consentradas: TAction
       Caption = 'Entradas'
+      Enabled = False
       Visible = False
       OnExecute = consentradasExecute
+    end
+    object admCierreTurno: TAction
+      Caption = 'Ci&erre de turno'
+      Enabled = False
+      OnExecute = admCierreTurnoExecute
+    end
+    object acierrejornada: TAction
+      Caption = 'Cierre jornada fiscal'
+      Enabled = False
+      OnExecute = acierrejornadaExecute
+    end
+    object acancelar: TAction
+      Caption = 'Cancelar documento fiscal en curso'
+      Enabled = False
+      OnExecute = acancelarExecute
+    end
+    object aherramienta: TAction
+      Caption = 'Extracci'#243'n de libro'
+      Enabled = False
+      OnExecute = aherramientaExecute
+    end
+    object consdev: TAction
+      Caption = 'Devoluciones'
+      Enabled = False
+      OnExecute = consdevExecute
+    end
+    object actPrinterFiscal: TAction
+      Caption = 'Printer Fiscal'
+      Enabled = False
+      Visible = False
+      OnExecute = actPrinterFiscalExecute
+    end
+    object actsubcategorias: TAction
+      Caption = 'actsubcategorias'
+      OnExecute = actsubcategoriasExecute
+    end
+    object aguarnicion: TAction
+      Caption = 'aguarnicion'
+      Enabled = False
+      OnExecute = aguarnicionExecute
+    end
+    object aterminos: TAction
+      Caption = 'Terminos de Coccion'
+      OnExecute = aterminosExecute
     end
   end
   object IdSMTP1: TIdSMTP
     MaxLineAction = maException
-    ReadTimeout = 0
     Host = 'smtp.bizmail.yahoo.com'
     Port = 25
     AuthenticationType = atNone
@@ -20196,6 +20278,7 @@ object frmMain: TfrmMain
     AttachmentEncoding = 'MIME'
     BccList = <>
     CCList = <>
+    DeleteTempFiles = False
     Encoding = meMIME
     Recipients = <>
     ReplyTo = <>

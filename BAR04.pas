@@ -283,6 +283,13 @@ type
     QParametrospar_banca_apuestas: TBooleanField;
     QEmpresaPrecioIncluyeItbis: TStringField;
     QParametrosRestBar_FactConItbis: TBooleanField;
+    QParametrosPAR_MESERO: TBooleanField;
+    QParametrosPAR_AutorizacionNoRequerida: TBooleanField;
+    QParametrosUsa_FacturacionElectronica: TBooleanField;
+    QParametrosintegracion_luganis: TBooleanField;
+    QParametrosPAR_FE_DetenerFacturacion: TBooleanField;
+    QParametrospar_ImprimirFacturaRestBar: TBooleanField;
+    QParametrospar_ImprimirCopiaRestBar: TBooleanField;
     procedure ADOBarAfterConnect(Sender: TObject);
     procedure ADOBarBeforeConnect(Sender: TObject);
     procedure DataModuleCreate(Sender: TObject);
@@ -299,6 +306,7 @@ type
     function GetPcName: string;
     function getParametrosPrinterFiscal: boolean;
     function getSecuencia(Tabla, Campo: string): Integer;
+    function getFechaServidor: TDatetime;
   end;
 
 var
@@ -320,6 +328,22 @@ implementation
 uses BAR03;
 
 {$R *.dfm}
+
+function TDM.getFechaServidor():TDatetime ;
+begin
+  with dm.adoMultiUso do begin
+    Close;
+    Sql.clear;
+    sql.add('SELECT CAST(CAST(GETDATE() AS CHAR(11)) AS DATETIME) FECHA');
+    open;
+    if not IsEmpty then
+      Result :=dm.adoMultiUso['fecha'];
+  end;
+end;
+
+
+
+
 
 function TDM.SetCentralizar(Const aValue:String;aSize : Smallint = 40):String;
 var

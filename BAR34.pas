@@ -34,11 +34,14 @@ type
     procedure bttecladoClick(Sender: TObject);
     procedure btaceptarClick(Sender: TObject);
     procedure ckDescuentoGlobalClick(Sender: TObject);
+    procedure DBEdit1Change(Sender: TObject);
+    procedure DBEdit1Enter(Sender: TObject);
   private
     { Private declarations }
   public
     { Public declarations }
     Acepto : integer;
+
   end;
 
 var
@@ -64,6 +67,7 @@ begin
   CEdt_DescGlobal.Value := 0;
   end;
   //ckDescuentoGlobal.OnClick(nil);
+
 end;
 
 procedure TfrmDescuento.FormKeyDown(Sender: TObject; var Key: Word;
@@ -113,6 +117,7 @@ begin
   if CEdt_DescGlobal.Value = 0 then
   ckDescuentoGlobal.Checked := False else
   ckDescuentoGlobal.Checked := True;
+  frmPOS.cambioxDescuento:= True;
   Acepto := 1;
   Close;
 end;
@@ -123,6 +128,16 @@ begin
     true :  pcDescuento.TabIndex := 1;
     false:  pcDescuento.TabIndex := 0;
   end;  
+end;
+
+procedure TfrmDescuento.DBEdit1Change(Sender: TObject);
+begin
+    frmPOS.cambioxDescuento:= True;
+end;
+
+procedure TfrmDescuento.DBEdit1Enter(Sender: TObject);
+begin
+frmPOS.cambioxDescuento:= True;
 end;
 
 end.

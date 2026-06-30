@@ -64,15 +64,23 @@ end;
 
 procedure TfrmCombinado.btcloseClick(Sender: TObject);
 begin
-  if StrToFloat(format('%10.2F',[Total])) <= StrToFloat(format('%10.2F',[Monto])) then
+  if (StrToFloat(format('%10.2F',[Total])) <= StrToFloat(format('%10.2F',[Monto]))) then
   begin
     Facturo := 0;
     Close;
   end
   else
   begin
+   if (StrToFloat(format('%10.2F',[Monto]))<> 0) then
+   begin
     MessageDlg('DEBE COMPLETAR EL PAGO DE LA CUENTA',mtError,[mbok],0);
     DBGrid1.SetFocus;
+   end
+   else
+   begin
+    Facturo := 0;
+    Close;
+   end;
   end;
 end;
 
@@ -180,82 +188,114 @@ begin
 end;
 
 procedure TfrmCombinado.bttarjetaClick(Sender: TObject);
+var
+  MontoTarjeta, Pendiente: Double;
 begin
-  Application.CreateForm(tfrmTarjeta, frmTarjeta);
-  frmTarjeta.edmonto.visible := true;
-  frmTarjeta.StaticText3.visible := true;
-  frmTarjeta.lbtotal.visible := true;
-  frmTarjeta.edmonto.Enabled := true;
-
-  frmTarjeta.total := Total-Monto;
-  frmTarjeta.lbtotal.Caption := 'TOTAL PENDIENTE'+#13+format('%n',[Total-Monto]);
-  frmTarjeta.ShowModal;
-  //Insertando Forma de Pago
-  if frmTarjeta.Acepto = 1 then
+  Pendiente := StrToFloat(format('%10.2F',[Total - Monto]));
+  if Pendiente <= 0 then
   begin
-      frmPos.QDetalle.DisableControls;
-      frmPos.QDetalle.First;
-      while not frmPos.QDetalle.Eof do
-      begin
-        frmPos.QDetalle.Edit;
-        frmPos.QDetalleCajeroID.Value := frmMain.Usuario;
-        frmPos.QDetalle.Post;
-        frmPos.QDetalle.Next;
-      end;
-      frmPos.QDetalle.First;
-      frmPos.QDetalle.EnableControls;
-      frmPos.QDetalle.UpdateBatch;
-
-    frmPOS.combinado := true;
-    dm.Query1.Close;
-    dm.Query1.SQL.Clear;
-    dm.Query1.SQL.Add('select ISNULL(max(DetalleID),0) as maximo from RestBar_Factura_Forma_Pago');
-    dm.Query1.SQL.Add('where cajeroid = :usu and facturaid = :fac');
-    dm.Query1.SQL.Add('and cajaid = :caj');
-    dm.Query1.Parameters.ParamByName('usu').Value := frmMain.Usuario; //frmPos.QFacturaCajeroID.Value;
-    dm.Query1.Parameters.ParamByName('fac').Value := frmPos.QFacturaFacturaID.Value;
-    dm.Query1.Parameters.ParamByName('caj').Value := frmPos.QFacturaCajaID.Value;
-    dm.Query1.Open;
-
-    frmPos.QForma.Insert;
-    frmPos.QFormaCajeroID.Value  := frmMain.Usuario; //frmPos.QFacturaCajeroID.Value;
-    frmPos.QFormaFacturaID.Value := frmPos.QFacturaFacturaID.Value;
-    frmPos.QFormaCajaID.Value    := frmPos.QFacturaCajaID.Value;
-    frmPos.QFormaDetalleID.Value := dm.Query1.FieldByName('maximo').AsInteger + 1;
-    frmPos.QFormaMonto.Value     := strtofloat(frmTarjeta.edmonto.Text);
-    frmPos.QFormaForma.Value     := 'Tarjeta';
-    frmPos.QFormaTipo_Tarjeta.Value   := frmTarjeta.ComboBox1.Text;
-    frmPos.QFormaAutorizacion.Value   := frmTarjeta.edautorizacion.Text;
-    frmPos.QFormaNumero_Tarjeta.Value := frmTarjeta.edtarjeta.Text;
-    frmPos.QFormaBanco.Value          := frmTarjeta.DBLookupComboBox1.Text;
-    frmPos.QForma.Post;
-    frmPos.QForma.UpdateBatch;
-
-   { frmPos.QFactura.Edit;
-    frmPos.QFacturaConbinado.Value  := true;
-    frmPos.QFacturaPagado.Value     := frmPos.QFacturaPagado.Value + strtofloat(frmTarjeta.edmonto.Text);
-    frmPos.QFactura.Post;
-    }
-    Monto := Monto + strtofloat(frmTarjeta.edmonto.Text); //frmPos.QFacturaPagado.Value;
-    lbmonto.Caption := 'MONTO PAGADO'+#13+format('%n',[Monto]);
-
-    Devuelta := Monto - Total;
-    if Total > Monto then
-    begin
-      lbdevuelta.Color   := clLime;
-      lbdevuelta.Caption := 'PENDIENTE COBRAR'+#13+format('%n',[Devuelta]);
-    end
-    else
-    begin
-      lbdevuelta.Color   := clRed;
-      lbdevuelta.Caption := 'MONTO A DEVOLVER'+#13+format('%n',[Devuelta]);
-    end;
+    MessageDlg('LA CUENTA YA ESTÁ COMPLETAMENTE PAGADA',mtError,[mbok],0);
+    Exit;
   end;
-  frmTarjeta.edmonto.visible      := false;
-  frmTarjeta.StaticText3.visible  := false;
-  frmTarjeta.lbtotal.visible      := false;
-  frmTarjeta.edmonto.Enabled      := false;
-  frmTarjeta.Release;
+
+  Application.CreateForm(tfrmTarjeta, frmTarjeta);
+  try
+    frmTarjeta.edmonto.visible := true;
+    frmTarjeta.StaticText3.visible := true;
+    frmTarjeta.lbtotal.visible := true;
+    frmTarjeta.edmonto.Enabled := true;
+
+    frmTarjeta.total := Pendiente;
+    frmTarjeta.lbtotal.Caption := 'TOTAL PENDIENTE'+#13+format('%n',[Pendiente]);
+    frmTarjeta.ShowModal;
+    //Insertando Forma de Pago
+    if frmTarjeta.Acepto = 1 then
+    begin
+      try
+        MontoTarjeta := StrToFloat(frmTarjeta.edmonto.Text);
+      except
+        MessageDlg('MONTO DE TARJETA INVÁLIDO',mtError,[mbok],0);
+        Exit;
+      end;
+
+      MontoTarjeta := StrToFloat(format('%10.2F',[MontoTarjeta]));
+      if MontoTarjeta <= 0 then
+      begin
+        MessageDlg('MONTO DE TARJETA INVÁLIDO',mtError,[mbok],0);
+        Exit;
+      end;
+
+      if MontoTarjeta > Pendiente then
+      begin
+        MessageDlg('EL MONTO DE LA TARJETA NO PUEDE SER MAYOR AL TOTAL PENDIENTE',mtError,[mbok],0);
+        Exit;
+      end;
+
+        frmPos.QDetalle.DisableControls;
+        frmPos.QDetalle.First;
+        while not frmPos.QDetalle.Eof do
+        begin
+          frmPos.QDetalle.Edit;
+          frmPos.QDetalleCajeroID.Value := frmMain.Usuario;
+          frmPos.QDetalle.Post;
+          frmPos.QDetalle.Next;
+        end;
+        frmPos.QDetalle.First;
+        frmPos.QDetalle.EnableControls;
+        frmPos.QDetalle.UpdateBatch;
+
+      frmPOS.combinado := true;
+      dm.Query1.Close;
+      dm.Query1.SQL.Clear;
+      dm.Query1.SQL.Add('select ISNULL(max(DetalleID),0) as maximo from RestBar_Factura_Forma_Pago');
+      dm.Query1.SQL.Add('where cajeroid = :usu and facturaid = :fac');
+      dm.Query1.SQL.Add('and cajaid = :caj');
+      dm.Query1.Parameters.ParamByName('usu').Value := frmMain.Usuario; //frmPos.QFacturaCajeroID.Value;
+      dm.Query1.Parameters.ParamByName('fac').Value := frmPos.QFacturaFacturaID.Value;
+      dm.Query1.Parameters.ParamByName('caj').Value := frmPos.QFacturaCajaID.Value;
+      dm.Query1.Open;
+
+      frmPos.QForma.Insert;
+      frmPos.QFormaCajeroID.Value  := frmMain.Usuario; //frmPos.QFacturaCajeroID.Value;
+      frmPos.QFormaFacturaID.Value := frmPos.QFacturaFacturaID.Value;
+      frmPos.QFormaCajaID.Value    := frmPos.QFacturaCajaID.Value;
+      frmPos.QFormaDetalleID.Value := dm.Query1.FieldByName('maximo').AsInteger + 1;
+      frmPos.QFormaMonto.Value     := MontoTarjeta;
+      frmPos.QFormaForma.Value     := 'Tarjeta';
+      frmPos.QFormaTipo_Tarjeta.Value   := frmTarjeta.ComboBox1.Text;
+      frmPos.QFormaAutorizacion.Value   := frmTarjeta.edautorizacion.Text;
+      frmPos.QFormaNumero_Tarjeta.Value := frmTarjeta.edtarjeta.Text;
+      frmPos.QFormaBanco.Value          := frmTarjeta.DBLookupComboBox1.Text;
+      frmPos.QForma.Post;
+      frmPos.QForma.UpdateBatch;
+
+     { frmPos.QFactura.Edit;
+      frmPos.QFacturaConbinado.Value  := true;
+      frmPos.QFacturaPagado.Value     := frmPos.QFacturaPagado.Value + MontoTarjeta;
+      frmPos.QFactura.Post;
+      }
+      Monto := Monto + MontoTarjeta; //frmPos.QFacturaPagado.Value;
+      lbmonto.Caption := 'MONTO PAGADO'+#13+format('%n',[Monto]);
+
+      Devuelta := Monto - Total;
+      if Total > Monto then
+      begin
+        lbdevuelta.Color   := clLime;
+        lbdevuelta.Caption := 'PENDIENTE COBRAR'+#13+format('%n',[Devuelta]);
+      end
+      else
+      begin
+        lbdevuelta.Color   := clRed;
+        lbdevuelta.Caption := 'MONTO A DEVOLVER'+#13+format('%n',[Devuelta]);
+      end;
+    end;
+  finally
+    frmTarjeta.edmonto.visible      := false;
+    frmTarjeta.StaticText3.visible  := false;
+    frmTarjeta.lbtotal.visible      := false;
+    frmTarjeta.edmonto.Enabled      := false;
+    frmTarjeta.Release;
+  end;
 end;
 
 procedure TfrmCombinado.FormActivate(Sender: TObject);
@@ -280,9 +320,9 @@ begin
       dm.Query1.ExecSQL;
     end;
 
-    frmPOS.QFactura.Edit;
+    {frmPOS.QFactura.Edit;
     frmPOS.QFacturaPagado.Value := frmPOS.QFacturaPagado.Value - frmPOS.QFormaMonto.Value;
-    frmPOS.QFactura.Post;
+    frmPOS.QFactura.Post;  }
 
 
     frmPOS.QForma.Delete;
@@ -402,11 +442,11 @@ begin
     frmPos.QForma.Post;
     frmPos.QForma.UpdateBatch;
 
-    frmPos.QFactura.Edit;
+    {frmPos.QFactura.Edit;
     frmPos.QFacturaConbinado.Value  := true;
     frmPos.QFacturaPagado.Value     := frmPos.QFacturaPagado.Value + strtofloat(frmBono.edmonto.Text);
     frmPos.QFactura.Post;
-
+        }
     Monto := strtofloat(frmBono.edmonto.Text);
     lbmonto.Caption := 'MONTO PAGADO'+#13+format('%n',[Monto]);
 
@@ -461,10 +501,10 @@ begin
         frmPos.QForma.Post;
         frmPos.QForma.UpdateBatch;
 
-        frmPos.QFactura.Edit;
+       { frmPos.QFactura.Edit;
         frmPos.QFacturaConbinado.Value  := true;
         frmPos.QFacturaPagado.Value     := frmPos.QFacturaPagado.Value + frmBuscaNC.QDevolucionTotal.Value;
-        frmPos.QFactura.Post;
+        frmPos.QFactura.Post; }
 
         dm.Query1.Close;
         dm.Query1.SQL.Clear;

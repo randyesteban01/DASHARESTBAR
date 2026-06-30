@@ -157,7 +157,7 @@ procedure TfrmConsVentas.FormCreate(Sender: TObject);
 begin
   Memo1.Lines := QVentas.SQL;
   Memo2.Lines := QProductos.SQL;
-  
+
   btclose.Caption    := 'F1'+#13+'SALIR';
   btrefresh.Caption  := 'F2'+#13+'CONSULTAR';
   btanular.Caption   := 'F8'+#13+'ANULAR';
@@ -168,6 +168,8 @@ begin
   hora2.Date  := Date;
   hora1.Time  := StrToTime('06:00:00');
   hora2.Time  := StrToTime('23:59:59');
+
+  
 end;
 
 procedure TfrmConsVentas.FormActivate(Sender: TObject);

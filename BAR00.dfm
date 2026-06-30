@@ -1,8 +1,8 @@
 object frmPOS: TfrmPOS
-  Left = 187
-  Top = 0
-  Width = 1126
-  Height = 735
+  Left = 167
+  Top = 17
+  Width = 1084
+  Height = 717
   ActiveControl = edproducto
   BorderIcons = []
   Caption = 'DASHA RESTBAR'
@@ -1113,15 +1113,18 @@ object frmPOS: TfrmPOS
   Position = poScreenCenter
   WindowState = wsMaximized
   OnActivate = FormActivate
+  OnClick = FormClick
   OnCreate = FormCreate
   OnKeyDown = FormKeyDown
+  OnKeyPress = FormKeyPress
+  OnMouseMove = FormMouseMove
   PixelsPerInch = 96
   TextHeight = 13
   object pnIzquierdo: TPanel
     Left = 0
     Top = 0
     Width = 267
-    Height = 661
+    Height = 643
     Align = alLeft
     BevelInner = bvLowered
     BevelOuter = bvNone
@@ -1168,7 +1171,7 @@ object frmPOS: TfrmPOS
       Left = 1
       Top = 58
       Width = 265
-      Height = 17
+      Height = 34
       Align = alTop
       BevelOuter = bvNone
       Color = clYellow
@@ -1178,10 +1181,24 @@ object frmPOS: TfrmPOS
         Top = 0
         Width = 265
         Height = 17
-        Align = alClient
         Alignment = taCenter
         AutoSize = False
         Caption = 'ATENDIENDO'
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clBlack
+        Font.Height = -15
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        ParentFont = False
+        OnDblClick = lbmesaDblClick
+      end
+      object lblMesero: TLabel
+        Left = 0
+        Top = 18
+        Width = 265
+        Height = 17
+        Alignment = taCenter
+        AutoSize = False
         Font.Charset = ANSI_CHARSET
         Font.Color = clBlack
         Font.Height = -15
@@ -1192,9 +1209,9 @@ object frmPOS: TfrmPOS
     end
     object DBGrid1: TDBGrid
       Left = 1
-      Top = 170
+      Top = 187
       Width = 265
-      Height = 299
+      Height = 264
       Align = alClient
       Ctl3D = True
       DataSource = dsDetalle
@@ -1207,6 +1224,8 @@ object frmPOS: TfrmPOS
       TitleFont.Height = -11
       TitleFont.Name = 'Tahoma'
       TitleFont.Style = []
+      OnCellClick = DBGrid1CellClick
+      OnColEnter = DBGrid1ColEnter
       OnDrawColumnCell = DBGrid1DrawColumnCell
       OnEnter = DBGrid1Enter
       Columns = <
@@ -1238,7 +1257,7 @@ object frmPOS: TfrmPOS
     end
     object Panel12: TPanel
       Left = 1
-      Top = 469
+      Top = 451
       Width = 265
       Height = 191
       Align = alBottom
@@ -1583,7 +1602,7 @@ object frmPOS: TfrmPOS
     end
     object Panel13: TPanel
       Left = 1
-      Top = 75
+      Top = 92
       Width = 265
       Height = 95
       Align = alTop
@@ -1876,13 +1895,13 @@ object frmPOS: TfrmPOS
   end
   object pnAbajo: TPanel
     Left = 0
-    Top = 661
-    Width = 1110
+    Top = 643
+    Width = 1068
     Height = 35
     Align = alBottom
     TabOrder = 1
     object lbfechahora: TLabel
-      Left = 973
+      Left = 931
       Top = 1
       Width = 136
       Height = 33
@@ -2470,10 +2489,10 @@ object frmPOS: TfrmPOS
     end
   end
   object pnDerecho: TPanel
-    Left = 1031
+    Left = 989
     Top = 0
     Width = 79
-    Height = 661
+    Height = 643
     Align = alRight
     BevelInner = bvLowered
     BevelOuter = bvNone
@@ -3045,7 +3064,6 @@ object frmPOS: TfrmPOS
       Font.Style = [fsBold]
       ParentFont = False
       Visible = False
-      OnClick = btliberarmesaClick
     end
     object btCombinado: TSpeedButton
       Left = 3
@@ -3165,8 +3183,8 @@ object frmPOS: TfrmPOS
   object pnCentral: TPanel
     Left = 267
     Top = 0
-    Width = 764
-    Height = 661
+    Width = 722
+    Height = 643
     Align = alClient
     BevelInner = bvLowered
     BevelOuter = bvNone
@@ -3174,7 +3192,7 @@ object frmPOS: TfrmPOS
     object Panel9: TPanel
       Left = 1
       Top = 1
-      Width = 762
+      Width = 720
       Height = 27
       Align = alTop
       BevelOuter = bvNone
@@ -3182,7 +3200,7 @@ object frmPOS: TfrmPOS
       object lbempresa: TLabel
         Left = 0
         Top = 0
-        Width = 762
+        Width = 720
         Height = 27
         Align = alClient
         Alignment = taCenter
@@ -3199,8 +3217,8 @@ object frmPOS: TfrmPOS
     object Panel10: TPanel
       Left = 1
       Top = 90
-      Width = 762
-      Height = 570
+      Width = 720
+      Height = 552
       Align = alClient
       BevelInner = bvLowered
       BevelOuter = bvLowered
@@ -5348,14 +5366,14 @@ object frmPOS: TfrmPOS
     object Panel11: TPanel
       Left = 1
       Top = 28
-      Width = 762
+      Width = 720
       Height = 62
       Align = alTop
       BevelInner = bvRaised
       BevelOuter = bvLowered
       TabOrder = 2
       DesignSize = (
-        762
+        720
         62)
       object btrestacat: TSpeedButton
         Left = 90
@@ -5634,6 +5652,96 @@ object frmPOS: TfrmPOS
         ParentFont = False
         OnClick = bthomeClick
       end
+      object btnmeserofd: TSpeedButton
+        Left = 46
+        Top = 2
+        Width = 43
+        Height = 39
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -12
+        Font.Name = 'Arial'
+        Font.Style = [fsBold]
+        Glyph.Data = {
+          42090000424D4209000000000000420000002800000018000000180000000100
+          20000300000000090000130B0000130B000000000000000000000000FF0000FF
+          0000FF00000000000000000000000000000000000000A86E6E35A86C6C44A86C
+          6C44A86C6C44A86C6C44A86C6C44A96D6D6BA86C6C76A86C6C76A86C6C76A86C
+          6C76A86C6C76A86C6C76A86C6C76A86C6C76A96E6E5F00000000000000000000
+          000000000000000000000000000000000000AA6E6E33AA6D6DFFAA6D6DFFAA6D
+          6DFFAA6D6DFFAA6D6DFFAA6D6DFFAA6D6DFFAA6D6DFFAA6D6DFFAA6D6DFFAA6D
+          6DFFAA6D6DFFAA6D6DFFAA6D6DFFAA6D6DFFAA6D6DFFAA6B6B5A000000000000
+          000000000000000000000000000000000000AB6B6B40AA6D6DFFD8B8B4FFE7D1
+          CCFFE7D1CCFFE7D1CCFFD8B8B4FFAA6D6DFFA084BDFF9C8CD8FF9C8CD8FF9C8C
+          D8FF9C8CD8FF9C8CD8FF9C8CD8FFA084BDFFAA6D6DFFAA6B6B70000000000000
+          000000000000000000000000000000000000AB6B6B40AA6D6DFFE8D3CDFFFDF5
+          EEFFFDF5EEFFFDF5EEFFE8D3CDFFAA6D6DFF9C8CDAFF9A92EDFF9796FCFF9797
+          FFFF9797FFFF9797FFFF9797FFFF9C8CDAFFAA6D6DFFAA6B6B70000000000000
+          000000000000000000000000000000000000AB6C6C3DAA6D6DFFE8D2CCFFFDF5
+          EEFFFDF5EEFFFDF5EEFFE8D3CDFFAA6D6DFF9C8CDAFFA96F74FF9F84BEFF9797
+          FFFF9797FFFF9797FFFF9797FFFF9C8CD9FFAA6D6DFFAA6E6E6A000000000000
+          000000000000000000000000000000000000AC707022AA6D6DFFDCBEBAFFFDF5
+          EEFFFDF5EEFFFDF5EEFFE8D3CEFFAA6D6DFF9D89CFFFA77486FF9E89CDFF9797
+          FFFF9797FFFF9797FFFF9797FFFF9F86C3FFAA6D6DFFA56E6E3C000000000000
+          00000000000000000000000000000000000000000000AA6F6FD7B57E7DFDF9EF
+          E9FFFDF5EEFFFDF5EEFFF9EFE8FFB47F80FFAA7176FF9B8DDBFF9797FFFF9797
+          FFFF9797FFFF9797FFFF9895F8FFA7727FFFA96E6FF800000000000000000000
+          00000000000000000000000000000000000000000000A86E6E4AAA6D6DFEBD8E
+          8DFEF3E4DEFFFDF5EEFFFDF4EDFFD5B5B1FFAA6E6EFFAA6E6EFFA47A9CFF9796
+          FDFF9797FFFF9A92EDFFA57891FFAA6D6DFFA96C6C7A00000000000000000000
+          0000000000000000000000000000000000000000000000000000A96D6D62AA6E
+          6EFAAA6E6EFEB98785FDB17878FFAA6D6DFFAE8A91FFAE8B91FFAA6D6DFFA970
+          76FFA77589FFA96D6EFFAA6E6EFFAA6B6B9D0000000000000000000000000000
+          000000000000000000000000000000000000000000000000000000000000AC6A
+          6A1FA96D6D83A96D6DB3AA6D6DFFAE9098FFB2B2C2FFB2B2C2FFAE9098FFAA6D
+          6DFFA96D6DE8AA6D6DC2AB69693A000000000000000000000000000000000000
+          0000000000000000000000000000000000000000000000000000000000000000
+          000000000000A769691DAA6F6FFFAA6D6DFFAA6D6DFFAA6D6DFFAA6D6DFFAA6E
+          6EFFAD6D6D1C0000000000000000000000000000000000000000000000000000
+          0000000000000000000000000000000000000000000000000000000000000000
+          0000A36D6D0EAA6E70DFAA7374FFB2ADBDFFB6CCE2FFB6CCE2FFB2ACBCFFAA72
+          74FFA96D6EDDB075750D00000000000000000000000000000000000000000000
+          000000000000000000000000000000000000000000000000000000000000AB6D
+          6D46AA6D6DC1AA6E6EFFB4C1D5FFB7DAF4FFB7DAF4FFB7DAF4FFB7DAF4FFB4C1
+          D5FFAA6D6DFFAA6E6EC0AA6B6B45000000000000000000000000000000000000
+          0000000000000000000000000000000000000000000000000000AA6B6B5AAA6D
+          6DFFAA6E6EFFAD858BFFB7DAF4FFB7DAF4FFB7DAF4FFB7DAF4FFB7DAF4FFB7DA
+          F4FFAD858AFFAA6F6FFFAA6D6DFFA96C6C590000000000000000000000000000
+          0000000000000000000000000000000000000000000000000000AA6D6DB1AB79
+          7DFDAC7B7EFFAE959FFFB7DAF4FFB7DAF4FFB7DAF4FFB7DAF4FFB7DAF4FFB7DA
+          F4FFAE959FFFAC7B7EFFAB797DFDA96C6CB00000000000000000000000000000
+          0000000000000000000000000000000000000000000000000000AA6D6D8AA96D
+          6EFEAB7375FFAF96A0FFB7DAF4FFB7DAF4FFB7DAF4FFB7DAF4FFB7DAF4FFB7DA
+          F4FFAF96A0FFAB7375FFA96D6EFEA96D6D890000000000000000000000000000
+          0000000000000000000000000000000000000000000000000000A36D6D0EA96E
+          6EA4AA6E6EFEAD8085FFB0A0ACFFB0A0ACFFB0A0ACFFB0A0ACFFB0A0ACFFB0A0
+          ACFFAD8085FFAA6E6EFEA96E6EA4A36D6D0E0000000000000000000000000000
+          0000000000000000000000000000000000000000000000000000000000000000
+          0000AA6E6FFAAA6D6DFFAA6D6DFFAA6D6DFFAA6D6DFFAA6D6DFFAA6D6DFFAA6D
+          6DFFAA6D6DFFAA6E6FFA00000000000000000000000000000000000000000000
+          0000000000000000000000000000000000000000000000000000000000000000
+          0000AA6D6EF4A47895FF9C8CD8FF9C8CD8FF9C8CD8FF9C8CD8FF9C8CD8FF9C8C
+          D8FFA47895FFAA6D6EF400000000000000000000000000000000000000000000
+          0000000000000000000000000000000000000000000000000000000000000000
+          0000AA6E6FF8AA6D6DFFAA6D6DFFAA6D6DFFAA6D6DFFAA6D6DFFAA6D6DFFAA6D
+          6DFFAA6D6DFFA96E6FF800000000000000000000000000000000000000000000
+          0000000000000000000000000000000000000000000000000000000000000000
+          0000AB6E6EE6BA8887FFD4B3AFFFD1ADAAFFD1ADAAFFD1ADAAFFD1ADAAFFD4B3
+          AFFFBA8887FFAB6E6EE600000000000000000000000000000000000000000000
+          0000000000000000000000000000000000000000000000000000000000000000
+          0000AB6F6FE3C09290FFE7D1CCFFE7D1CCFFE7D1CCFFE7D1CCFFE7D1CCFFE7D1
+          CCFFC09290FFAB6F6FE300000000000000000000000000000000000000000000
+          0000000000000000000000000000000000000000000000000000000000000000
+          0000AB6F6FD5AA6D6DFFAA6D6DFFAA6D6DFFAA6D6DFFAA6D6DFFAA6D6DFFAA6D
+          6DFFAA6D6DFFAB6F6FD500000000000000000000000000000000000000000000
+          0000000000000000000000000000000000000000000000000000000000000000
+          0000AD6D6D1CA86C6C44A86C6C44A86C6C44A86C6C44A86C6C44A86C6C44A86C
+          6C44A86C6C44AD6D6D1C00000000000000000000000000000000000000000000
+          000000000000}
+        Layout = blGlyphTop
+        ParentFont = False
+        OnClick = btnmeserofdClick
+      end
       object lbcatactual: TStaticText
         Left = 3
         Top = 42
@@ -5654,7 +5762,7 @@ object frmPOS: TfrmPOS
         TabOrder = 0
       end
       object Panel65: TPanel
-        Left = 293
+        Left = 251
         Top = 2
         Width = 467
         Height = 58
@@ -5943,19 +6051,35 @@ object frmPOS: TfrmPOS
           Width = 51
         end
         object ckConItbis: TcxCheckBox
-          Left = 367
-          Top = 24
+          Left = 418
+          Top = 5
           Caption = 'Itbis'
           TabOrder = 1
           OnClick = ckConItbisClick
           Width = 98
         end
+        object CurrencyEdit1: TCurrencyEdit
+          Left = 373
+          Top = 24
+          Width = 54
+          Height = 29
+          AutoSize = False
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -16
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          ParentFont = False
+          TabOrder = 2
+          Visible = False
+          OnKeyPress = CurrencyEdit1KeyPress
+        end
       end
       object lbrnc: TStaticText
         Left = 178
         Top = 3
-        Width = 116
-        Height = 55
+        Width = 146
+        Height = 40
         Alignment = taCenter
         Anchors = [akLeft, akTop, akRight]
         AutoSize = False
@@ -5975,6 +6099,7 @@ object frmPOS: TfrmPOS
         Caption = 'Div / Cta'
         Enabled = False
         TabOrder = 3
+        Visible = False
         OnClick = CkDividirCtaClick
         Width = 67
       end
@@ -6091,8 +6216,12 @@ object frmPOS: TfrmPOS
       
         '          Visualizar, Imprimir, CajaID, Costo, Recargo, MontoItb' +
         'is, imprimir_comanda, imprimir_comanda2,'
-      '         Comanda_Impreso, div_grupo,div_Pago'
-      ',emp_codigo, suc_codigo'
+      
+        '         Comanda_Impreso, div_grupo,div_Pago,pro_nota,pro_inclui' +
+        'rnota'
+      
+        ',emp_codigo, suc_codigo, incluye_guarnicion, guarniciones, inclu' +
+        'ye_termino, termino_coccion'
       'From Factura_Items'
       'Where CajeroID = :caj'
       '     and FacturaID = :fac'
@@ -6211,6 +6340,27 @@ object frmPOS: TfrmPOS
     object QDetalleemp_codigo: TIntegerField
       FieldName = 'emp_codigo'
     end
+    object QDetallepro_nota: TStringField
+      FieldName = 'pro_nota'
+      Size = 100
+    end
+    object QDetallepro_incluirnota: TBooleanField
+      FieldName = 'pro_incluirnota'
+    end
+    object QDetalleincluye_guarnicion: TBooleanField
+      FieldName = 'incluye_guarnicion'
+    end
+    object QDetalleincluye_termino: TBooleanField
+      FieldName = 'incluye_termino'
+    end
+    object QDetalletermino_coccion: TStringField
+      FieldName = 'termino_coccion'
+      Size = 500
+    end
+    object QDetalleguarniciones: TStringField
+      FieldName = 'guarniciones'
+      Size = 500
+    end
   end
   object QProductos: TADOQuery
     Connection = DM.ADOBar
@@ -6229,26 +6379,33 @@ object frmPOS: TfrmPOS
         '(select exi_cantidad from Existencias where emp_codigo = p.emp_c' +
         'odigo and alm_codigo = pa.par_almacenventa and pro_codigo = p.pr' +
         'o_codigo) Existencia, '
+      ''
+      'pro_precio1 preciooriginal,'
       
-        '--case when pa.par_itbisincluido = '#39'False'#39' then isnull(pro_preci' +
-        'o1,0) else isnull(pro_precio1,0)/(1+(p.pro_montoitbis/100)) end ' +
-        'Precio, '
-      
-        'case when pa.RestBar_FactConItbis = '#39'False'#39' then isnull(pro_prec' +
-        'io1,0) else isnull(pro_precio1,0)/(1+(p.pro_montoitbis/100)) end' +
-        ' Precio, '
-      
-        'case when pa.RestBar_FactConItbis = '#39'False'#39' then isnull(pro_prec' +
-        'io2,0) else isnull(pro_precio2,0)/(1+(p.pro_montoitbis/100)) end' +
-        ' Precio2, '
-      
-        'case when pa.RestBar_FactConItbis = '#39'False'#39' then isnull(pro_prec' +
-        'io3,0) else isnull(pro_precio3,0)/(1+(p.pro_montoitbis/100)) end' +
-        ' Precio3, '
-      
-        'case when pa.RestBar_FactConItbis = '#39'False'#39' then isnull(pro_prec' +
-        'io4,0) else isnull(pro_precio4,0)/(1+(p.pro_montoitbis/100)) end' +
-        ' Precio4, '
+        '--case when pa.RestBar_FactConItbis = '#39'False'#39' then isnull(pro_pr' +
+        'ecio1,0) else isnull(pro_precio1,0)/(1+(p.pro_montoitbis/100)) e' +
+        'nd Precio, '
+      ''
+      'case when pa.RestBar_FactConItbis=0 then isnull(pro_precio1,0)  '
+      'when pa.RestBar_FactConItbis=1 and par_itbisincluido = '#39'False'#39' '
+      'then isnull(pro_precio1,0) else'
+      'isnull(pro_precio1,0)/(1+(p.pro_montoitbis/100)) end Precio, '
+      ''
+      'case when pa.RestBar_FactConItbis=0 then isnull(pro_precio2,0)  '
+      'when pa.RestBar_FactConItbis=1 and par_itbisincluido = '#39'False'#39' '
+      'then isnull(pro_precio2,0) else'
+      'isnull(pro_precio2,0)/(1+(p.pro_montoitbis/100)) end Precio2, '
+      ''
+      'case when pa.RestBar_FactConItbis=0 then isnull(pro_precio3,0)  '
+      'when pa.RestBar_FactConItbis=1 and par_itbisincluido = '#39'False'#39' '
+      'then isnull(pro_precio3,0) else'
+      'isnull(pro_precio3,0)/(1+(p.pro_montoitbis/100)) end Precio3, '
+      ''
+      'case when pa.RestBar_FactConItbis=0 then isnull(pro_precio4,0)  '
+      'when pa.RestBar_FactConItbis=1 and par_itbisincluido = '#39'False'#39' '
+      'then isnull(pro_precio4,0) else'
+      'isnull(pro_precio4,0)/(1+(p.pro_montoitbis/100)) end Precio4, '
+      ''
       'p.pro_costo Costo, '
       
         'cast(case when p.pro_itbis = '#39'S'#39' then 1 else 0 end as bit) Itbis' +
@@ -6264,10 +6421,10 @@ object frmPOS: TfrmPOS
         'OfertaDescuento,ImpresoraRemota, pro_roriginal Codigo,'
       
         'cast(case when p.pro_itbis = '#39'S'#39' then pro_montoitbis else 0 end ' +
-        'as numeric(18,2)) pro_itbis, ImpresoraRemota2'
+        'as numeric(18,2)) pro_itbis, ImpresoraRemota2,'
+      'pro_incluirnota, incluir_guarnicion,incluir_termino'
       'from Productos P '
       'inner join Parametros PA on p.emp_codigo = pa.emp_codigo'
-      ''
       'where pro_nombre = :nom')
     Left = 376
     Top = 320
@@ -6328,6 +6485,15 @@ object frmPOS: TfrmPOS
     end
     object QProductosImpresoraRemota2: TBooleanField
       FieldName = 'ImpresoraRemota2'
+    end
+    object QProductospro_incluirnota: TBooleanField
+      FieldName = 'pro_incluirnota'
+    end
+    object QProductosincluir_guarnicion: TBooleanField
+      FieldName = 'incluir_guarnicion'
+    end
+    object QProductosincluir_termino: TBooleanField
+      FieldName = 'incluir_termino'
     end
   end
   object dsDetalle: TDataSource
@@ -6497,16 +6663,19 @@ object frmPOS: TfrmPOS
       
         'ConItbis, ConPropina, nota, imprimeNCF,DecuentoGlobal ,Unificada' +
         ', Abierta, AbiertaPor, RECARGO'
-      ',emp_codigo, suc_codigo'
+      
+        ',f.emp_codigo, suc_codigo, mese_codigo, alias,CLI_CODIGO,mov_num' +
+        'ero , eNCF, t.cod_dgii as TipoeNCF'
       'from'
-      'Factura_RestBar'
+      'Factura_RestBar f'
+      'LEFT join TipoNCF t on t.tip_codigo=f.TipoNCF'
       'where'
       'CajeroID = :caj'
       'and FacturaID = :fac'
       'and CajaID = :caja'
       'and estatus <> '#39'ANU'#39)
     Left = 376
-    Top = 256
+    Top = 264
     object QFacturaCajeroID: TIntegerField
       FieldName = 'CajeroID'
     end
@@ -6623,6 +6792,25 @@ object frmPOS: TfrmPOS
     end
     object QFacturasuc_codigo: TIntegerField
       FieldName = 'suc_codigo'
+    end
+    object QFacturamese_codigo: TIntegerField
+      FieldName = 'mese_codigo'
+    end
+    object QFacturaalias: TStringField
+      FieldName = 'alias'
+      Size = 50
+    end
+    object QFacturaCLI_CODIGO: TIntegerField
+      FieldName = 'CLI_CODIGO'
+    end
+    object QFacturamov_numero: TIntegerField
+      FieldName = 'mov_numero'
+    end
+    object QFacturaeNCF: TStringField
+      FieldName = 'eNCF'
+    end
+    object QFacturaTipoeNCF: TIntegerField
+      FieldName = 'TipoeNCF'
     end
   end
   object QForma: TADOQuery
@@ -6770,8 +6958,8 @@ object frmPOS: TfrmPOS
   end
   object Timer_Msg: TTimer
     Enabled = False
-    Left = 716
-    Top = 154
+    Left = 724
+    Top = 210
   end
   object adoComandaD: TADOQuery
     Connection = DM.ADOBar
@@ -6830,7 +7018,6 @@ object frmPOS: TfrmPOS
     CursorType = ctStatic
     Filtered = True
     LockType = ltBatchOptimistic
-    BeforeOpen = QDetalleTotalBeforeOpen
     OnNewRecord = QDetalleNewRecord
     DataSource = dsDetalle
     Parameters = <
@@ -6895,7 +7082,7 @@ object frmPOS: TfrmPOS
       'declare @tipo int, @emp int'
       'set @tipo = :tipo'
       'set @emp = :emp'
-      'select isnull(NCF_Secuencia,0) sec,NCF_FIJO NCF from ncf'
+      'select isnull(NCF_Secuencia,0)+1 sec,NCF_FIJO NCF from ncf'
       'where ncf_fijo = case when @tipo = 1 then '#39'B02'#39
       '                      when @tipo = 2 then '#39'B01'#39
       '                      when @tipo = 3 then '#39'B15'#39
@@ -6903,7 +7090,7 @@ object frmPOS: TfrmPOS
       #9#9#9#9#9'  END'
       #9' and emp_codigo = @emp'
       'UNION ALL '
-      'select isnull(NCF_Secuencia,0) sec,NCF_FIJO NCF from ncf'
+      'select isnull(NCF_Secuencia,0) +1 sec,NCF_FIJO NCF from ncf'
       'where ncf_fijo = case when @tipo = 1 then '#39'00000000B02'#39
       '                      when @tipo = 2 then '#39'00000000B01'#39
       '                      when @tipo = 3 then '#39'00000000B15'#39
@@ -6989,5 +7176,17 @@ object frmPOS: TfrmPOS
       #9' and emp_codigo = @emp')
     Left = 624
     Top = 40
+  end
+  object consultadetalle: TADOQuery
+    Connection = DM.ADOBar
+    CursorType = ctStatic
+    Parameters = <>
+    Left = 560
+    Top = 336
+  end
+  object TimerInactivo: TTimer
+    OnTimer = TimerInactivoTimer
+    Left = 48
+    Top = 216
   end
 end

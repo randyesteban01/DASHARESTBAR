@@ -4,8 +4,8 @@ object frmActUsuario: TfrmActUsuario
   BorderIcons = []
   BorderStyle = bsSingle
   Caption = 'Actualizando Usuario'
-  ClientHeight = 453
-  ClientWidth = 337
+  ClientHeight = 281
+  ClientWidth = 324
   Color = clBtnFace
   Font.Charset = ANSI_CHARSET
   Font.Color = clWindowText
@@ -23,7 +23,7 @@ object frmActUsuario: TfrmActUsuario
   object Panel1: TPanel
     Left = 0
     Top = 0
-    Width = 337
+    Width = 324
     Height = 89
     Align = alTop
     BevelInner = bvRaised
@@ -261,8 +261,8 @@ object frmActUsuario: TfrmActUsuario
   object Panel2: TPanel
     Left = 0
     Top = 89
-    Width = 337
-    Height = 364
+    Width = 324
+    Height = 192
     Align = alClient
     BevelInner = bvRaised
     BevelOuter = bvLowered
@@ -270,8 +270,8 @@ object frmActUsuario: TfrmActUsuario
     object Panel3: TPanel
       Left = 2
       Top = -3
-      Width = 333
-      Height = 365
+      Width = 320
+      Height = 193
       Align = alBottom
       Anchors = [akLeft, akTop, akRight, akBottom]
       TabOrder = 0
@@ -300,116 +300,7 @@ object frmActUsuario: TfrmActUsuario
         Font.Name = 'Tahoma'
         Font.Style = [fsBold]
         ParentFont = False
-      end
-      object Label3: TLabel
-        Left = 16
-        Top = 104
-        Width = 122
-        Height = 13
-        Caption = 'TARJETA DE USUARIO'
-        Font.Charset = ANSI_CHARSET
-        Font.Color = clWindowText
-        Font.Height = -11
-        Font.Name = 'Tahoma'
-        Font.Style = [fsBold]
-        ParentFont = False
-      end
-      object Label4: TLabel
-        Left = 16
-        Top = 152
-        Width = 141
-        Height = 13
-        Caption = 'TARJETA DE SUPERVISOR'
-        Font.Charset = ANSI_CHARSET
-        Font.Color = clWindowText
-        Font.Height = -11
-        Font.Name = 'Tahoma'
-        Font.Style = [fsBold]
-        ParentFont = False
-      end
-      object SpeedButton1: TSpeedButton
-        Left = 290
-        Top = 120
-        Width = 23
-        Height = 21
-        Glyph.Data = {
-          36040000424D3604000000000000360000002800000010000000100000000100
-          2000000000000004000000000000000000000000000000000000FF00FF00FF00
-          FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-          FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-          FF00FF00FF000000000000000000FF00FF00FF00FF00FF00FF00FF00FF00FF00
-          FF00FF00FF00FF00FF00FF00FF0000000000FF00FF00FF00FF00FF00FF00FF00
-          FF002900DD002900DF0000000000FF00FF00FF00FF00FF00FF00FF00FF00FF00
-          FF00FF00FF00FF00FF0008002C002100B60000000000FF00FF00FF00FF00FF00
-          FF002900DE002900DF001200640000000000FF00FF00FF00FF00FF00FF00FF00
-          FF00000000001D009D002900DF0019008600FF00FF00FF00FF00FF00FF00FF00
-          FF00FF00FF002900DE002900DF000000000000000000FF00FF00FF00FF000000
-          00002500C8002900DF0000000000FF00FF00FF00FF00FF00FF00FF00FF00FF00
-          FF00FF00FF00FF00FF002900DF002900DF000000000000000000000000002500
-          C8002900DF0000000000FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-          FF00FF00FF00FF00FF00FF00FF002900DF002700D600000000002500C7002900
-          DF0000000000FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-          FF00FF00FF00FF00FF00FF00FF00FF00FF002900DE002900DF002900DF000000
-          0000FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-          FF00FF00FF00FF00FF00FF00FF00000000002800D8002900DF002900DF000000
-          000000000000FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-          FF00FF00FF00FF00FF00000000002500C8002900DF00000000002900DF002900
-          DF000400140000000000FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-          FF00FF00FF00000000002500C8002900DF0000000000FF00FF00FF00FF002900
-          DF002900DF0011005A000000000000000000FF00FF00FF00FF00FF00FF00FF00
-          FF00000000002400C7002900DF0009002F00FF00FF00FF00FF00FF00FF00FF00
-          FF00FF00FF002900DF002200BB0000000000FF00FF00FF00FF00FF00FF00FF00
-          FF002800D8002900DF0019008700FF00FF00FF00FF00FF00FF00FF00FF00FF00
-          FF00FF00FF00FF00FF002900DC00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-          FF002900DF002300BE0000000000FF00FF00FF00FF00FF00FF00FF00FF00FF00
-          FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-          FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-          FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-          FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-          FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00}
-        OnClick = SpeedButton1Click
-      end
-      object SpeedButton2: TSpeedButton
-        Left = 290
-        Top = 168
-        Width = 23
-        Height = 21
-        Glyph.Data = {
-          36040000424D3604000000000000360000002800000010000000100000000100
-          2000000000000004000000000000000000000000000000000000FF00FF00FF00
-          FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-          FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-          FF00FF00FF000000000000000000FF00FF00FF00FF00FF00FF00FF00FF00FF00
-          FF00FF00FF00FF00FF00FF00FF0000000000FF00FF00FF00FF00FF00FF00FF00
-          FF002900DD002900DF0000000000FF00FF00FF00FF00FF00FF00FF00FF00FF00
-          FF00FF00FF00FF00FF0008002C002100B60000000000FF00FF00FF00FF00FF00
-          FF002900DE002900DF001200640000000000FF00FF00FF00FF00FF00FF00FF00
-          FF00000000001D009D002900DF0019008600FF00FF00FF00FF00FF00FF00FF00
-          FF00FF00FF002900DE002900DF000000000000000000FF00FF00FF00FF000000
-          00002500C8002900DF0000000000FF00FF00FF00FF00FF00FF00FF00FF00FF00
-          FF00FF00FF00FF00FF002900DF002900DF000000000000000000000000002500
-          C8002900DF0000000000FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-          FF00FF00FF00FF00FF00FF00FF002900DF002700D600000000002500C7002900
-          DF0000000000FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-          FF00FF00FF00FF00FF00FF00FF00FF00FF002900DE002900DF002900DF000000
-          0000FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-          FF00FF00FF00FF00FF00FF00FF00000000002800D8002900DF002900DF000000
-          000000000000FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-          FF00FF00FF00FF00FF00000000002500C8002900DF00000000002900DF002900
-          DF000400140000000000FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-          FF00FF00FF00000000002500C8002900DF0000000000FF00FF00FF00FF002900
-          DF002900DF0011005A000000000000000000FF00FF00FF00FF00FF00FF00FF00
-          FF00000000002400C7002900DF0009002F00FF00FF00FF00FF00FF00FF00FF00
-          FF00FF00FF002900DF002200BB0000000000FF00FF00FF00FF00FF00FF00FF00
-          FF002800D8002900DF0019008700FF00FF00FF00FF00FF00FF00FF00FF00FF00
-          FF00FF00FF00FF00FF002900DC00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-          FF002900DF002300BE0000000000FF00FF00FF00FF00FF00FF00FF00FF00FF00
-          FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-          FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-          FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-          FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-          FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00}
-        OnClick = SpeedButton2Click
+        Visible = False
       end
       object DBEdit2: TDBEdit
         Left = 16
@@ -418,7 +309,7 @@ object frmActUsuario: TfrmActUsuario
         Height = 21
         BevelKind = bkFlat
         BorderStyle = bsNone
-        DataField = 'Nombre'
+        DataField = 'usu_nombre'
         DataSource = dsUsuarios
         TabOrder = 0
       end
@@ -430,18 +321,18 @@ object frmActUsuario: TfrmActUsuario
         BevelKind = bkFlat
         BorderStyle = bsNone
         CharCase = ecUpperCase
-        DataField = 'Clave'
         DataSource = dsUsuarios
         PasswordChar = '*'
         TabOrder = 1
+        Visible = False
       end
       object DBCheckBox3: TDBCheckBox
         Left = 16
-        Top = 200
+        Top = 96
         Width = 193
         Height = 17
         Caption = 'TRABAJA COMO SUPERVISOR'
-        DataField = 'Supervisor'
+        DataField = 'usu_supervisor'
         DataSource = dsUsuarios
         Font.Charset = ANSI_CHARSET
         Font.Color = clWindowText
@@ -455,11 +346,11 @@ object frmActUsuario: TfrmActUsuario
       end
       object DBCheckBox1: TDBCheckBox
         Left = 16
-        Top = 216
+        Top = 112
         Width = 193
         Height = 17
         Caption = 'TRABAJA COMO CAJERO'
-        DataField = 'Cajero'
+        DataField = 'usu_Cajero'
         DataSource = dsUsuarios
         Font.Charset = ANSI_CHARSET
         Font.Color = clWindowText
@@ -473,11 +364,11 @@ object frmActUsuario: TfrmActUsuario
       end
       object DBCheckBox2: TDBCheckBox
         Left = 16
-        Top = 232
+        Top = 128
         Width = 193
         Height = 17
         Caption = 'TRABAJA COMO CAMARERO'
-        DataField = 'Camarero'
+        DataField = 'usu_camarero'
         DataSource = dsUsuarios
         Font.Charset = ANSI_CHARSET
         Font.Color = clWindowText
@@ -489,29 +380,41 @@ object frmActUsuario: TfrmActUsuario
         ValueChecked = 'True'
         ValueUnchecked = 'False'
       end
-      object DBLookupComboBox1: TDBLookupComboBox
+      object DBCheckBox4: TDBCheckBox
         Left = 16
-        Top = 120
-        Width = 273
-        Height = 21
-        DataField = 'tarjetaUsuarioID'
+        Top = 145
+        Width = 193
+        Height = 17
+        Caption = 'DESLOGUEO AUTOM'#193'TICO '
+        DataField = 'usu_logueoautomatico'
         DataSource = dsUsuarios
-        KeyField = 'TarjetaID'
-        ListField = 'TarjetaID'
-        ListSource = dsTarjetaUsu
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = [fsBold]
+        ParentFont = False
         TabOrder = 5
+        ValueChecked = 'True'
+        ValueUnchecked = 'False'
       end
-      object DBLookupComboBox2: TDBLookupComboBox
+      object DBCheckBox5: TDBCheckBox
         Left = 16
-        Top = 168
-        Width = 273
-        Height = 21
-        DataField = 'tarjetaSupervisorID'
+        Top = 161
+        Width = 193
+        Height = 17
+        Caption = 'CAJERO PUEDE CUADAR'
+        DataField = 'usu_cajerocuadrar'
         DataSource = dsUsuarios
-        KeyField = 'TarjetaID'
-        ListField = 'TarjetaID'
-        ListSource = dsTarjetaSuper
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = [fsBold]
+        ParentFont = False
         TabOrder = 6
+        ValueChecked = 'True'
+        ValueUnchecked = 'False'
       end
     end
   end
@@ -531,49 +434,45 @@ object frmActUsuario: TfrmActUsuario
         Value = Null
       end>
     SQL.Strings = (
+      ''
       'select'
-      'UsuarioID, Nombre, Clave, Estatus, Supervisor, Cajero, Camarero,'
-      'tarjetaUsuarioID, tarjetaSupervisorID'
+      
+        'usu_codigo, usu_nombre,  usu_status, usu_supervisor, usu_Cajero,' +
+        ' usu_camarero,'
+      'usu_logueoautomatico,usu_cajerocuadrar'
       'from'
       'Usuarios'
       'where'
-      'UsuarioID = :usu'
+      'usu_codigo = :usu'
       'order by'
-      'UsuarioID')
+      'usu_codigo')
     Left = 216
     Top = 296
     object QUsuariosUsuarioID: TAutoIncField
-      FieldName = 'UsuarioID'
+      FieldName = 'usu_codigo'
       ReadOnly = True
     end
     object QUsuariosNombre: TWideStringField
-      FieldName = 'Nombre'
-      Size = 255
-    end
-    object QUsuariosClave: TWideStringField
-      FieldName = 'Clave'
-      Size = 255
-    end
-    object QUsuariosEstatus: TWideStringField
-      FieldName = 'Estatus'
+      FieldName = 'usu_nombre'
       Size = 255
     end
     object QUsuariosSupervisor: TBooleanField
-      FieldName = 'Supervisor'
+      FieldName = 'usu_supervisor'
     end
     object QUsuariosCajero: TBooleanField
-      FieldName = 'Cajero'
+      FieldName = 'usu_Cajero'
     end
     object QUsuariosCamarero: TBooleanField
-      FieldName = 'Camarero'
+      FieldName = 'usu_camarero'
     end
-    object QUsuariostarjetaUsuarioID: TWideStringField
-      FieldName = 'tarjetaUsuarioID'
-      Size = 255
+    object QUsuariosusu_logueoautomatico: TBooleanField
+      FieldName = 'usu_logueoautomatico'
     end
-    object QUsuariostarjetaSupervisorID: TWideStringField
-      FieldName = 'tarjetaSupervisorID'
-      Size = 255
+    object QUsuariosusu_status: TStringField
+      FieldName = 'usu_status'
+    end
+    object QUsuariosusu_cajerocuadrar: TBooleanField
+      FieldName = 'usu_cajerocuadrar'
     end
   end
   object dsUsuarios: TDataSource
@@ -581,52 +480,8 @@ object frmActUsuario: TfrmActUsuario
     Left = 248
     Top = 296
   end
-  object QTarjetaUsu: TADOQuery
-    Connection = DM.ADOBar
-    Parameters = <>
-    SQL.Strings = (
-      'select'
-      'TarjetaID'
-      'from'
-      'tarjetas'
-      'where'
-      'SUBSTRING (tarjetaID,1, 4) = '#39'1000'#39
-      'order by'
-      'TarjetaID')
-    Left = 216
-    Top = 328
-    object QTarjetaUsuTarjetaID: TWideStringField
-      FieldName = 'TarjetaID'
-      Size = 255
-    end
-  end
   object dsTarjetaUsu: TDataSource
-    DataSet = QTarjetaUsu
     Left = 248
     Top = 328
-  end
-  object QTarjetaSuper: TADOQuery
-    Connection = DM.ADOBar
-    Parameters = <>
-    SQL.Strings = (
-      'select'
-      'TarjetaID'
-      'from'
-      'tarjetas'
-      'where'
-      'SUBSTRING (tarjetaID,1, 4) = '#39'1001'#39
-      'order by'
-      'TarjetaID')
-    Left = 216
-    Top = 360
-    object QTarjetaSuperTarjetaID: TWideStringField
-      FieldName = 'TarjetaID'
-      Size = 255
-    end
-  end
-  object dsTarjetaSuper: TDataSource
-    DataSet = QTarjetaSuper
-    Left = 248
-    Top = 360
   end
 end

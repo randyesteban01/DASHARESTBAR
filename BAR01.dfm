@@ -1,7 +1,7 @@
 object frmMain: TfrmMain
-  Left = 215
-  Top = 118
-  Width = 1022
+  Left = 163
+  Top = 151
+  Width = 1028
   Height = 571
   Caption = 'DASHA RESTBAR'
   Color = clWhite
@@ -19464,18 +19464,18 @@ object frmMain: TfrmMain
     Top = 0
     Width = 1109
     Height = 26
+    UseSystemFont = False
     ActionManager = ActionManager1
     Caption = 'ActionMainMenuBar1'
     ColorMap.HighlightColor = clWhite
     ColorMap.BtnSelectedColor = clBtnFace
     ColorMap.UnusedColor = clWhite
     Font.Charset = DEFAULT_CHARSET
-    Font.Color = clMenuText
+    Font.Color = clWindowText
     Font.Height = -12
     Font.Name = 'Segoe UI'
     Font.Style = []
     Spacing = 0
-    OnClick = admcuadreExecute
   end
   object Panel1: TPanel
     Left = 0
@@ -20005,8 +20005,20 @@ object frmMain: TfrmMain
                     Caption = '&Categorias'
                   end
                   item
+                    Action = actsubcategorias
+                    Caption = '&SubCategorias'
+                  end
+                  item
                     Action = aproductos
                     Caption = '&Productos'
+                  end
+                  item
+                    Action = aguarnicion
+                    Caption = '&Terminos - Cocina'
+                  end
+                  item
+                    Action = aterminos
+                    Caption = 'T&erminos - BAR'
                   end
                   item
                     Caption = '-'
@@ -20031,7 +20043,6 @@ object frmMain: TfrmMain
               item
                 Items = <
                   item
-                    Visible = False
                     Action = segusuarios
                     Caption = '&Usuarios'
                   end>
@@ -20132,6 +20143,7 @@ object frmMain: TfrmMain
     end
     object acategoria: TAction
       Caption = 'Categorias'
+      Enabled = False
       OnExecute = acategoriaExecute
     end
     object acerrar: TAction
@@ -20145,15 +20157,16 @@ object frmMain: TfrmMain
     object segusuarios: TAction
       Caption = 'Usuarios'
       Enabled = False
-      Visible = False
       OnExecute = segusuariosExecute
     end
     object admmesas: TAction
       Caption = 'Mesas'
+      Enabled = False
       OnExecute = admmesasExecute
     end
     object admareas: TAction
       Caption = 'Areas'
+      Enabled = False
       OnExecute = admareasExecute
     end
     object admempresa: TAction
@@ -20169,10 +20182,12 @@ object frmMain: TfrmMain
     end
     object admcuadre: TAction
       Caption = 'Cuadre'
+      Enabled = False
       OnExecute = admcuadreExecute
     end
     object admprinter: TAction
       Caption = 'Printer'
+      Enabled = False
       OnExecute = admprinterExecute
     end
     object Proveedores: TAction
@@ -20200,27 +20215,33 @@ object frmMain: TfrmMain
     end
     object consentradas: TAction
       Caption = 'Entradas'
+      Enabled = False
       Visible = False
       OnExecute = consentradasExecute
     end
     object admCierreTurno: TAction
       Caption = 'Ci&erre de turno'
+      Enabled = False
       OnExecute = admCierreTurnoExecute
     end
     object acierrejornada: TAction
       Caption = 'Cierre jornada fiscal'
+      Enabled = False
       OnExecute = acierrejornadaExecute
     end
     object acancelar: TAction
       Caption = 'Cancelar documento fiscal en curso'
+      Enabled = False
       OnExecute = acancelarExecute
     end
     object aherramienta: TAction
       Caption = 'Extracci'#243'n de libro'
+      Enabled = False
       OnExecute = aherramientaExecute
     end
     object consdev: TAction
       Caption = 'Devoluciones'
+      Enabled = False
       OnExecute = consdevExecute
     end
     object actPrinterFiscal: TAction
@@ -20228,6 +20249,19 @@ object frmMain: TfrmMain
       Enabled = False
       Visible = False
       OnExecute = actPrinterFiscalExecute
+    end
+    object actsubcategorias: TAction
+      Caption = 'actsubcategorias'
+      OnExecute = actsubcategoriasExecute
+    end
+    object aguarnicion: TAction
+      Caption = 'aguarnicion'
+      Enabled = False
+      OnExecute = aguarnicionExecute
+    end
+    object aterminos: TAction
+      Caption = 'Terminos de Coccion'
+      OnExecute = aterminosExecute
     end
   end
   object IdSMTP1: TIdSMTP

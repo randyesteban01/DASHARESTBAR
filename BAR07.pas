@@ -154,6 +154,20 @@ type
     dblkcbImpresoraRemota: TDBLookupComboBox;
     dbchkImpresoraRemota2: TDBCheckBox;
     QProductoImpresoraRemota2: TBooleanField;
+    DBChkNota: TDBCheckBox;
+    QProductopro_incluirnota: TBooleanField;
+    Label23: TLabel;
+    DBLookupComboBox5: TDBLookupComboBox;
+    QSubCategoria: TADOQuery;
+    IntegerField1: TIntegerField;
+    WideStringField1: TWideStringField;
+    dsSubCategorias: TDataSource;
+    QSubCategoriaSubCategoriaID: TIntegerField;
+    QProductosubcategoriaID: TIntegerField;
+    DBChkGuarnicion: TDBCheckBox;
+    DBChkTermino: TDBCheckBox;
+    QProductoincluir_termino: TBooleanField;
+    QProductoincluir_guarnicion: TBooleanField;
     procedure FormCreate(Sender: TObject);
     procedure btcloseClick(Sender: TObject);
     procedure FormKeyDown(Sender: TObject; var Key: Word;
@@ -177,6 +191,10 @@ type
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure DBCheckBox6Click(Sender: TObject);
     procedure dbchkImpresoraRemota2Click(Sender: TObject);
+    procedure dsCategoriasDataChange(Sender: TObject; Field: TField);
+    procedure DBChkTerminoClick(Sender: TObject);
+    procedure DBChkGuarnicionClick(Sender: TObject);
+    procedure DBChkNotaClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -437,6 +455,43 @@ QProductoImpresoraRemota2.Value := True;
 end;
 end;
 end;
+end;
+
+procedure TfrmActProducto.dsCategoriasDataChange(Sender: TObject;
+  Field: TField);
+begin
+  QSubCategoria.Close;
+  QSubCategoria.Parameters.ParamByName('cat').Value := QCategoriaCategoriaID.Value;
+  QSubCategoria.Open;
+end;
+
+procedure TfrmActProducto.DBChkTerminoClick(Sender: TObject);
+begin    
+  if DBChkTermino.Checked then
+  begin
+    DBChkNota.Checked := False;
+  end;
+
+end;
+
+procedure TfrmActProducto.DBChkGuarnicionClick(Sender: TObject);
+begin
+  if DBChkGuarnicion.Checked then
+  begin
+    DBChkNota.Checked := False;
+  
+  end;
+end;
+
+procedure TfrmActProducto.DBChkNotaClick(Sender: TObject);
+begin
+  if DBChkNota.Checked then
+  begin
+
+     DBChkTermino.Checked := False;
+     DBChkGuarnicion.Checked := False;
+
+  end;
 end;
 
 end.

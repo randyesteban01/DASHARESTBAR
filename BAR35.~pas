@@ -39,13 +39,6 @@ type
     QVentasCajaID: TIntegerField;
     QVentasCajeroID: TIntegerField;
     QVentasHora: TDateTimeField;
-    QVentasForma: TWideStringField;
-    QVentasPagado: TBCDField;
-    QVentasDevuelta: TBCDField;
-    QVentastipo_Tarjeta: TWideStringField;
-    QVentasAutorizacion: TWideStringField;
-    QVentasNumero_Tarjeta: TWideStringField;
-    QVentasBanco: TWideStringField;
     QRDBText2: TQRDBText;
     QRDBText3: TQRDBText;
     QRDBText4: TQRDBText;
@@ -70,6 +63,9 @@ type
     QRBand5: TQRBand;
     QRSysData1: TQRSysData;
     QRSysData2: TQRSysData;
+    QVentasMesero: TStringField;
+    QRLabel16: TQRLabel;
+    QRDBText10: TQRDBText;
   private
 
   public

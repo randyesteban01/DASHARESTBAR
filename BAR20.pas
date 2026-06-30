@@ -17,32 +17,22 @@ type
     dsUsuarios: TDataSource;
     Label1: TLabel;
     DBEdit2: TDBEdit;
-    Label2: TLabel;
     DBEdit1: TDBEdit;
     DBCheckBox3: TDBCheckBox;
     DBCheckBox1: TDBCheckBox;
     DBCheckBox2: TDBCheckBox;
     QUsuariosUsuarioID: TAutoIncField;
     QUsuariosNombre: TWideStringField;
-    QUsuariosClave: TWideStringField;
-    QUsuariosEstatus: TWideStringField;
     QUsuariosSupervisor: TBooleanField;
     QUsuariosCajero: TBooleanField;
     QUsuariosCamarero: TBooleanField;
-    QUsuariostarjetaUsuarioID: TWideStringField;
-    QUsuariostarjetaSupervisorID: TWideStringField;
-    Label3: TLabel;
-    Label4: TLabel;
-    DBLookupComboBox1: TDBLookupComboBox;
-    DBLookupComboBox2: TDBLookupComboBox;
-    QTarjetaUsu: TADOQuery;
-    QTarjetaUsuTarjetaID: TWideStringField;
     dsTarjetaUsu: TDataSource;
-    QTarjetaSuper: TADOQuery;
-    QTarjetaSuperTarjetaID: TWideStringField;
-    dsTarjetaSuper: TDataSource;
-    SpeedButton1: TSpeedButton;
-    SpeedButton2: TSpeedButton;
+    DBCheckBox4: TDBCheckBox;
+    QUsuariosusu_logueoautomatico: TBooleanField;
+    QUsuariosusu_status: TStringField;
+    Label2: TLabel;
+    DBCheckBox5: TDBCheckBox;
+    QUsuariosusu_cajerocuadrar: TBooleanField;
     procedure btcloseClick(Sender: TObject);
     procedure FormKeyPress(Sender: TObject; var Key: Char);
     procedure FormKeyDown(Sender: TObject; var Key: Word;
@@ -51,8 +41,6 @@ type
     procedure FormCreate(Sender: TObject);
     procedure QUsuariosNewRecord(DataSet: TDataSet);
     procedure QUsuariosBeforePost(DataSet: TDataSet);
-    procedure SpeedButton1Click(Sender: TObject);
-    procedure SpeedButton2Click(Sender: TObject);
   private
     { Private declarations }
   public
@@ -111,23 +99,13 @@ begin
   QUsuariosSupervisor.Value := False;
   QUsuariosCajero.Value := False;
   QUsuariosCamarero.Value := False;
-  QUsuariosEstatus.Value := 'ACT';
+  QUsuariosusu_status.Value := 'ACT';
 end;
 
 procedure TfrmActUsuario.QUsuariosBeforePost(DataSet: TDataSet);
 begin
-  if QUsuarios.State in[dsInsert,dsEdit] then
-    QUsuariosClave.Value := MimeEncodeString(QUsuariosClave.Value);
-end;
-
-procedure TfrmActUsuario.SpeedButton1Click(Sender: TObject);
-begin
-  QUsuariostarjetaUsuarioID.Clear;
-end;
-
-procedure TfrmActUsuario.SpeedButton2Click(Sender: TObject);
-begin
-  QUsuariostarjetaSupervisorID.Clear;
+  {if QUsuarios.State in[dsInsert,dsEdit] then
+    QUsuariosClave.Value := MimeEncodeString(QUsuariosClave.Value);}
 end;
 
 end.

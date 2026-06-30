@@ -22,6 +22,7 @@ type
     QCategoriasBgColor: TWideStringField;
     QCategoriasFgColor: TWideStringField;
     dsCategorias: TDataSource;
+    btadd: TSpeedButton;
     procedure btcloseClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormActivate(Sender: TObject);
@@ -29,6 +30,7 @@ type
       Shift: TShiftState);
     procedure bteditClick(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure btaddClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -64,6 +66,7 @@ procedure TfrmCategorias.FormKeyDown(Sender: TObject; var Key: Word;
   Shift: TShiftState);
 begin
   if (ssAlt in Shift) and (key = vk_f4) then abort;
+  if key = vk_f3 then btaddClick(Self);
   if key = vk_f1 then btcloseClick(Self);
   if key = vk_f2 then bteditClick(Self);
 end;
@@ -93,6 +96,25 @@ procedure TfrmCategorias.FormClose(Sender: TObject;
 begin
   frmMain.Panel1.Enabled := true;
   Action := cafree;
+end;
+
+procedure TfrmCategorias.btaddClick(Sender: TObject);   
+var
+  t : TBookmark;
+begin
+  Application.CreateForm(tfrmActCategoria, frmActCategoria);
+  frmActCategoria.QCategorias.Parameters.ParamByName('cat').Value := -1;
+  frmActCategoria.QCategorias.Open;
+  frmActCategoria.QCategorias.Insert;
+  frmActCategoria.ShowModal;
+  if frmActCategoria.Grabo = 1 then
+  begin
+    t := QCategorias.GetBookmark;
+    QCategorias.Close;
+    QCategorias.Open;
+    QCategorias.GotoBookmark(t);
+  end;
+  frmActCategoria.Release;
 end;
 
 end.

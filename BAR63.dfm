@@ -1,6 +1,6 @@
 object frmClientes: TfrmClientes
   Left = 393
-  Top = 109
+  Top = 84
   BorderIcons = []
   BorderStyle = bsSingle
   Caption = 'Clientes'
@@ -448,7 +448,6 @@ object frmClientes: TfrmClientes
       end>
   end
   object QClientes: TADOQuery
-    Active = True
     AutoCalcFields = False
     Connection = DM.ADOBar
     CursorType = ctStatic

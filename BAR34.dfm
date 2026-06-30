@@ -366,7 +366,7 @@ object frmDescuento: TfrmDescuento
     Top = 88
     Width = 673
     Height = 217
-    ActivePage = TabSheet2
+    ActivePage = TabSheet1
     Font.Charset = ANSI_CHARSET
     Font.Color = clWindowText
     Font.Height = -16
@@ -433,6 +433,8 @@ object frmDescuento: TfrmDescuento
         Font.Style = []
         ParentFont = False
         TabOrder = 0
+        OnChange = DBEdit1Change
+        OnEnter = DBEdit1Enter
       end
       object DBEdit2: TDBEdit
         Left = 293

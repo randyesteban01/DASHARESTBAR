@@ -55,6 +55,7 @@ end;
 procedure TfrmImpuestos.ckitbisClick(Sender: TObject);
 begin
   frmPOS.ckItbis := ckitbis.Checked;
+  frmPOS.ckConItbis.Checked :=ckitbis.Checked;
   frmPOS.QFactura.Edit;
   frmPOS.QFacturaConItbis.AsBoolean := ckItbis.Checked;
   frmPOS.QFacturaimprimeNCF.Value := ckitbis.Checked;

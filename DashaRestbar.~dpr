@@ -13,8 +13,8 @@ uses
   BAR08 in 'BAR08.pas' {frmSeleccionaCategoria},
   BAR09 in 'BAR09.pas' {frmBuscarProducto},
   BAR10 in 'BAR10.pas' {frmIngredientes},
-  BAR11 in 'BAR11.pas' {frmCategorias},
-  BAR12 in 'BAR12.pas' {frmActCategoria},
+  BAR526 in 'BAR526.pas' {frmTerminos},
+  BAR527 in 'BAR527.pas' {frmActTerminos},
   BAR13 in 'BAR13.pas' {frmOferta},
   BAR14 in 'BAR14.pas' {frmAcceso},
   BAR52 in 'BAR52.pas' {frmUnifMesa},
@@ -34,7 +34,7 @@ uses
   BAR30 in 'BAR30.pas' {frmTarjeta},
   BAR31 in 'BAR31.pas' {frmReimpresion},
   BAR32 in 'BAR32.pas' {frmNombreCliente},
-  BAR33 in 'BAR33.pas' {frmTeclado},
+  BAR514 in 'BAR514.pas' {frmDetalleMesa},
   BAR34 in 'BAR34.pas' {frmDescuento},
   BAR35 in 'BAR35.pas' {RVentas: TQuickRep},
   BAR36 in 'BAR36.pas' {RVentasProductos: TQuickRep},
@@ -68,7 +68,16 @@ uses
   BAR27 in 'BAR27.pas' {frmConsVentas},
   BAR68 in 'BAR68.pas' {FrmHabitaciones},
   BAR69 in 'BAR69.pas' {DM_Update: TDataModule},
-  BAR70 in 'BAR70.pas' {FrmSeleccionarImpresora};
+  BAR70 in 'BAR70.pas' {FrmSeleccionarImpresora},
+  BAR71 in 'BAR71.pas' {frmCierreJornadaFiscal},
+  BAR511 in 'BAR511.pas' {frmConfImpFiscal},
+  BAR520 in 'BAR520.pas' {frmDev},
+  BAR521 in 'BAR521.pas' {frmSeleccionarmesero},
+  BAR522 in 'BAR522.pas' {frmSubCategorias},
+  BAR523 in 'BAR523.pas' {frmActSubCategoria},
+  uOpcionesProducto in 'uOpcionesProducto.pas' {frmOpcionesProducto},
+  FacturacionElectronicaDGII_TLB in 'C:\Program Files (x86)\Borland\Delphi7\Imports\FacturacionElectronicaDGII_TLB.pas',
+  DelphiZXingQRCode in 'Librerias\DelphiZXingQRCode.pas';
 
 {$R *.res}
 
@@ -80,6 +89,10 @@ begin
   Application.CreateForm(TfrmHold, frmHold);
   Application.CreateForm(TfrmCash, frmCash);
   Application.CreateForm(TDM_Update, DM_Update);
-  Application.CreateForm(TFrmSeleccionarImpresora, FrmSeleccionarImpresora);
+  // Application.CreateForm(TfrmNota, frmNota);
+  Application.CreateForm(TfrmDetalleMesa, frmDetalleMesa);
+  Application.CreateForm(TfrmDev, frmDev);
+  Application.CreateForm(TfrmSeleccionarmesero, frmSeleccionarmesero);
+  // Application.CreateForm(TfrmSeleccionMesero, frmSeleccionMesero);
   Application.Run;
 end.

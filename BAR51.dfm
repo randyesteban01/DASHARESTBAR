@@ -1,6 +1,6 @@
 object frmImpresoraRemota: TfrmImpresoraRemota
-  Left = 489
-  Top = 294
+  Left = 490
+  Top = 295
   BorderIcons = []
   BorderStyle = bsSingle
   Caption = 'Printer'

@@ -781,7 +781,7 @@ object frmProductos: TfrmProductos
       
         'p.pro_roriginal Codigo, p.pro_nombre Nombre, p.pro_precio1 Preci' +
         'o, p.pro_existencia Existencia, c.Nombre as Categoria,'
-      'p.pro_codigo ProductoID, p.pro_costo Costo'
+      'p.pro_codigo ProductoID, p.pro_costo Costo, ImpresoraRemota2'
       'from'
       'Productos p'
       'LEFT JOIN Categorias c ON p.CategoriaID = c.CategoriaID'
@@ -811,6 +811,9 @@ object frmProductos: TfrmProductos
     end
     object QProductosExistencia: TFloatField
       FieldName = 'Existencia'
+    end
+    object QProductosImpresoraRemota2: TBooleanField
+      FieldName = 'ImpresoraRemota2'
     end
   end
   object dsProductos: TDataSource

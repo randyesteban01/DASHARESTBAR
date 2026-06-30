@@ -1,6 +1,6 @@
 object frmTeclado: TfrmTeclado
-  Left = 65
-  Top = 198
+  Left = 252
+  Top = 238
   BorderIcons = [biSystemMenu]
   BorderStyle = bsSingle
   Caption = 'Teclado'

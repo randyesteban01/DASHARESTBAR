@@ -55,6 +55,7 @@ type
     procedure btcloseClick(Sender: TObject);
     procedure FormKeyDown(Sender: TObject; var Key: Word;
       Shift: TShiftState);
+    procedure ckCajeroClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -138,6 +139,17 @@ begin
   if (ssAlt in Shift) and (key = vk_f4) then abort;
   if key = vk_f1 then btcloseClick(Self);
   if key = vk_f2 then btrefreshClick(Self);
+end;
+
+procedure TfrmConsDev.ckCajeroClick(Sender: TObject);
+begin
+ // Verifica si el checkbox está marcado
+  if ckCajero.Checked then
+    // Habilita el DBLookupComboBox si el checkbox está marcado
+    DBLookupComboBox1.Enabled := True
+  else
+    // Deshabilita el DBLookupComboBox si el checkbox no está marcado
+    DBLookupComboBox1.Enabled := False;
 end;
 
 end.

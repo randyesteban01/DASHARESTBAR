@@ -1,6 +1,6 @@
 object frmHold: TfrmHold
-  Left = 303
-  Top = 174
+  Left = 599
+  Top = 246
   BorderIcons = []
   BorderStyle = bsSingle
   Caption = 'Facturas en HOLD'
@@ -20,6 +20,38 @@ object frmHold: TfrmHold
   OnKeyDown = FormKeyDown
   PixelsPerInch = 96
   TextHeight = 13
+  object btneliminar: TSpeedButton
+    Left = 247
+    Top = 8
+    Width = 73
+    Height = 73
+    Font.Charset = ANSI_CHARSET
+    Font.Color = clBlue
+    Font.Height = -80
+    Font.Name = 'Arial'
+    Font.Style = [fsBold]
+    Glyph.Data = {
+      16020000424D160200000000000076000000280000001A0000001A0000000100
+      040000000000A001000000000000000000001000000000000000000000000000
+      BF0000BF000000BFBF00BF000000BF00BF00BFBF0000C0C0C000808080000000
+      FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00777777777777
+      7777777777777700000077777777777777777777777777000000777777777777
+      7777777777777700000077777777777777777777777777000000777777777777
+      7777777777777700000077777777777777777777777777000000777777777777
+      7777777777777700000077777777777777777777777777000000777777777777
+      7777777777777700000077777777777777777777777777000000777788888888
+      8888888887777700000077791111111111111111187777000000777911111111
+      1111111118777700000077791111111111111111187777000000777911111111
+      1111111118777700000077779999999999999999977777000000777777777777
+      7777777777777700000077777777777777777777777777000000777777777777
+      7777777777777700000077777777777777777777777777000000777777777777
+      7777777777777700000077777777777777777777777777000000777777777777
+      7777777777777700000077777777777777777777777777000000777777777777
+      7777777777777700000077777777777777777777777777000000}
+    ParentFont = False
+    Visible = False
+    OnClick = btneliminarClick
+  end
   object btclose: TSpeedButton
     Left = 8
     Top = 8
@@ -361,8 +393,8 @@ object frmHold: TfrmHold
     OnClick = SpeedButton2Click
   end
   object btaceptar: TSpeedButton
-    Left = 248
-    Top = 8
+    Left = 247
+    Top = 7
     Width = 73
     Height = 73
     Caption = 'F10 ACEPTAR'
@@ -575,24 +607,67 @@ object frmHold: TfrmHold
         DataType = ftInteger
         Size = -1
         Value = Null
+      end
+      item
+        Name = 'emp'
+        Size = -1
+        Value = Null
+      end
+      item
+        Name = 'mesero'
+        Size = -1
+        Value = Null
+      end
+      item
+        Name = 'es_cajero'
+        Size = -1
+        Value = Null
       end>
     SQL.Strings = (
-      'declare @caja int'
-      'declare @cajero int'
+      'DECLARE @caja INT'
+      'DECLARE @cajero INT'
+      'DECLARE @emp_codigo INT'
+      'DECLARE @mesero INT'
+      'DECLARE @mesas_abiertas BIT'
+      'DECLARE @es_cajero BIT'
       ''
-      'set @caja = :caja'
-      'set @cajero= :caj'
+      'SET @caja       = :caja'
+      'SET @cajero     = :caj'
+      'SET @emp_codigo = :emp'
+      'SET @mesero     = :mesero'
+      'SET @mesas_abiertas = 0'
+      'SET @es_cajero  = :es_cajero'
       ''
-      'select f.FacturaID, f.Fecha, '
+      'SELECT @mesas_abiertas = ISNULL(mesas_abiertas, 0)'
+      'FROM dbo.Parametros'
+      'WHERE emp_codigo = @emp_codigo'
+      ''
+      'SELECT '
+      '    f.FacturaID,'
+      '    f.Fecha,'
       
-        'RTRIM(m.Nombre)+ISNULL(CASE WHEN ISNULL(F.NOMBRE,'#39#39')<>'#39#39' THEN '#39'/' +
-        #39'+ RTRIM(F.NOMBRE) END,'#39#39') NOMBRE,'
-      'f.Total, f.CajeroID, f.CajaID, f.Abierta, f.AbiertaPor'
-      'from Factura_RestBar f'
-      'left outer join Mesas m on (f.MesaID = m.MesaID)'
-      'where f.Hold = 1 and (f.CajeroID = @cajero or  f.CajeroID = 0)'
-      'and f.CajaID = @caja and f.estatus <> '#39'ANU'#39
-      'order by f.Fecha')
+        '    ISNULL(RTRIM(m.Nombre),'#39#39') + '#39' '#39' + ISNULL(RTRIM(f.alias),'#39#39')' +
+        ' +'
+      '    ISNULL(CASE '
+      '              WHEN ISNULL(f.NOMBRE,'#39#39') <> '#39#39' '
+      '              THEN '#39'/'#39' + RTRIM(f.NOMBRE) '
+      '          END,'#39#39') AS NOMBRE,'
+      '    f.Total,'
+      '    f.CajeroID,'
+      '    f.CajaID,'
+      '    f.Abierta,'
+      '    f.AbiertaPor,'
+      '    f.mese_codigo'
+      'FROM Factura_RestBar f'
+      'LEFT OUTER JOIN Mesas m '
+      '    ON f.MesaID = m.MesaID'
+      ''
+      'WHERE f.Hold = 1'#10'  AND'
+      ' (f.CajeroID = @cajero OR f.CajeroID = 0)'#10'  '
+      'AND f.CajaID = @caja'#10'  AND f.estatus <> '#39'ANU'#39#10'  '
+      'AND ('#10' @es_cajero = 1'#10'        OR @mesas_abiertas = 0'#10'        '
+      'OR f.mese_codigo = @mesero'#10'      )'#13#10#10
+      'ORDER BY f.FacturaID')
     Left = 104
     Top = 176
     object QFacturasFacturaID: TIntegerField
@@ -752,15 +827,24 @@ object frmHold: TfrmHold
       ''
       'select f.FacturaID, f.Fecha, '
       
-        'RTRIM(m.Nombre)+ISNULL(CASE WHEN ISNULL(F.NOMBRE,'#39#39')<>'#39#39' THEN '#39'/' +
-        #39'+ RTRIM(F.NOMBRE) END,'#39#39') NOMBRE,'
+        '--RTRIM(m.Nombre)+ISNULL(CASE WHEN ISNULL(F.NOMBRE,'#39#39')<>'#39#39' THEN ' +
+        #39'/'#39'+ RTRIM(F.NOMBRE) END,'#39#39') NOMBRE,'
+      
+        '--ISNULL(RTRIM(m.Nombre),'#39#39') +'#39' '#39' + isnull(RTRIM(m.alias),'#39#39') +I' +
+        'SNULL(CASE WHEN ISNULL(F.NOMBRE,'#39#39')<>'#39#39' THEN '#39'/'#39'+ RTRIM(F.NOMBRE' +
+        ') END,'#39#39') NOMBRE,'
+      
+        'ISNULL(RTRIM(m.Nombre),'#39#39') +'#39' '#39' + isnull(RTRIM(f.alias),'#39#39') +ISN' +
+        'ULL(CASE WHEN ISNULL(F.NOMBRE,'#39#39')<>'#39#39' THEN '#39'/'#39'+ RTRIM(F.NOMBRE) ' +
+        'END,'#39#39') NOMBRE,'
+      ''
       'f.Total, f.CajeroID, f.CajaID, f.Abierta, f.AbiertaPor'
       'from Factura_RestBar f'
       'left outer join Mesas m on (f.MesaID = m.MesaID)'
       'where f.Hold = 1 and (f.CajeroID = @cajero or f.CajeroID = 0)'
       'and f.CajaID = @caja and f.estatus <> '#39'ANU'#39
       'order by f.Fecha')
-    Left = 384
+    Left = 552
     Top = 32
     object IntegerField1: TIntegerField
       FieldName = 'FacturaID'

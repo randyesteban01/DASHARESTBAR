@@ -1,11 +1,11 @@
 object frmConsDev: TfrmConsDev
-  Left = 206
-  Top = 154
+  Left = 218
+  Top = 158
   BorderIcons = []
   BorderStyle = bsSingle
   Caption = 'Consulta de Devoluciones'
   ClientHeight = 481
-  ClientWidth = 912
+  ClientWidth = 913
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -137,7 +137,7 @@ object frmConsDev: TfrmConsDev
   object btrefresh: TSpeedButton
     Left = 85
     Top = 8
-    Width = 89
+    Width = 105
     Height = 73
     Caption = 'F2-CONSULTAR'
     Font.Charset = ANSI_CHARSET
@@ -217,7 +217,7 @@ object frmConsDev: TfrmConsDev
     OnClick = btrefreshClick
   end
   object GroupBox1: TGroupBox
-    Left = 184
+    Left = 194
     Top = 8
     Width = 249
     Height = 73
@@ -277,7 +277,7 @@ object frmConsDev: TfrmConsDev
     end
   end
   object GroupBox2: TGroupBox
-    Left = 440
+    Left = 450
     Top = 8
     Width = 289
     Height = 73
@@ -297,6 +297,7 @@ object frmConsDev: TfrmConsDev
       Height = 17
       Caption = 'Cajero'
       TabOrder = 0
+      OnClick = ckCajeroClick
     end
     object DBLookupComboBox1: TDBLookupComboBox
       Left = 80
@@ -327,7 +328,7 @@ object frmConsDev: TfrmConsDev
   object DBGrid1: TDBGrid
     Left = 0
     Top = 85
-    Width = 912
+    Width = 913
     Height = 396
     Align = alBottom
     Anchors = [akLeft, akTop, akRight, akBottom]

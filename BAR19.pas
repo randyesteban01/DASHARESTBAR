@@ -18,11 +18,11 @@ type
     QUsuariosUsuarioID: TAutoIncField;
     QUsuariosNombre: TWideStringField;
     QUsuariosClave: TWideStringField;
-    QUsuariosEstatus: TWideStringField;
     QUsuariosSupervisor: TBooleanField;
     QUsuariosCajero: TBooleanField;
     QUsuariosCamarero: TBooleanField;
     btadd: TSpeedButton;
+    QUsuariosusu_status: TStringField;
     procedure btcloseClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormActivate(Sender: TObject);
@@ -77,8 +77,7 @@ var
   t : TBookmark;
 begin
   Application.CreateForm(tfrmActUsuario, frmActUsuario);
-  frmActUsuario.QTarjetaUsu.Open;
-  frmActUsuario.QTarjetaSuper.Open;
+
   frmActUsuario.QUsuarios.close;
   frmActUsuario.QUsuarios.Parameters.ParamByName('usu').Value := QUsuariosUsuarioID.Value;
   frmActUsuario.QUsuarios.Open;
@@ -99,8 +98,7 @@ var
   t : TBookmark;
 begin
   Application.CreateForm(tfrmActUsuario, frmActUsuario);
-  frmActUsuario.QTarjetaUsu.Open;
-  frmActUsuario.QTarjetaSuper.Open;
+ 
   frmActUsuario.QUsuarios.Parameters.ParamByName('usu').Value := -1;
   frmActUsuario.QUsuarios.Open;
   frmActUsuario.QUsuarios.Insert;

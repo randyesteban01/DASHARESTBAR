@@ -1,10 +1,10 @@
 object frmSeleccionMesa: TfrmSeleccionMesa
-  Left = 203
-  Top = 180
+  Left = 227
+  Top = 111
   BorderIcons = []
   BorderStyle = bsSingle
   Caption = 'Selecci'#243'n de Mesa'
-  ClientHeight = 461
+  ClientHeight = 529
   ClientWidth = 626
   Color = clBtnFace
   Font.Charset = ANSI_CHARSET
@@ -133,9 +133,22 @@ object frmSeleccionMesa: TfrmSeleccionMesa
     ParentFont = False
     OnClick = btcloseClick
   end
+  object lblMesero: TLabel
+    Left = 16
+    Top = 104
+    Width = 96
+    Height = 29
+    Caption = 'Mesero:'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -24
+    Font.Name = 'MS Sans Serif'
+    Font.Style = [fsBold]
+    ParentFont = False
+  end
   object pncat2: TPanel
     Left = 96
-    Top = 97
+    Top = 165
     Width = 81
     Height = 65
     BevelOuter = bvNone
@@ -162,7 +175,7 @@ object frmSeleccionMesa: TfrmSeleccionMesa
   end
   object pncat1: TPanel
     Left = 8
-    Top = 97
+    Top = 165
     Width = 81
     Height = 65
     BevelOuter = bvNone
@@ -189,7 +202,7 @@ object frmSeleccionMesa: TfrmSeleccionMesa
   end
   object pncat3: TPanel
     Left = 184
-    Top = 97
+    Top = 165
     Width = 81
     Height = 65
     BevelOuter = bvNone
@@ -216,7 +229,7 @@ object frmSeleccionMesa: TfrmSeleccionMesa
   end
   object pncat4: TPanel
     Left = 272
-    Top = 97
+    Top = 165
     Width = 81
     Height = 65
     BevelOuter = bvNone
@@ -243,7 +256,7 @@ object frmSeleccionMesa: TfrmSeleccionMesa
   end
   object pncat6: TPanel
     Left = 448
-    Top = 97
+    Top = 165
     Width = 81
     Height = 65
     BevelOuter = bvNone
@@ -270,7 +283,7 @@ object frmSeleccionMesa: TfrmSeleccionMesa
   end
   object pncat5: TPanel
     Left = 360
-    Top = 97
+    Top = 165
     Width = 81
     Height = 65
     BevelOuter = bvNone
@@ -297,7 +310,7 @@ object frmSeleccionMesa: TfrmSeleccionMesa
   end
   object pncat7: TPanel
     Left = 536
-    Top = 97
+    Top = 165
     Width = 81
     Height = 65
     BevelOuter = bvNone
@@ -324,7 +337,7 @@ object frmSeleccionMesa: TfrmSeleccionMesa
   end
   object pncat8: TPanel
     Left = 8
-    Top = 169
+    Top = 237
     Width = 81
     Height = 65
     BevelOuter = bvNone
@@ -351,7 +364,7 @@ object frmSeleccionMesa: TfrmSeleccionMesa
   end
   object pncat10: TPanel
     Left = 184
-    Top = 169
+    Top = 237
     Width = 81
     Height = 65
     BevelOuter = bvNone
@@ -378,7 +391,7 @@ object frmSeleccionMesa: TfrmSeleccionMesa
   end
   object pncat9: TPanel
     Left = 96
-    Top = 169
+    Top = 237
     Width = 81
     Height = 65
     BevelOuter = bvNone
@@ -405,7 +418,7 @@ object frmSeleccionMesa: TfrmSeleccionMesa
   end
   object pncat11: TPanel
     Left = 272
-    Top = 169
+    Top = 237
     Width = 81
     Height = 65
     BevelOuter = bvNone
@@ -432,7 +445,7 @@ object frmSeleccionMesa: TfrmSeleccionMesa
   end
   object pncat12: TPanel
     Left = 360
-    Top = 169
+    Top = 237
     Width = 81
     Height = 65
     BevelOuter = bvNone
@@ -459,7 +472,7 @@ object frmSeleccionMesa: TfrmSeleccionMesa
   end
   object pncat14: TPanel
     Left = 536
-    Top = 169
+    Top = 237
     Width = 81
     Height = 65
     BevelOuter = bvNone
@@ -486,7 +499,7 @@ object frmSeleccionMesa: TfrmSeleccionMesa
   end
   object pncat13: TPanel
     Left = 448
-    Top = 169
+    Top = 237
     Width = 81
     Height = 65
     BevelOuter = bvNone
@@ -513,7 +526,7 @@ object frmSeleccionMesa: TfrmSeleccionMesa
   end
   object pncat15: TPanel
     Left = 8
-    Top = 241
+    Top = 309
     Width = 81
     Height = 65
     BevelOuter = bvNone
@@ -540,7 +553,7 @@ object frmSeleccionMesa: TfrmSeleccionMesa
   end
   object pncat16: TPanel
     Left = 96
-    Top = 241
+    Top = 309
     Width = 81
     Height = 65
     BevelOuter = bvNone
@@ -567,7 +580,7 @@ object frmSeleccionMesa: TfrmSeleccionMesa
   end
   object pncat17: TPanel
     Left = 184
-    Top = 241
+    Top = 309
     Width = 81
     Height = 65
     BevelOuter = bvNone
@@ -594,7 +607,7 @@ object frmSeleccionMesa: TfrmSeleccionMesa
   end
   object pncat18: TPanel
     Left = 272
-    Top = 241
+    Top = 380
     Width = 81
     Height = 65
     BevelOuter = bvNone
@@ -621,7 +634,7 @@ object frmSeleccionMesa: TfrmSeleccionMesa
   end
   object pncat19: TPanel
     Left = 360
-    Top = 241
+    Top = 309
     Width = 81
     Height = 65
     BevelOuter = bvNone
@@ -648,7 +661,7 @@ object frmSeleccionMesa: TfrmSeleccionMesa
   end
   object pncat21: TPanel
     Left = 536
-    Top = 241
+    Top = 309
     Width = 81
     Height = 65
     BevelOuter = bvNone
@@ -675,7 +688,7 @@ object frmSeleccionMesa: TfrmSeleccionMesa
   end
   object pncat20: TPanel
     Left = 448
-    Top = 241
+    Top = 309
     Width = 81
     Height = 65
     BevelOuter = bvNone
@@ -702,7 +715,7 @@ object frmSeleccionMesa: TfrmSeleccionMesa
   end
   object pncat22: TPanel
     Left = 8
-    Top = 313
+    Top = 380
     Width = 81
     Height = 65
     BevelOuter = bvNone
@@ -729,7 +742,7 @@ object frmSeleccionMesa: TfrmSeleccionMesa
   end
   object pncat23: TPanel
     Left = 96
-    Top = 313
+    Top = 380
     Width = 81
     Height = 65
     BevelOuter = bvNone
@@ -756,7 +769,7 @@ object frmSeleccionMesa: TfrmSeleccionMesa
   end
   object pncat24: TPanel
     Left = 184
-    Top = 313
+    Top = 380
     Width = 81
     Height = 65
     BevelOuter = bvNone
@@ -783,7 +796,7 @@ object frmSeleccionMesa: TfrmSeleccionMesa
   end
   object pncat25: TPanel
     Left = 272
-    Top = 313
+    Top = 309
     Width = 81
     Height = 65
     BevelOuter = bvNone
@@ -810,7 +823,7 @@ object frmSeleccionMesa: TfrmSeleccionMesa
   end
   object pncat26: TPanel
     Left = 360
-    Top = 313
+    Top = 380
     Width = 81
     Height = 65
     BevelOuter = bvNone
@@ -837,7 +850,7 @@ object frmSeleccionMesa: TfrmSeleccionMesa
   end
   object pncat28: TPanel
     Left = 536
-    Top = 313
+    Top = 380
     Width = 81
     Height = 65
     BevelOuter = bvNone
@@ -864,7 +877,7 @@ object frmSeleccionMesa: TfrmSeleccionMesa
   end
   object pncat27: TPanel
     Left = 448
-    Top = 313
+    Top = 380
     Width = 81
     Height = 65
     BevelOuter = bvNone
@@ -891,7 +904,7 @@ object frmSeleccionMesa: TfrmSeleccionMesa
   end
   object pncat29: TPanel
     Left = 8
-    Top = 385
+    Top = 452
     Width = 81
     Height = 65
     BevelOuter = bvNone
@@ -918,7 +931,7 @@ object frmSeleccionMesa: TfrmSeleccionMesa
   end
   object pncat30: TPanel
     Left = 96
-    Top = 385
+    Top = 452
     Width = 81
     Height = 65
     BevelOuter = bvNone
@@ -945,7 +958,7 @@ object frmSeleccionMesa: TfrmSeleccionMesa
   end
   object pncat31: TPanel
     Left = 184
-    Top = 385
+    Top = 452
     Width = 81
     Height = 65
     BevelOuter = bvNone
@@ -972,7 +985,7 @@ object frmSeleccionMesa: TfrmSeleccionMesa
   end
   object pncat32: TPanel
     Left = 272
-    Top = 385
+    Top = 452
     Width = 81
     Height = 65
     BevelOuter = bvNone
@@ -999,7 +1012,7 @@ object frmSeleccionMesa: TfrmSeleccionMesa
   end
   object Panel1: TPanel
     Left = 360
-    Top = 385
+    Top = 452
     Width = 81
     Height = 65
     BevelOuter = bvNone
@@ -1026,7 +1039,7 @@ object frmSeleccionMesa: TfrmSeleccionMesa
   end
   object Panel2: TPanel
     Left = 448
-    Top = 385
+    Top = 452
     Width = 81
     Height = 65
     BevelOuter = bvNone
@@ -1053,7 +1066,7 @@ object frmSeleccionMesa: TfrmSeleccionMesa
   end
   object Panel3: TPanel
     Left = 536
-    Top = 385
+    Top = 452
     Width = 81
     Height = 65
     BevelOuter = bvNone
@@ -1095,6 +1108,23 @@ object frmSeleccionMesa: TfrmSeleccionMesa
     TabOrder = 35
     OnClick = DBLookupComboBox1Click
   end
+  object cmbMesero: TDBLookupComboBox
+    Left = 136
+    Top = 85
+    Width = 480
+    Height = 66
+    Font.Charset = ANSI_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -48
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    KeyField = 'ven_codigo'
+    ListField = 'ven_nombre'
+    ListSource = dsMeseros
+    ParentFont = False
+    TabOrder = 36
+    OnClick = DBLookupComboBox1Click
+  end
   object QAreas: TADOQuery
     Connection = DM.ADOBar
     Parameters = <>
@@ -1130,5 +1160,28 @@ object frmSeleccionMesa: TfrmSeleccionMesa
     Parameters = <>
     Left = 304
     Top = 240
+  end
+  object QMeseros: TADOQuery
+    Connection = DM.ADOBar
+    Parameters = <>
+    SQL.Strings = (
+      'select usu_nombre ven_nombre, usu_codigo ven_codigo'
+      'from Usuarios'
+      'order by ven_nombre')
+    Left = 488
+    Top = 104
+    object QMeserosven_nombre: TStringField
+      FieldName = 'ven_nombre'
+      Size = 60
+    end
+    object QMeserosven_codigo: TIntegerField
+      FieldName = 'ven_codigo'
+    end
+  end
+  object dsMeseros: TDataSource
+    DataSet = QMeseros
+    OnDataChange = dsMeserosDataChange
+    Left = 520
+    Top = 104
   end
 end

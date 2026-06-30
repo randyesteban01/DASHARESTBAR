@@ -1,6 +1,6 @@
 object frmReimpresion: TfrmReimpresion
-  Left = 197
-  Top = 126
+  Left = 246
+  Top = 158
   BorderIcons = []
   BorderStyle = bsSingle
   Caption = 'Reimpresi'#243'n'

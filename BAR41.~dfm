@@ -1,6 +1,6 @@
 object frmCombinado: TfrmCombinado
-  Left = 470
-  Top = 117
+  Left = 252
+  Top = 59
   BorderIcons = []
   BorderStyle = bsSingle
   Caption = 'PAGO COMBINADO'

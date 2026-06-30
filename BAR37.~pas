@@ -248,7 +248,7 @@ else begin
   dm.Query1.Parameters.ParamByName('fec2').Value := hora2.Date;
   dm.Query1.Open;
 
-  total := total - dm.Query1.FieldByName('total').AsFloat;
+  total := total - dm.Query1.FieldByName('total').AsFloat-credito;
 
   s6:= '';
   FillChar(s6, 18-length('$'+format('%n',[dm.Query1.FieldByName('total').AsFloat])), ' ');

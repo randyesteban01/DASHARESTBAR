@@ -63,6 +63,9 @@ type
     QRBand5: TQRBand;
     QRSysData1: TQRSysData;
     QRSysData2: TQRSysData;
+    QVentasMesero: TStringField;
+    QRLabel16: TQRLabel;
+    QRDBText10: TQRDBText;
   private
 
   public

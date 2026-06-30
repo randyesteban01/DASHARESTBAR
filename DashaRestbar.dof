@@ -90,11 +90,11 @@ MaxStackSize=1048576
 ImageBase=4194304
 ExeDescription=
 [Directories]
-OutputDir=C:\Users\randy\Desktop\Ejecutables
+OutputDir=E:\Ejecutables
 UnitOutputDir=
 PackageDLLOutputDir=
 PackageDCPOutputDir=
-SearchPath=
+SearchPath=E:\Fuentes\DASHARESTBAR-main\Librerias
 Packages=vcl;rtl;vclx;indy;inet;xmlrtl;vclie;inetdbbde;inetdbxpress;dbrtl;dsnap;dsnapcon;vcldb;soaprtl;VclSmp;dbexpress;dbxcds;inetdb;bdertl;vcldbx;webdsnap;websnap;adortl;ibxpress;teeui;teedb;tee;dss;visualclx;visualdbclx;vclactnband;vclshlctrls;IntrawebDB_50_70;Intraweb_50_70;Rave50CLX;Rave50VCL;dclOfficeXP;dxPScxScheduler2LnkD7;cxSchedulerVCLD7;cxLibraryVCLD7;dxPScxCommonD7;dxPSCoreD7;cxDataD7;cxEditorsVCLD7;dxPSLnksD7;dxThemeD7;cxExtEditorsVCLD7;dxBarD7;dxComnD7;dxBarDBNavD7;dxBarExtItemsD7;dxBarExtDBItemsD7;dxDockingD7;dxsbD7;dxNavBarD7;dxLayoutControlD7;dxLayoutControlcxEditAdaptersD7;cxSpreadSheetVCLD7;dxFlowChartD7;cxPageControlVCLD7;cxGridVCLD7;cxTreeListVCLD7;cxVerticalGridVCLD7;dxPScxPCProdD7;dxPScxGridLnkD7;dxPSTeeChartD7;dxPScxSSLnkD7;dxPScxTLLnkD7;dxPScxVGridLnkD7;dxPSdxDBTVLnkD7;dxdbtrD7;dxPSdxFCLnkD7;dxPSdxLCLnkD7;dxPsPrVwAdvD7;QExportRT_D7;QR4RunD7
 Conditionals=
 DebugSourceDirs=
@@ -135,19 +135,5 @@ ProductName=
 ProductVersion=1.0.0.0
 Comments=
 [Excluded Packages]
-C:\Program Files (x86)\Borland\Delphi7\Projects\Bpl\dclcxLibraryD7.bpl=Express Cross Platform Library by Developer Express Inc.
-C:\Program Files (x86)\Borland\Delphi7\Projects\Bpl\dxSkinscxPCPainterD7.bpl=ExpressSkins Library Painter for PageControl by Developer Express Inc.
-C:\Program Files (x86)\Borland\Delphi7\Projects\Bpl\dxSkinscxSchedulerPainterD7.bpl=ExpressSkins Library Painter for Scheduler by Developer Express Inc.
-C:\Program Files (x86)\Borland\Delphi7\Projects\Bpl\dxSkinsdxDLPainterD7.bpl=ExpressSkins Library Painter for Docking Library by Developer Express Inc.
-C:\Program Files (x86)\Borland\Delphi7\Projects\Bpl\dxSkinsdxBarPainterD7.bpl=ExpressSkins Library Painter for Bars by Developer Express Inc.
-C:\Program Files (x86)\Borland\Delphi7\Projects\Bpl\dxSkinsdxNavBarPainterD7.bpl=ExpressSkins Library Painter for NavBar by Developer Express Inc.
-C:\Program Files (x86)\Borland\Delphi7\Projects\Bpl\dxSkinsdxRibbonPainterD7.bpl=ExpressSkins Library Painter for Ribbon by Developer Express Inc.
-C:\Program Files (x86)\Borland\Delphi7\Projects\Bpl\dcldxPSdxLCLnkD7.bpl=ExpressPrinting System ReportLink for ExpressLayoutControl by Developer Express Inc.
-[HistoryLists\hlUnitAliases]
-Count=1
-Item0=WinTypes=Windows;WinProcs=Windows;DbiTypes=BDE;DbiProcs=BDE;DbiErrs=BDE;
-[HistoryLists\hlOutputDirectorry]
-Count=3
-Item0=C:\Users\randy\Desktop\Ejecutables
-Item1=F:\D&RTecnologic\Ejecutables
-Item2=d:\Ejecutables\RestBar
+C:\Program Files (x86)\Borland\Delphi7\Projects\Bpl\QExportRT_D7.bpl=EMS Quick Export Component Suite 2.0
+c:\program files (x86)\borland\delphi7\Projects\Bpl\dclusr70.bpl=Borland User Components

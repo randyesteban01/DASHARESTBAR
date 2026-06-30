@@ -1,6 +1,6 @@
 object frmSeleccionaCategoria: TfrmSeleccionaCategoria
-  Left = 98
-  Top = 284
+  Left = 513
+  Top = 255
   BorderIcons = []
   BorderStyle = bsSingle
   Caption = 'Categorias'

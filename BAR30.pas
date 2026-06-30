@@ -89,21 +89,29 @@ end;
 
 procedure TfrmTarjeta.btokClick(Sender: TObject);
 begin
-  if length(Trim(edtarjeta.Text)) < 4 then
-  begin
-    MessageDlg('DEBE DEGITAR POR LO MENOS 4 NUMEROS DE LA TARJETA',mtError,[mbok],0);
-    edtarjeta.SetFocus;
+    if not (DM.QParametrosPAR_AutorizacionNoRequerida.Value)  then
+    begin
+      if length(Trim(edtarjeta.Text)) < 4 then
+        begin
+          MessageDlg('DEBE DEGITAR POR LO MENOS 4 NUMEROS DE LA TARJETA',mtError,[mbok],0);
+          edtarjeta.SetFocus;
+        end
+        else if trim(edautorizacion.Text) = '' then
+        begin
+          MessageDlg('DEBE DEGITAR EL NUMERO DE AUTORIZACION',mtError,[mbok],0);
+          edautorizacion.SetFocus;
+        end
+        else
+        begin
+          Acepto := 1;
+          Close;
+        end;
   end
-  else if trim(edautorizacion.Text) = '' then
-  begin
-    MessageDlg('DEBE DEGITAR EL NUMERO DE AUTORIZACION',mtError,[mbok],0);
-    edautorizacion.SetFocus;
-  end
-  else
-  begin
-    Acepto := 1;
-    Close;
-  end;
+    else
+    begin
+      Acepto := 1;
+      Close;
+    end;
 end;
 
 procedure TfrmTarjeta.bttecladoClick(Sender: TObject);

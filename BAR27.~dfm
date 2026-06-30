@@ -1,10 +1,10 @@
 object frmConsVentas: TfrmConsVentas
-  Left = 293
-  Top = 186
+  Left = 276
+  Top = 132
   BorderIcons = []
   BorderStyle = bsSingle
   Caption = 'Consulta de Ventas'
-  ClientHeight = 493
+  ClientHeight = 494
   ClientWidth = 1057
   Color = clBtnFace
   Font.Charset = ANSI_CHARSET
@@ -479,7 +479,7 @@ object frmConsVentas: TfrmConsVentas
   object GroupBox2: TGroupBox
     Left = 592
     Top = 8
-    Width = 289
+    Width = 305
     Height = 73
     Caption = 'Filtro de Busqueda'
     TabOrder = 1
@@ -552,7 +552,7 @@ object frmConsVentas: TfrmConsVentas
   end
   object Panel2: TPanel
     Left = 0
-    Top = 424
+    Top = 425
     Width = 1057
     Height = 69
     Align = alBottom
@@ -850,7 +850,7 @@ object frmConsVentas: TfrmConsVentas
     Left = 0
     Top = 88
     Width = 1057
-    Height = 336
+    Height = 337
     ActivePage = TabSheet1
     Align = alBottom
     Anchors = [akTop, akBottom]
@@ -862,14 +862,14 @@ object frmConsVentas: TfrmConsVentas
         Left = 0
         Top = 0
         Width = 1049
-        Height = 308
+        Height = 309
         Align = alClient
         TabOrder = 0
         object DBGrid1: TDBGrid
           Left = 269
           Top = 1
           Width = 779
-          Height = 306
+          Height = 307
           Align = alRight
           Anchors = [akLeft, akTop, akRight, akBottom]
           DataSource = dsVentas
@@ -903,6 +903,12 @@ object frmConsVentas: TfrmConsVentas
               FieldName = 'Nombre'
               Title.Caption = 'Cajero'
               Width = 110
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'Mesero'
+              Width = 158
               Visible = True
             end
             item
@@ -1050,7 +1056,7 @@ object frmConsVentas: TfrmConsVentas
           Left = 1
           Top = 1
           Width = 268
-          Height = 306
+          Height = 307
           Align = alClient
           Color = clInfoBk
           Ctl3D = True
@@ -1200,7 +1206,9 @@ object frmConsVentas: TfrmConsVentas
     SQL.Strings = (
       'select'
       'u.Nombre, f.FacturaID, f.Fecha, f.Exento, f.Grabado, f.Itbis,'
-      'f.Descuento, f.Propina, f.Total, f.Estatus, f.NCF, f.Cuadrada,'
+      
+        'f.Descuento, f.Propina, f.Total, f.Estatus, isnull(f.encf, f.NCF' +
+        '), f.Cuadrada,'
       'f.rnc, f.Nombre as Cliente, f.CajaID, f.CajeroID, f.Hora,'
       'p.Forma, p.Monto as Pagado, p.Devuelta, p.tipo_Tarjeta,'
       'p.Autorizacion, p.Numero_Tarjeta, p.Banco, '

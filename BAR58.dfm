@@ -1,6 +1,6 @@
 object frmEntradas: TfrmEntradas
-  Left = 489
-  Top = 306
+  Left = 319
+  Top = 205
   Width = 1228
   Height = 480
   Caption = 'Entradas'

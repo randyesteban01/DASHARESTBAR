@@ -1,6 +1,6 @@
 object frmBuscaFactura: TfrmBuscaFactura
-  Left = 289
-  Top = 301
+  Left = 334
+  Top = 204
   BorderIcons = []
   BorderStyle = bsSingle
   Caption = 'Buscar factura'

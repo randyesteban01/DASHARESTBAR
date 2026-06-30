@@ -1,8 +1,8 @@
 object DM: TDM
   OldCreateOrder = False
   OnCreate = DataModuleCreate
-  Left = 639
-  Top = 263
+  Left = 720
+  Top = 308
   Height = 258
   Width = 418
   object ADOBar: TADOConnection
@@ -1116,6 +1116,27 @@ object DM: TDM
     end
     object QParametrosRestBar_FactConItbis: TBooleanField
       FieldName = 'RestBar_FactConItbis'
+    end
+    object QParametrosPAR_MESERO: TBooleanField
+      FieldName = 'PAR_MESERO'
+    end
+    object QParametrosPAR_AutorizacionNoRequerida: TBooleanField
+      FieldName = 'PAR_AutorizacionNoRequerida'
+    end
+    object QParametrosUsa_FacturacionElectronica: TBooleanField
+      FieldName = 'Usa_FacturacionElectronica'
+    end
+    object QParametrosintegracion_luganis: TBooleanField
+      FieldName = 'integracion_luganis'
+    end
+    object QParametrosPAR_FE_DetenerFacturacion: TBooleanField
+      FieldName = 'PAR_FE_DetenerFacturacion'
+    end
+    object QParametrospar_ImprimirFacturaRestBar: TBooleanField
+      FieldName = 'par_ImprimirFacturaRestBar'
+    end
+    object QParametrospar_ImprimirCopiaRestBar: TBooleanField
+      FieldName = 'par_ImprimirCopiaRestBar'
     end
   end
 end

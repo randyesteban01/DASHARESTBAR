@@ -139,6 +139,9 @@ type
     QFormaPagoNumero_Tarjeta: TWideStringField;
     QFormaPagoBanco: TWideStringField;
     pclient: TPanel;
+    QVentasMesero: TStringField;
+    Label5: TLabel;
+    cboFormas: TComboBox;
     procedure btcloseClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormActivate(Sender: TObject);
@@ -237,6 +240,8 @@ begin
   mtProductos.Lines  := QTotalProductos.SQL;
   QFormaPago.Open;
 
+  cboFormas.Text:='Todos';
+
   btclose.Caption    := 'F1'+#13+'SALIR';
   btrefresh.Caption  := 'F2'+#13+'CONSULTAR';
   btanular.Caption   := 'F8'+#13+'ANULAR';
@@ -289,6 +294,16 @@ begin
   2: QVentas.SQL.Add('and f.estatus = '+QuotedStr('ABI'));
   3: QVentas.SQL.Add('and f.estatus = '+QuotedStr('FAC'));
   end;
+
+  case cboFormas.ItemIndex of
+  1: QVentas.SQL.Add('and p.Forma = '+QuotedStr('Tarjeta'));
+  2: QVentas.SQL.Add('and p.Forma = '+QuotedStr('Efectivo'));
+  3: QVentas.SQL.Add('and p.Forma = '+QuotedStr('Cheque'));
+  4: QVentas.SQL.Add('and p.Forma = '+QuotedStr('Credito'));
+  end;
+
+
+
 
 {  QVentas.SQL.Add('group by u.Nombre, f.FacturaID, f.Fecha, f.Exento, f.Grabado, f.Itbis,');
   QVentas.SQL.Add('f.Descuento, f.Propina, f.Total, f.Estatus, f.NCF, f.Cuadrada,');

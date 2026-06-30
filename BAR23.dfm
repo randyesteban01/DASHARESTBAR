@@ -1,6 +1,6 @@
 object frmMesas: TfrmMesas
   Left = 528
-  Top = 185
+  Top = 84
   BorderIcons = []
   BorderStyle = bsSingle
   Caption = 'Mesas'

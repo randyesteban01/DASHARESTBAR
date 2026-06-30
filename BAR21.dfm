@@ -1,6 +1,6 @@
 object frmAreas: TfrmAreas
   Left = 564
-  Top = 161
+  Top = 84
   BorderIcons = []
   BorderStyle = bsSingle
   Caption = 'Areas'

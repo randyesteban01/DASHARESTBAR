@@ -1,6 +1,6 @@
 object frmImpuestos: TfrmImpuestos
-  Left = 570
-  Top = 313
+  Left = 897
+  Top = 208
   BorderIcons = [biSystemMenu]
   BorderStyle = bsSingle
   Caption = 'Impuestos'

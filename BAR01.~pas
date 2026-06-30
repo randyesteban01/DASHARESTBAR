@@ -7,7 +7,8 @@ uses
   Dialogs, ToolWin, ActnMan, ActnCtrls, ActnMenus, XPStyleActnCtrls,
   ActnList, ExtCtrls, Buttons, ComCtrls, DIMime, DB, StdCtrls, IdMessage,
   IdBaseComponent, IdComponent, IdTCPConnection, IdTCPClient,
-  IdMessageClient, IdSMTP, QRExport, QRXMLSFilt, QRPDFFilt;
+  IdMessageClient, IdSMTP, QRExport, QRXMLSFilt, QRPDFFilt, OCXFISLib_TLB,iFiscal,vmaxFiscal,
+  Tfhkaif;
 
 type
   TfrmMain = class(TForm)
@@ -49,6 +50,16 @@ type
     Salidas: TAction;
     Clientes: TAction;
     consentradas: TAction;
+    admCierreTurno: TAction;
+    acierrejornada: TAction;
+    acancelar: TAction;
+    aherramienta: TAction;
+    consdev: TAction;
+    actPrinterFiscal: TAction;
+    actsubcategorias: TAction;
+    aguarnicion: TAction;
+    aterminos: TAction;
+    
     procedure acloseExecute(Sender: TObject);
     procedure FormKeyDown(Sender: TObject; var Key: Word;
       Shift: TShiftState);
@@ -74,13 +85,25 @@ type
     procedure SalidasExecute(Sender: TObject);
     procedure ClientesExecute(Sender: TObject);
     procedure consentradasExecute(Sender: TObject);
+    procedure admCierreTurnoExecute(Sender: TObject);
+    procedure acierrejornadaExecute(Sender: TObject);
+    procedure acancelarExecute(Sender: TObject);
+    procedure aherramientaExecute(Sender: TObject);
+    procedure consdevExecute(Sender: TObject);
+    procedure actPrinterFiscalExecute(Sender: TObject);
+    procedure actsubcategoriasExecute(Sender: TObject);
+    procedure aguarnicionExecute(Sender: TObject);
+    procedure aterminosExecute(Sender: TObject);
+ 
+
   private
     procedure ActivaForma(Unidad: TFormClass; Var Forma : TForm);
   public
     { Public declarations }
-    Usuario : Integer;
+    Usuario, vp_cia, vp_suc : Integer;
     Nombre  : String;
-    Supervisor, Cajero, Camarero : Boolean;
+    Supervisor, Cajero, Camarero, clogueoautomatico, puedecuadrar : Boolean;
+
   end;
 
 var
@@ -89,7 +112,12 @@ var
 implementation
 
 uses BAR03, BAR00, BAR05, BAR11, BAR14, BAR19, BAR21, BAR23, BAR25, BAR27,
-  BAR04, BAR37, BAR51, BAR56, BAR59, BAR58, BAR63, BAR65, BAR67;
+  BAR04, BAR37, BAR51, BAR56, BAR59, BAR58, BAR63, BAR65, BAR67, BAR71,
+  BAR45, BAR511,
+  BAR522,
+  BAR525,
+  BAR524,
+  BAR526;
 
 {$R *.dfm}
 
@@ -126,6 +154,10 @@ begin
   btcerrar.Caption := 'CERRAR'+#13+'SESION';
   stBar1.Panels[0].Text := 'USUARIO : '+Nombre;
   //dm.QEmpresa.Active :=true;
+  dm.getParametrosPrinterFiscal();
+
+  
+
 end;
 
 procedure TfrmMain.aposExecute(Sender: TObject);
@@ -199,7 +231,7 @@ begin
 
     dm.Query1.close;
     dm.Query1.sql.clear;
-    dm.Query1.sql.add('select usu_codigo UsuarioID, usu_nombre Nombre, usu_supervisor Supervisor, usu_cajero Cajero, usu_camarero Camarero, usu_status Estatus from Usuarios');
+    dm.Query1.sql.add('select usu_codigo UsuarioID, usu_nombre Nombre, usu_supervisor Supervisor, usu_cajero Cajero, usu_camarero Camarero, usu_status Estatus, usu_logueoautomatico as logueo,usu_cajerocuadrar from Usuarios');
    {if (copy(frmAcceso.edclave.Text,1,1) = ';') or (copy(frmAcceso.edclave.Text,1,1) = 'Ñ') then
     begin
       dm.Query1.sql.add('where tarjetaUsuarioID = :cla');
@@ -218,7 +250,7 @@ begin
     else if dm.Query1.FieldbyName('Estatus').AsString <> 'ACT' then
     begin
       showmessage('ESTE USUARIO NO ESTA ACTIVO');
-    end
+    end    
     else
     begin
       Usuario    := dm.Query1.FieldbyName('UsuarioID').AsInteger;
@@ -226,6 +258,9 @@ begin
       Supervisor := dm.Query1.FieldbyName('Supervisor').AsBoolean;
       Cajero     := dm.Query1.FieldbyName('Cajero').AsBoolean;
       Camarero   := dm.Query1.FieldbyName('Camarero').AsBoolean;
+      clogueoautomatico := dm.Query1.FieldbyName('logueo').AsBoolean;
+      puedecuadrar := dm.Query1.FieldbyName('usu_cajerocuadrar').AsBoolean;
+
       btabrir.Enabled  := frmMain.Usuario = 0;
       btcerrar.Enabled := frmMain.Usuario > 0;
       aabrir.Enabled   := frmMain.Usuario = 0;
@@ -234,16 +269,21 @@ begin
       stBar1.Panels[0].Text := 'USUARIO : '+Nombre;
       aproductos.Enabled  := Supervisor;
       acategoria.Enabled  := Supervisor;
+      actsubcategorias.Enabled  := Supervisor;
       segusuarios.Enabled := Supervisor;
       admmesas.Enabled    := Supervisor;
       admareas.Enabled    := Supervisor;
       consventas.Enabled  := Supervisor;
       admempresa.Enabled  := Supervisor;
-      admcuadre.Enabled   := Supervisor;
+
+      admcuadre.Enabled   := Supervisor or puedecuadrar;
+      aguarnicion.Enabled :=  supervisor;
+      aterminos.Enabled :=  supervisor;
       admprinter.Enabled  := supervisor;
       Proveedores.Enabled := supervisor;
       Entradas.Enabled    := supervisor;
       Salidas.Enabled     := supervisor;
+      segusuarios.Enabled := supervisor;
 
       //Enviando Mail
       {dm.Query1.close;
@@ -290,6 +330,20 @@ begin
       end;}
 
     end;
+          dm.Query1.close;
+          dm.Query1.SQL.clear;
+          dm.Query1.SQL.add('select top 1 emp_codigo from EmpAccesos where usu_codigo ='+IntToStr(Usuario));
+          dm.Query1.SQL.add('order by emp_codigo');
+          dm.Query1.Open;
+          if dm.Query1.RecordCount > 0 then
+          vp_cia := DM.Query1.Fields.FieldByName('emp_codigo').Value;
+          dm.Query1.Close;
+          dm.Query1.SQL.clear;
+          dm.Query1.SQL.add('select top 1 suc_codigo from Sucursal_Acceso where usu_codigo ='+IntToStr(Usuario));
+          dm.Query1.SQL.add('and emp_codigo = '+IntToStr(vp_cia)+ ' order by emp_codigo');
+          dm.Query1.Open;
+          if dm.Query1.RecordCount > 0 then
+          vp_suc := DM.Query1.Fields.FieldByName('suc_codigo').Value;
   end;
   frmAcceso.Release;
 end;
@@ -302,7 +356,8 @@ begin
   btpos.Enabled := Usuario > 0;
   aabrir.Enabled  := Usuario = 0;
   acerrar.Enabled := Usuario > 0;
-  Panel1.SetFocus;
+  if Panel1.Enabled and Panel1.Visible and Panel1.CanFocus then
+    Panel1.SetFocus;
 end;
 
 procedure TfrmMain.stBar1DrawPanel(StatusBar: TStatusBar;
@@ -352,12 +407,25 @@ begin
   stBar1.Panels[0].Text := 'USUARIO : '+Nombre;
 
   frmMain.aproductos.Enabled  := frmMain.Supervisor;
-  frmMain.acategoria.Enabled  := frmMain.Supervisor;
+  frmMain.acategoria.Enabled  := frmMain.Supervisor;    
   frmMain.segusuarios.Enabled := frmMain.Supervisor;
   frmMain.admmesas.Enabled    := frmMain.Supervisor;
   frmMain.admareas.Enabled    := frmMain.Supervisor;
   frmMain.consventas.Enabled  := frmMain.Supervisor;
   frmMain.admempresa.Enabled  := frmMain.Supervisor;
+  
+  frmMain.admcuadre.Enabled   := frmMain.Supervisor or frmMain.Cajero;
+  frmMain.admprinter.Enabled  := frmMain.Supervisor;
+  frmMain.aherramienta.Enabled:= frmMain.Supervisor;
+  frmMain.acierrejornada.Enabled:=frmMain.Supervisor;
+  frmMain.admCierreTurno.Enabled:=frmMain.Supervisor;
+  frmMain.acancelar.Enabled   := frmmain.Supervisor;
+  frmMain.actPrinterFiscal.Enabled := frmMain.Supervisor;
+  frmMain.consdev.Enabled := frmMain.Supervisor;
+  frmMain.aguarnicion.Enabled   := frmmain.Supervisor;
+  frmMain.aterminos.Enabled   := frmmain.Supervisor;
+  frmMain.actsubcategorias.Enabled   := frmmain.Supervisor;
+  frmMain.acancelar.Enabled   := frmmain.Supervisor;
 
 end;
 
@@ -365,9 +433,9 @@ procedure TfrmMain.segusuariosExecute(Sender: TObject);
 begin
   activaforma(TfrmUsuarios, tform(frmUsuarios));
   Panel1.Enabled := true;
-{  Application.CreateForm(tfrmUsuarios, frmUsuarios);
-  frmUsuarios.ShowModal;
-  frmUsuarios.Release; //}
+  //Application.CreateForm(tfrmUsuarios, frmUsuarios);
+  //frmUsuarios.ShowModal;
+  //frmUsuarios.Release;
 end;
 
 procedure TfrmMain.admareasExecute(Sender: TObject);
@@ -505,4 +573,99 @@ begin
      MDIChildren[Indice].BringToFront;
 end;
 
+
+
+
+procedure TfrmMain.admCierreTurnoExecute(Sender: TObject);
+var
+  err : integer;
+  arch : textfile;
+  puerto : string;
+  DriverFiscal1 : TDriverFiscal;
+begin
+  if MessageDlg('Está seguro que desea cerrar el turno?', mtConfirmation, [mbyes, mbno], 0) = mrYes then
+  begin
+    AssignFile(arch, 'puerto.ini');
+    reset(arch);
+    readln(arch, puerto);
+    closefile(arch);
+
+    DriverFiscal1 := TDriverFiscal.Create(Self);
+    DriverFiscal1.SerialNumber := '27-0163848-435';
+
+    err := DriverFiscal1.IF_OPEN(puerto, 9600);
+    err := DriverFiscal1.IF_WRITE('@DailyCloseX|P');
+    err := DriverFiscal1.IF_CLOSE;
+
+    DriverFiscal1.Destroy;
+  end;
+end;
+
+procedure TfrmMain.acierrejornadaExecute(Sender: TObject);
+begin
+  Application.CreateForm(tfrmCierreJornadaFiscal, frmCierreJornadaFiscal);
+end;
+
+procedure TfrmMain.acancelarExecute(Sender: TObject);
+var
+  err, error: integer;
+  arch : textfile;
+  puerto : string;
+  DriverFiscal1 : TDriverFiscal;
+begin
+  AssignFile(arch, 'puerto.ini');
+  reset(arch);
+  readln(arch, puerto);
+  closefile(arch);
+
+  DriverFiscal1 := TDriverFiscal.Create(Self);
+  DriverFiscal1.SerialNumber := '27-0163848-435';
+
+  err := DriverFiscal1.IF_OPEN(puerto, 9600);
+  err := DriverFiscal1.IF_WRITE('@TicketCancel');
+  err := DriverFiscal1.IF_CLOSE;
+
+  DriverFiscal1.Destroy;
+
+end;
+
+procedure TfrmMain.aherramientaExecute(Sender: TObject);
+begin
+  WinExec('EPSONDllExtraccionLV.exe', 1);
+end;
+
+procedure TfrmMain.consdevExecute(Sender: TObject);
+begin
+ Application.CreateForm(tfrmConsDev, frmConsDev);
+  frmConsDev.ShowModal;
+  frmConsDev.Release;
+end;
+
+procedure TfrmMain.actPrinterFiscalExecute(Sender: TObject);
+begin
+  activaforma(TfrmConfImpFiscal, tform(frmConfImpFiscal));
+  Panel1.Enabled := false;
+end;
+
+
+
+procedure TfrmMain.actsubcategoriasExecute(Sender: TObject);
+begin
+  activaforma(TfrmSubCategorias, tform(frmSubCategorias));
+  Panel1.Enabled := false;
+end;
+
+procedure TfrmMain.aguarnicionExecute(Sender: TObject);
+begin
+    activaforma(TfrmGuarniciones, tform(frmGuarniciones));
+    Panel1.Enabled := false;
+end;
+
+procedure TfrmMain.aterminosExecute(Sender: TObject);
+begin
+   activaforma(TfrmTerminos, tform(frmTerminos));
+    Panel1.Enabled := false;
+end;
+
 end.
+

@@ -64,15 +64,23 @@ end;
 
 procedure TfrmCombinado.btcloseClick(Sender: TObject);
 begin
-  if StrToFloat(format('%10.2F',[Total])) <= StrToFloat(format('%10.2F',[Monto])) then
+  if (StrToFloat(format('%10.2F',[Total])) <= StrToFloat(format('%10.2F',[Monto]))) then
   begin
     Facturo := 0;
     Close;
   end
   else
   begin
+   if (StrToFloat(format('%10.2F',[Monto]))<> 0) then
+   begin
     MessageDlg('DEBE COMPLETAR EL PAGO DE LA CUENTA',mtError,[mbok],0);
     DBGrid1.SetFocus;
+   end
+   else
+   begin
+    Facturo := 0;
+    Close;
+   end;
   end;
 end;
 
@@ -135,7 +143,7 @@ begin
     frmPOS.combinado := true;
     dm.Query1.Close;
     dm.Query1.SQL.Clear;
-    dm.Query1.SQL.Add('select max(DetalleID) as maximo from Factura_Forma_Pago');
+    dm.Query1.SQL.Add('select ISNULL(max(DetalleID),0) as maximo from RestBar_Factura_Forma_Pago');
     dm.Query1.SQL.Add('where cajeroid = :usu and facturaid = :fac');
     dm.Query1.SQL.Add('and cajaid = :caj');
     dm.Query1.Parameters.ParamByName('usu').Value := frmMain.Usuario; //frmPos.QFacturaCajeroID.Value;
@@ -155,12 +163,12 @@ begin
     frmPos.QForma.Post;
     frmPos.QForma.UpdateBatch;
 
-    frmPos.QFactura.Edit;
+  {  frmPos.QFactura.Edit;
     frmPos.QFacturaConbinado.Value := true;
     frmPos.QFacturaPagado.Value := frmPos.QFacturaPagado.Value + frmCash.Monto;
     frmPos.QFactura.Post;
     frmPos.QFactura.UpdateBatch;
-
+   }
     Monto := Monto + frmCash.Monto; //20171012 frmPos.QFacturaPagado.Value;
     lbmonto.Caption := 'MONTO PAGADO'+#13+format('%n',[Monto]);
 
@@ -200,16 +208,17 @@ begin
         frmPos.QDetalle.Edit;
         frmPos.QDetalleCajeroID.Value := frmMain.Usuario;
         frmPos.QDetalle.Post;
+        frmPos.QDetalle.Refresh;
         frmPos.QDetalle.Next;
       end;
       frmPos.QDetalle.First;
       frmPos.QDetalle.EnableControls;
       frmPos.QDetalle.UpdateBatch;
-  
+
     frmPOS.combinado := true;
     dm.Query1.Close;
     dm.Query1.SQL.Clear;
-    dm.Query1.SQL.Add('select max(DetalleID) as maximo from Factura_Forma_Pago');
+    dm.Query1.SQL.Add('select ISNULL(max(DetalleID),0) as maximo from RestBar_Factura_Forma_Pago');
     dm.Query1.SQL.Add('where cajeroid = :usu and facturaid = :fac');
     dm.Query1.SQL.Add('and cajaid = :caj');
     dm.Query1.Parameters.ParamByName('usu').Value := frmMain.Usuario; //frmPos.QFacturaCajeroID.Value;
@@ -231,12 +240,11 @@ begin
     frmPos.QForma.Post;
     frmPos.QForma.UpdateBatch;
 
-    frmPos.QFactura.Edit;
+   { frmPos.QFactura.Edit;
     frmPos.QFacturaConbinado.Value  := true;
     frmPos.QFacturaPagado.Value     := frmPos.QFacturaPagado.Value + strtofloat(frmTarjeta.edmonto.Text);
     frmPos.QFactura.Post;
-    frmPos.QFactura.UpdateBatch;
-
+    }
     Monto := Monto + strtofloat(frmTarjeta.edmonto.Text); //frmPos.QFacturaPagado.Value;
     lbmonto.Caption := 'MONTO PAGADO'+#13+format('%n',[Monto]);
 
@@ -280,11 +288,11 @@ begin
       dm.Query1.Parameters.ParamByName('dev').Value := strtoint(frmPOS.QFormaNumero_Tarjeta.AsString);
       dm.Query1.ExecSQL;
     end;
-    
-    frmPOS.QFactura.Edit;
+
+    {frmPOS.QFactura.Edit;
     frmPOS.QFacturaPagado.Value := frmPOS.QFacturaPagado.Value - frmPOS.QFormaMonto.Value;
-    frmPOS.QFactura.Post;
-    frmPOS.QFactura.UpdateBatch;
+    frmPOS.QFactura.Post;  }
+
 
     frmPOS.QForma.Delete;
     frmPOS.QForma.UpdateBatch;
@@ -301,7 +309,7 @@ begin
     begin
       lbdevuelta.Color   := clRed;
       lbdevuelta.Caption := 'MONTO A DEVOLVER'+#13+format('%n',[Devuelta]);
-    end;    
+    end;
   end;
 end;
 
@@ -327,7 +335,7 @@ begin
     frmPOS.combinado := true;
     dm.Query1.Close;
     dm.Query1.SQL.Clear;
-    dm.Query1.SQL.Add('select max(DetalleID) as maximo from Factura_Forma_Pago');
+    dm.Query1.SQL.Add('select ISNULL(max(DetalleID),0) as maximo from RestBar_Factura_Forma_Pago');
     dm.Query1.SQL.Add('where cajeroid = :usu and facturaid = :fac');
     dm.Query1.SQL.Add('and cajaid = :caj');
     dm.Query1.Parameters.ParamByName('usu').Value := frmMain.Usuario; //frmPos.QFacturaCajeroID.Value;
@@ -347,10 +355,11 @@ begin
     frmPos.QForma.Post;
     frmPos.QForma.UpdateBatch;
 
-    frmPos.QFactura.Edit;
-    frmPos.QFacturaPagado.Value := frmPos.QFacturaPagado.Value + strtofloat(frmCheque.edmonto.Text);
+    {frmPos.QFactura.Edit;
+    frmPos.QFacturaConbinado.Value  := true;
+    frmPos.QFacturaPagado.Value     := frmPos.QFacturaPagado.Value + strtofloat(frmCheque.edmonto.Text);
     frmPos.QFactura.Post;
-    frmPos.QFactura.UpdateBatch;
+     }
 
     Monto := Monto + strtofloat(frmCheque.edmonto.Text);
     lbmonto.Caption := 'MONTO PAGADO'+#13+format('%n',[Monto]);
@@ -383,7 +392,7 @@ begin
     frmPOS.combinado := true;
     dm.Query1.Close;
     dm.Query1.SQL.Clear;
-    dm.Query1.SQL.Add('select max(DetalleID) as maximo from Factura_Forma_Pago');
+    dm.Query1.SQL.Add('select ISNULL(max(DetalleID),0) as maximo from RestBar_Factura_Forma_Pago');
     dm.Query1.SQL.Add('where cajeroid = :usu and facturaid = :fac');
     dm.Query1.SQL.Add('and cajaid = :caj');
     dm.Query1.Parameters.ParamByName('usu').Value := frmMain.Usuario; //frmPos.QFacturaCajeroID.Value;
@@ -402,11 +411,11 @@ begin
     frmPos.QForma.Post;
     frmPos.QForma.UpdateBatch;
 
-    frmPos.QFactura.Edit;
-    frmPos.QFacturaPagado.Value := frmPos.QFacturaPagado.Value + strtofloat(frmBono.edmonto.Text);
+    {frmPos.QFactura.Edit;
+    frmPos.QFacturaConbinado.Value  := true;
+    frmPos.QFacturaPagado.Value     := frmPos.QFacturaPagado.Value + strtofloat(frmBono.edmonto.Text);
     frmPos.QFactura.Post;
-    frmPos.QFactura.UpdateBatch;
-
+        }
     Monto := strtofloat(frmBono.edmonto.Text);
     lbmonto.Caption := 'MONTO PAGADO'+#13+format('%n',[Monto]);
 
@@ -442,7 +451,7 @@ begin
         frmPOS.combinado := true;
         dm.Query1.Close;
         dm.Query1.SQL.Clear;
-        dm.Query1.SQL.Add('select max(DetalleID) as maximo from Factura_Forma_Pago');
+        dm.Query1.SQL.Add('select max(DetalleID) as maximo from RestBar_Factura_Forma_Pago');
         dm.Query1.SQL.Add('where cajeroid = :usu and facturaid = :fac');
         dm.Query1.SQL.Add('and cajaid = :caj');
         dm.Query1.Parameters.ParamByName('usu').Value := frmMain.Usuario; //frmPos.QFacturaCajeroID.Value;
@@ -461,10 +470,10 @@ begin
         frmPos.QForma.Post;
         frmPos.QForma.UpdateBatch;
 
-        frmPos.QFactura.Edit;
-        frmPos.QFacturaPagado.Value := frmPos.QFacturaPagado.Value + frmBuscaNC.QDevolucionTotal.Value;
-        frmPos.QFactura.Post;
-        frmPos.QFactura.UpdateBatch;
+       { frmPos.QFactura.Edit;
+        frmPos.QFacturaConbinado.Value  := true;
+        frmPos.QFacturaPagado.Value     := frmPos.QFacturaPagado.Value + frmBuscaNC.QDevolucionTotal.Value;
+        frmPos.QFactura.Post; }
 
         dm.Query1.Close;
         dm.Query1.SQL.Clear;

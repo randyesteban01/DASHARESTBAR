@@ -1,6 +1,6 @@
 object frmUsuarios: TfrmUsuarios
-  Left = 861
-  Top = 127
+  Left = 367
+  Top = 154
   BorderIcons = []
   BorderStyle = bsSingle
   Caption = 'Usuarios'
@@ -363,6 +363,7 @@ object frmUsuarios: TfrmUsuarios
       FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF}
     Layout = blGlyphTop
     ParentFont = False
+    Visible = False
     OnClick = btaddClick
   end
   object Panel1: TPanel
@@ -391,38 +392,35 @@ object frmUsuarios: TfrmUsuarios
       Columns = <
         item
           Expanded = False
-          FieldName = 'UsuarioID'
+          FieldName = 'usu_codigo'
           Title.Alignment = taCenter
+          Title.Caption = 'C'#243'digo'
           Width = 52
           Visible = True
         end
         item
           Expanded = False
-          FieldName = 'Nombre'
+          FieldName = 'usu_nombre'
+          Title.Caption = 'Nombre'
           Width = 250
           Visible = True
         end
         item
-          Alignment = taCenter
           Expanded = False
-          FieldName = 'Estatus'
-          Title.Alignment = taCenter
-          Width = 47
+          FieldName = 'usu_supervisor'
+          Title.Caption = 'Supervisor'
           Visible = True
         end
         item
           Expanded = False
-          FieldName = 'Supervisor'
+          FieldName = 'usu_Cajero'
+          Title.Caption = 'Cajero'
           Visible = True
         end
         item
           Expanded = False
-          FieldName = 'Cajero'
-          Visible = True
-        end
-        item
-          Expanded = False
-          FieldName = 'Camarero'
+          FieldName = 'usu_camarero'
+          Title.Caption = 'Camarero'
           Visible = True
         end>
     end
@@ -441,38 +439,42 @@ object frmUsuarios: TfrmUsuarios
     Connection = DM.ADOBar
     Parameters = <>
     SQL.Strings = (
+      ''
       'select'
-      'UsuarioID, Nombre, Clave, Estatus, Supervisor, Cajero, Camarero'
+      
+        'usu_codigo, usu_nombre, usu_clave, usu_status, usu_supervisor, u' +
+        'su_Cajero, usu_camarero,'
+      'usu_logueoautomatico'
       'from'
       'Usuarios'
+      ''
       'order by'
-      'UsuarioID')
+      'usu_codigo')
     Left = 240
     Top = 152
     object QUsuariosUsuarioID: TAutoIncField
-      FieldName = 'UsuarioID'
+      FieldName = 'usu_codigo'
       ReadOnly = True
     end
     object QUsuariosNombre: TWideStringField
-      FieldName = 'Nombre'
+      FieldName = 'usu_nombre'
       Size = 255
     end
     object QUsuariosClave: TWideStringField
-      FieldName = 'Clave'
-      Size = 255
-    end
-    object QUsuariosEstatus: TWideStringField
-      FieldName = 'Estatus'
+      FieldName = 'usu_clave'
       Size = 255
     end
     object QUsuariosSupervisor: TBooleanField
-      FieldName = 'Supervisor'
+      FieldName = 'usu_supervisor'
     end
     object QUsuariosCajero: TBooleanField
-      FieldName = 'Cajero'
+      FieldName = 'usu_Cajero'
     end
     object QUsuariosCamarero: TBooleanField
-      FieldName = 'Camarero'
+      FieldName = 'usu_camarero'
+    end
+    object QUsuariosusu_status: TStringField
+      FieldName = 'usu_status'
     end
   end
   object dsUsuarios: TDataSource

@@ -1,8 +1,8 @@
 object DM: TDM
   OldCreateOrder = False
   OnCreate = DataModuleCreate
-  Left = 715
-  Top = 293
+  Left = 971
+  Top = 420
   Height = 258
   Width = 418
   object ADOBar: TADOConnection
@@ -29,8 +29,11 @@ object DM: TDM
     Parameters = <>
     SQL.Strings = (
       
-        'select e.emp_codigo EmpresaId, emp_nombre Nombre, emp_rnc RNC, e' +
-        'mp_direccion Direccion, emp_telefono Telefono, emp_fax Fax,'
+        'select CASE WHEN P.par_itbisincluido = '#39'True'#39' then '#39'S'#39' else '#39'N'#39' ' +
+        'end PrecioIncluyeItbis,'
+      
+        'e.emp_codigo EmpresaId, emp_nombre Nombre, emp_rnc RNC, emp_dire' +
+        'ccion Direccion, emp_telefono Telefono, emp_fax Fax,'
       
         'emp_web Website, emp_email Correo, p.par_tkmensaje1 Mensaje1, p.' +
         'par_itbis Itbis, p.RestBar_PropLegal Propina,'
@@ -292,6 +295,10 @@ object DM: TDM
     object QEmpresaCortapapel: TWideStringField
       FieldName = 'Cortapapel'
       Size = 150
+    end
+    object QEmpresaPrecioIncluyeItbis: TStringField
+      FieldName = 'PrecioIncluyeItbis'
+      Size = 1
     end
   end
   object dsEmpresa: TDataSource
@@ -1106,6 +1113,30 @@ object DM: TDM
     end
     object QParametrospar_banca_apuestas: TBooleanField
       FieldName = 'par_banca_apuestas'
+    end
+    object QParametrosRestBar_FactConItbis: TBooleanField
+      FieldName = 'RestBar_FactConItbis'
+    end
+    object QParametrosPAR_MESERO: TBooleanField
+      FieldName = 'PAR_MESERO'
+    end
+    object QParametrosPAR_AutorizacionNoRequerida: TBooleanField
+      FieldName = 'PAR_AutorizacionNoRequerida'
+    end
+    object QParametrosUsa_FacturacionElectronica: TBooleanField
+      FieldName = 'Usa_FacturacionElectronica'
+    end
+    object QParametrosintegracion_luganis: TBooleanField
+      FieldName = 'integracion_luganis'
+    end
+    object QParametrosPAR_FE_DetenerFacturacion: TBooleanField
+      FieldName = 'PAR_FE_DetenerFacturacion'
+    end
+    object QParametrospar_ImprimirFacturaRestBar: TBooleanField
+      FieldName = 'par_ImprimirFacturaRestBar'
+    end
+    object QParametrospar_ImprimirCopiaRestBar: TBooleanField
+      FieldName = 'par_ImprimirCopiaRestBar'
     end
   end
 end

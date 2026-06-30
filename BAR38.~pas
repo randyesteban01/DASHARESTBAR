@@ -86,6 +86,7 @@ type
     QDetalleTotalesdescuentoTotal: TBCDField;
     QDetalleSubTotal: TCurrencyField;
     QDetalleMontoItbis: TCurrencyField;
+    QDetalleTotalItbis: TCurrencyField;
     procedure btcloseClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormKeyDown(Sender: TObject; var Key: Word;
@@ -191,19 +192,52 @@ procedure TfrmBuscaFactura.QDetalleCalcFields(DataSet: TDataSet);
 var
   Venta, NumItbis : Double;
 begin
-  if QDetalleItbis.Value then
+Venta := 0;
+NumItbis := 0;
+
+if QDetalleProductoID.Text <> '' then begin
+dm.Query1.Close;
+dm.Query1.SQL.Clear;
+dm.Query1.SQL.Add('select (cast(case when p.pro_itbis = ''S'' and pro_montoitbis > 0  then pro_montoitbis else 0 end as numeric(18,2))/100)+1 pro_itbis');
+dm.Query1.SQL.Add('from Productos P');
+dm.Query1.SQL.Add('inner join Parametros PA on p.emp_codigo = pa.emp_codigo');
+dm.Query1.SQL.Add('where pro_codigo = '+QDetalleProductoID.Text);
+dm.Query1.Open;
+NumItbis := DM.Query1.fieldbyname('pro_itbis').Value;
+end
+else
+NumItbis := 0;
+
+
+
+  if (NumItbis > 0) and (QDetalleItbis.Value = True) then
   begin
-    NumItbis := strtofloat(format('%10.2f',[(DM.QEmpresaItbis.Value/100)+1]));
-    Venta    := strtofloat(format('%10.2f',[(QDetallePrecio.value)/NumItbis]));
+    IF (DM.QParametrospar_itbisincluido.Value = 'True') and (QDetalleItbis.Value = True) then
+    Venta    := (QDetallePrecio.value/NumItbis)*QDetalleCantidad.Value else
+    Venta    := QDetallePrecio.value*QDetalleCantidad.Value;
     QDetalleConItbis.Value := 'G';
   end
   else
+  if (NumItbis > 0)  then
   begin
-    Venta    := strtofloat(format('%10.2f',[(QDetallePrecio.value)]));
+    IF (DM.QParametrospar_itbisincluido.Value = 'True')  then
+    Venta    := (QDetallePrecio.value/NumItbis)*QDetalleCantidad.Value else
+    Venta    := QDetallePrecio.value*QDetalleCantidad.Value;
+    QDetalleConItbis.Value := 'E';
+  end
+  else
+  begin
+    Venta    := (QDetallePrecio.value*QDetalleCantidad.Value);
+    QDetalleConItbis.Value := 'E';
   end;
+  QDetalleTotalDescuento.Value := (Venta * QDetalleDescuento.Value)/100;
+  QDetalleSubTotal.Value := Venta;
+  if QDetalleItbis.Value = True then
+  QDetalleTotalItbis.Value := (Venta-QDetalleTotalDescuento.Value) * (NumItbis-1) else
+  QDetalleTotalItbis.Value := 0;
 
-  QDetalleTotalDescuento.Value := (QDetallePrecio.value * QDetalledescuento.Value) / 100;  
-  QDetalleValor.Value := (QDetalleCantidad.Value * QDetallePrecio.Value)-QDetalleMontoItbis.Value;
+  QDetalleValor.Value := Round(Venta - QDetalleTotalDescuento.Value + QDetalleTotalItbis.Value);
+
 end;
 
 procedure TfrmBuscaFactura.QDetalleBeforeOpen(DataSet: TDataSet);

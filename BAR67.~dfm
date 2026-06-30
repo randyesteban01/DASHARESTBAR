@@ -479,7 +479,7 @@ object frmConsVentasMod: TfrmConsVentasMod
   object GroupBox2: TGroupBox
     Left = 592
     Top = 8
-    Width = 289
+    Width = 401
     Height = 73
     Caption = 'Filtro de Busqueda'
     TabOrder = 1
@@ -496,6 +496,13 @@ object frmConsVentasMod: TfrmConsVentasMod
       Width = 36
       Height = 13
       Caption = 'Estatus'
+    end
+    object Label5: TLabel
+      Left = 304
+      Top = 24
+      Width = 81
+      Height = 13
+      Caption = 'Formas de pago:'
     end
     object ckCajero: TCheckBox
       Left = 16
@@ -548,6 +555,22 @@ object frmConsVentasMod: TfrmConsVentasMod
         'Anulados'
         'Abiertos'
         'Facturados')
+    end
+    object cboFormas: TComboBox
+      Left = 304
+      Top = 44
+      Width = 89
+      Height = 21
+      Style = csDropDownList
+      ItemHeight = 13
+      TabOrder = 4
+      OnClick = cbcuadreClick
+      Items.Strings = (
+        'Todos'
+        'Tarjeta'
+        'Efectivo'
+        'Cheque'
+        'Credito')
     end
   end
   object PageControl1: TPageControl
@@ -677,6 +700,12 @@ object frmConsVentasMod: TfrmConsVentasMod
                 FieldName = 'Nombre'
                 Title.Caption = 'Cajero'
                 Width = 110
+                Visible = True
+              end
+              item
+                Expanded = False
+                FieldName = 'Mesero'
+                Width = 150
                 Visible = True
               end
               item
@@ -1252,14 +1281,17 @@ object frmConsVentasMod: TfrmConsVentasMod
       'f.rnc, f.Nombre as Cliente, f.CajaID, f.CajeroID, f.Hora'
       
         ', (select sum(d.Cantidad*d.costo) from Factura_Items d where f.f' +
-        'acturaid = d.facturaid)as Costo'
+        'acturaid = d.facturaid)as Costo,'
+      'v.ven_nombre as mesero'
       'from'
-      'Factura_RestBar f, usuarios u , Restbar_factura_forma_pago p'
-      'where f.cajeroid = u.usu_codigo'
-      'and f.FacturaID = p.FacturaID'
-      'and f.CajaID = p.CajaID'
-      'and f.CajeroID = p.CajeroID'
-      'and f.hora between :fec1 and :fec2')
+      'Factura_RestBar f inner join usuarios u '
+      'on f.cajeroid = u.usu_codigo'
+      'inner join Restbar_factura_forma_pago p'
+      'on f.FacturaID = p.FacturaID'
+      'and f.CajaID = p.CajaID and f.CajeroID = p.CajeroID'
+      'left join Vendedores v on v.ven_codigo= f.mese_codigo'
+      'where '
+      'f.hora between :fec1 and :fec2')
     Left = 112
     Top = 240
     object QVentasFacturaID: TIntegerField
@@ -1333,6 +1365,10 @@ object frmConsVentasMod: TfrmConsVentasMod
     object QVentasCosto: TFloatField
       FieldName = 'Costo'
       ReadOnly = True
+    end
+    object QVentasMesero: TStringField
+      FieldName = 'Mesero'
+      Size = 50
     end
   end
   object dsVentas: TDataSource
