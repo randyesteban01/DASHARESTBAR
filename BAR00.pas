@@ -5483,8 +5483,8 @@ if Trim(dm.QEmpresaMensaje4.AsString) <> '' then
     writeln(arch, chr(27) + chr(109));
   end;
 
-  //IF vl_cuenta =  False THEN
-  pnabrircaja;
+  if not vl_cuenta then
+    pnabrircaja;
 
   closefile(Arch);
   winexec(pchar({ExtractFilePath(Application.ExeName)+}'.\imp.bat'),0);
