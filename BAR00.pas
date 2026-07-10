@@ -644,7 +644,8 @@ uses BAR02, BAR04, BAR08, BAR09, BAR01, BAR15, BAR16, BAR17,
   BAR63,
   BAR521,
    Types,DelphiZXingQRCode,
-  uOpcionesProducto, FacturacionElectronicaDGII_TLB,frxBarcode;
+  uOpcionesProducto, FacturacionElectronicaDGII_TLB,frxBarcode,
+  uContabilidadRestBar;
 
 {$R *.dfm}
 
@@ -4343,6 +4344,10 @@ else
         dm.Query1.ExecSQL;
        end;
 
+      IntegrarPostFacturacion(dm.ADOBar,
+        QFacturaemp_codigo.Value, QFacturasuc_codigo.Value,
+        QFacturaFacturaID.Value, False);
+
        // Despu�s de QFactura.Post; y antes de "//Imprimiendo" / ImpTicket
       if (dm.QParametrosUsa_FacturacionElectronica.Value and ckConItbis.Checked) then
       begin
@@ -4756,6 +4761,10 @@ else
         dm.Query1.Parameters.ParamByName('mesa').Value := QFacturaMesaID.Value;
         dm.Query1.ExecSQL;
       end;
+
+      IntegrarPostFacturacion(dm.ADOBar,
+        QFacturaemp_codigo.Value, QFacturasuc_codigo.Value,
+        QFacturaFacturaID.Value, False);
 
              // Despu�s de QFactura.Post; y antes de "//Imprimiendo" / ImpTicket
       if (dm.QParametrosUsa_FacturacionElectronica.Value and ckConItbis.Checked) then
@@ -5591,6 +5600,7 @@ else
       QFacturaFecha.Value   := Date;
       QFacturaTipoNCF.Value := TipoNCF;
       QFacturaCredito.Value := True;
+      QFacturaCLI_CODIGO.Value := cliente;
       //QFacturaNombre.Value  := frmNombreCliente.edcliente.Text;
       QFacturaConItbis.Value   := ckItbis;
       QFacturaConPropina.Value := ckPropina;
@@ -5651,74 +5661,16 @@ else
 
       QFactura.Post;
         credito := 'True';
-       // decodedate (date, ano, mes, dia);
 
-        dm.Query1.close;
-        dm.Query1.sql.clear;
-        dm.Query1.sql.add('select isnull(max(mov_numero),0) as maximo');
-        dm.Query1.sql.add('from movimientos where emp_codigo = :emp');
-        dm.Query1.sql.add('and mov_tipo = '+#39+'TK'+#39);
-        dm.Query1.Parameters.parambyname('emp').Value := empresa;
-        dm.Query1.open;
-        MovFactura := dm.query1.FieldByName('maximo').AsInteger + 1;
-
-        dm.Query1.close;
-        dm.Query1.sql.clear;
-        dm.Query1.sql.add('select max(mov_secuencia) as maximo');
-        dm.Query1.sql.add('from movimientos where emp_codigo = :emp');
-        dm.Query1.sql.add('and mov_tipo = '+#39+'TK'+#39);
-        dm.Query1.Parameters.parambyname('emp').Value := empresa;
-        dm.Query1.open;
-        num := dm.query1.FieldByName('maximo').AsInteger + 1;
-
-        dm.Query1.close;
-        dm.Query1.sql.clear;
-        dm.Query1.sql.add('select cpa_dias from condiciones');
-        dm.Query1.sql.add('where emp_codigo = '+inttostr(empresa));
-        dm.Query1.sql.add('and cpa_codigo in (select cpa_codigo from clientes');
-        dm.Query1.sql.add('where emp_Codigo = :emp and cli_codigo = :cli)');
-        dm.Query1.Parameters.ParamByName('emp').Value := empresa;
-        dm.Query1.Parameters.ParamByName('cli').Value := cliente;
-        dm.Query1.Open;
-        diasvence := dm.query1.FieldByName('cpa_dias').AsInteger;
-
-        vence := DM.getFechaServidor + diasvence;
-
-        //Inseretando en movimientos
-        dm.Query1.close;
-        dm.Query1.sql.clear;
-        dm.Query1.sql.add('insert into movimientos(emp_codigo,suc_codigo,');
-        dm.Query1.sql.add('mov_tipo, mov_numero, mov_fecha, mov_monto,');
-        dm.Query1.sql.add('mov_abono, mov_status, cli_codigo, ');
-        dm.Query1.sql.add('mov_secuencia, fac_forma, tfa_codigo, MOV_FECHAVENCE, mon_codigo, mov_tasa)');
-        dm.Query1.sql.add('values (:emp, :suc,'+#39+'TK'+#39+', :num, :fecha, :total,');
-        dm.Query1.sql.add('0, '+#39+'PEN'+#39+', :cliente, :sec, '+#39+'X'+#39+', 0, :vence, 1, 1)');
-        dm.Query1.Parameters.parambyname('cliente').Value := cliente;
-        dm.Query1.Parameters.parambyname('fecha').Value   := DM.getFechaServidor;
-        dm.Query1.Parameters.parambyname('total').Value   := QFacturaTotal.Value;
-        dm.Query1.Parameters.parambyname('emp').Value     := QFacturasuc_codigo.Value;
-        dm.Query1.Parameters.parambyname('suc').Value     := QFacturasuc_codigo.Value;
-        dm.Query1.Parameters.parambyname('num').Value     := MovFactura;
-        dm.Query1.Parameters.parambyname('sec').Value     := num;
-        dm.Query1.Parameters.parambyname('vence').Value   := vence;
-        dm.Query1.ExecSQL;
-
-        //actualizando balance del cliente
-        dm.Query1.close;
-        dm.Query1.sql.clear;
-        dm.Query1.sql.add('update clientes set cli_balance = cli_balance + :monto');
-        dm.Query1.sql.add('where cli_codigo = :cliente');
-        dm.Query1.sql.add('and emp_codigo = :compania');
-        dm.Query1.Parameters.parambyname('cliente').Value  := cliente;
-        dm.Query1.Parameters.parambyname('monto').Value    := QFacturaTotal.Value;
-        dm.Query1.Parameters.parambyname('compania').Value := empresa;
-        dm.Query1.ExecSQL;
-
+        MovFactura := QFacturaFacturaID.Value;
         QFactura.Edit;
         QFacturamov_numero.Value := MovFactura;
         QFactura.Post;
         QFactura.UpdateBatch;
 
+        IntegrarPostFacturacion(dm.ADOBar,
+          QFacturaemp_codigo.Value, QFacturasuc_codigo.Value,
+          QFacturaFacturaID.Value, True);
 
       if vl_mesa > 0 then
       begin
@@ -6216,6 +6168,10 @@ else
         dm.Query1.Parameters.ParamByName('mesa').Value := QFacturaMesaID.Value;
         dm.Query1.ExecSQL;
       end;
+
+      IntegrarPostFacturacion(dm.ADOBar,
+        QFacturaemp_codigo.Value, QFacturasuc_codigo.Value,
+        QFacturaFacturaID.Value, False);
 
              // Despu�s de QFactura.Post; y antes de "//Imprimiendo" / ImpTicket
       if (dm.QParametrosUsa_FacturacionElectronica.Value and ckConItbis.Checked) then

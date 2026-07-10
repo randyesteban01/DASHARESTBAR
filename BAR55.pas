@@ -139,7 +139,8 @@ var
 
 implementation
 
-uses BAR00, BAR04, BAR32, BAR16, BAR01, BAR28, BAR30, FacturacionElectronicaDGII_TLB;
+uses BAR00, BAR04, BAR32, BAR16, BAR01, BAR28, BAR30, FacturacionElectronicaDGII_TLB,
+  uContabilidadRestBar;
 
 {$R *.dfm}
 
@@ -1255,6 +1256,25 @@ begin
       QFactura.Post;
       QFactura.UpdateBatch;
 
+      if (vBtn = btcredito) and Assigned(frmNombreCliente) and
+         (frmNombreCliente.Acepto = 1) then
+      begin
+        dm.Query1.Close;
+        dm.Query1.SQL.Text :=
+          'UPDATE Factura_RestBar SET CLI_CODIGO = :cli, mov_numero = :mov ' +
+          'WHERE EMP_CODIGO = :emp AND SUC_CODIGO = :suc AND FacturaID = :fac ' +
+          'AND CajeroID = :caj AND CajaID = :caja';
+        dm.Query1.Parameters.ParamByName('cli').Value :=
+          frmNombreCliente.QClientescli_codigo.Value;
+        dm.Query1.Parameters.ParamByName('mov').Value := QFacturaFacturaID.Value;
+        dm.Query1.Parameters.ParamByName('emp').Value := QFacturaemp_codigo.Value;
+        dm.Query1.Parameters.ParamByName('suc').Value := QFacturasuc_codigo.Value;
+        dm.Query1.Parameters.ParamByName('fac').Value := QFacturaFacturaID.Value;
+        dm.Query1.Parameters.ParamByName('caj').Value := QFacturaCajeroID.Value;
+        dm.Query1.Parameters.ParamByName('caja').Value := QFacturaCajaID.Value;
+        dm.Query1.ExecSQL;
+      end;
+
       if esUltimaDivision then
         LimpiarTodasDivisionesMesa
       else
@@ -1319,6 +1339,10 @@ begin
          end;{1}
       MPagado  := vMonto;
       Devuelta := vDevuelta;
+
+      IntegrarPostFacturacion(dm.ADOBar,
+        QFacturaemp_codigo.Value, QFacturasuc_codigo.Value,
+        QFacturaFacturaID.Value, vBtn = btcredito);
 
       if (qCuenta.RecordCount = 1) and (QDetalle.RecordCount = 0) then
       begin

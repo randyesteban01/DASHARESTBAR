@@ -78,7 +78,8 @@ uses
   uOpcionesProducto in 'uOpcionesProducto.pas' {frmOpcionesProducto},
   FacturacionElectronicaDGII_TLB in 'C:\Program Files (x86)\Borland\Delphi7\Imports\FacturacionElectronicaDGII_TLB.pas',
   DelphiZXingQRCode in 'DelphiZXingQRCode.pas',
-  uConsultaRNCDGII in 'uConsultaRNCDGII.pas';
+  uConsultaRNCDGII in 'uConsultaRNCDGII.pas',
+  uContabilidadRestBar in 'uContabilidadRestBar.pas';
 
 {$R *.res}
 
