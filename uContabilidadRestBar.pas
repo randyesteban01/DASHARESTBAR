@@ -468,12 +468,14 @@ begin
     Q.Connection := AConnection;
     IsPorFamilia := False;
     Q.SQL.Text :=
-      'SELECT CAST(ISNULL(par_codifica_venta_familia,0) AS INT) AS PorFam ' +
+      'SELECT ISNULL(par_codifica_venta_familia, ''False'') AS PorFam ' +
       'FROM ContParametros';
     try
       Q.Open;
       if not Q.IsEmpty then
-        IsPorFamilia := Q.FieldByName('PorFam').AsInteger = 1;
+        IsPorFamilia :=
+          (CompareText(Trim(Q.FieldByName('PorFam').AsString), 'True') = 0) or
+          (Trim(Q.FieldByName('PorFam').AsString) = '1');
     except
       IsPorFamilia := False;
     end;
