@@ -115,8 +115,9 @@ begin
   frmPOS.ckItbis := False;
   frmPOS.QFactura.Edit;
   frmPOS.QFacturaConItbis.AsBoolean := frmPOS.ckItbis;
-  frmPOS.QFacturaimprimeNCF.Value := frmPOS.ckItbis;
-  frmPOS.ckNCF                    := frmPOS.ckItbis;
+  // Exoneracion (B14) no lleva ITBIS, pero si debe imprimir NCF
+  frmPOS.QFacturaimprimeNCF.Value := True;
+  frmPOS.ckNCF                    := True;
   frmPOS.Totalizar;
 
     Acepto := 1;

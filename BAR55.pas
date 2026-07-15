@@ -1532,12 +1532,14 @@ begin
       begin
         dm.Query1.Close;
         dm.Query1.SQL.Clear;
-        dm.Query1.SQL.Add('SELECT nombre_dgii FROM TipoNCF');
-        dm.Query1.SQL.Add('WHERE cod_dgii = :cod_dgii');
-        dm.Query1.Parameters.ParamByName('cod_dgii').Value := frmPOS.QFacturaTipoNCF.Value;
+        dm.Query1.SQL.Add('SELECT ISNULL(NULLIF(LTRIM(RTRIM(nombre_dgii)), ''''), tip_nombre) AS Nombre');
+        dm.Query1.SQL.Add('FROM TipoNCF');
+        dm.Query1.SQL.Add('WHERE emp_codigo = :emp AND tip_codigo = :tipo');
+        dm.Query1.Parameters.ParamByName('emp').Value := DM.QEmpresaEmpresaID.Value;
+        dm.Query1.Parameters.ParamByName('tipo').Value := frmPOS.QFacturaTipoNCF.Value;
         dm.Query1.Open;
 
-        writeln(arch, dm.centro(dm.Query1.FieldByName('nombre_dgii').AsString));
+        writeln(arch, dm.centro(dm.Query1.FieldByName('Nombre').AsString));
       end
       else
       begin
@@ -1605,6 +1607,22 @@ begin
     begin
       writeln(arch, ' ');
       writeln(arch, 'eNCF: '+encf);
+    end
+    else if Trim(frmPOS.QFacturaNCF.Value) <> '' then
+    begin
+      writeln(arch, 'NCF    : '+frmPOS.QFacturaNCF.Value);
+      with dm.Query1 do begin
+        Close;
+        sql.Clear;
+        SQL.Add('select FechaVenc ');
+        sql.Add('from NCF ');
+        sql.Add('where VerificaVenc = 1');
+        sql.Add('and NCF_Fijo   = LEFT(:NCF,3)');
+        Parameters.ParamByName('NCF').Value := frmPOS.QFacturaNCF.Text;
+        Open;
+        if not IsEmpty then
+          writeln(arch,'Fecha Venc.: '+FieldByName('FechaVenc').text);
+      end;
     end;
 
    //buscar vencimiento
@@ -1624,7 +1642,7 @@ begin
         Parameters.ParamByName('tipo').Value       := frmPOS.QFacturaTipoeNCF.Value;
         Open;
 
-        if not IsEmpty then
+        if not IsEmpty and (Trim(encf) <> '') then
           Writeln(arch, 'Fecha Venc.: ' + FieldByName('FechaVencimientoSecuenciaDGII').AsString);
       end;
       end
