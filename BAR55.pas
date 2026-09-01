@@ -829,7 +829,12 @@ begin
      if frmPOS.ckPropina then
         begin
         if frmPOS.QFacturaMesaID.Value > 0 then
-          vTPropina  := ((TGrabado + TExento) * dm.QEmpresaPropina.Value)/100.0;
+        begin
+          if frmPOS.QFacturaDecuentoGlobal.Value then
+            vTPropina  := ((vSubTotalCta - vDescGlobal) * dm.QEmpresaPropina.Value)/100.0
+          else
+            vTPropina  := ((TGrabado + TExento) * dm.QEmpresaPropina.Value)/100.0;
+        end;
        end
        else
         vTPropina := 0;
@@ -1085,7 +1090,12 @@ begin
    if frmPOS.ckPropina then
         begin
         if frmPOS.QFacturaMesaID.Value > 0 then
-          vTPropina  := ((TGrabado + TExento) * dm.QEmpresaPropina.Value)/100.0;
+        begin
+          if frmPOS.QFacturaDecuentoGlobal.Value then
+            vTPropina  := ((vSubTotalDiv - vDescuento) * dm.QEmpresaPropina.Value)/100.0
+          else
+            vTPropina  := ((TGrabado + TExento) * dm.QEmpresaPropina.Value)/100.0;
+        end;
        end
        else
         vTPropina := 0;

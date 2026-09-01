@@ -1692,6 +1692,7 @@ begin
 
   btnmeserofd.Visible := True;
   lbUsuario.Caption := frmMain.Nombre;
+  ckConItbis.Enabled := frmMain.Supervisor;
   lbEmpresa.Caption := dm.QEmpresaNombre.Value;
   CurrencyString := '';
   TipoNCF := 1;
@@ -2380,15 +2381,7 @@ begin
     end;
 {verificar descueto 20170420}
       tDescuento := tDescuento + QDetalleTotalDescuento.Value;
-      SubTotal := SubTotal + QDetalleSubTotal.Value-tDescuento; //+ QDetalleMontoItbis.Value;
-
-   if ckPropina then
-    begin
-      if QFacturaMesaID.Value > 0 then
-        TPropina := ((SubTotal) * dm.QEmpresaPropina.Value)/100
-      else
-        TPropina := 0;
-    end;
+      SubTotal := SubTotal + QDetalleSubTotal.Value;
 
     if frmpos.ckItbis then begin
     //  if QDetalleMontoItbis.Value > 0 then
@@ -2400,6 +2393,14 @@ begin
     QDetalle.First;
     QDetalle.GotoBookmark(t);
     QDetalle.EnableControls;
+
+    if ckPropina then
+    begin
+      if QFacturaMesaID.Value > 0 then
+        TPropina := ((SubTotal - TDescuento) * dm.QEmpresaPropina.Value)/100
+      else
+        TPropina := 0;
+    end;
 
     if QFacturaDecuentoGlobal.Value then begin
     if TDescuento > 0 then begin
@@ -5972,6 +5973,7 @@ begin
   btncf.Enabled := (frmMain.Supervisor) or (frmMain.Cajero);
   btdescuento.Enabled := (frmMain.Supervisor) or (frmMain.Cajero);
   btCombinado.Enabled := (frmMain.Supervisor) or (frmMain.Cajero);
+  ckConItbis.Enabled := frmMain.Supervisor;
 
   dm.getParametrosPrinterFiscal();
 end;
@@ -8227,6 +8229,18 @@ var
   ValorAnterior: Boolean;
 begin
 UserInactiveTime := 0;
+  if not frmMain.Supervisor then
+  begin
+    FCambiandoItbis := True;
+    try
+      ckConItbis.Checked := ckItbis;
+    finally
+      FCambiandoItbis := False;
+    end;
+    ShowMessage('SOLO LOS SUPERVISORES PUEDEN CAMBIAR LA CONFIGURACION DE ITBIS');
+    Exit;
+  end;
+
   if FCambiandoItbis then
     Exit;
 
@@ -8435,6 +8449,7 @@ begin
       btncf.Enabled := (frmMain.Supervisor) or (frmMain.Cajero);
       btdescuento.Enabled := (frmMain.Supervisor) or (frmMain.Cajero);
       btCombinado.Enabled := (frmMain.Supervisor) or (frmMain.Cajero);
+      ckConItbis.Enabled := frmMain.Supervisor;
       lbUsuario.Caption := frmMain.Nombre;
 
       UserInactiveTime := 0;

@@ -28,7 +28,7 @@ var
 
 implementation
 
-uses BAR00;
+uses BAR00, BAR01;
 
 {$R *.dfm}
 
@@ -37,6 +37,7 @@ begin
   btclose.Caption   := 'F1'+#13+'SALIR';
   ckitbis.Checked   := frmPOS.ckItbis;
   ckpropina.Checked := frmPOS.ckPropina;
+  ckitbis.Enabled   := frmMain.Supervisor;
 end;
 
 procedure TfrmImpuestos.btcloseClick(Sender: TObject);
@@ -54,6 +55,13 @@ end;
 
 procedure TfrmImpuestos.ckitbisClick(Sender: TObject);
 begin
+  if not frmMain.Supervisor then
+  begin
+    ckitbis.Checked := frmPOS.ckItbis;
+    ShowMessage('SOLO LOS SUPERVISORES PUEDEN CAMBIAR LA CONFIGURACION DE ITBIS');
+    Exit;
+  end;
+
   frmPOS.ckItbis := ckitbis.Checked;
   frmPOS.ckConItbis.Checked :=ckitbis.Checked;
   frmPOS.QFactura.Edit;
