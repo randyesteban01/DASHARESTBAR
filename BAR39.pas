@@ -58,7 +58,6 @@ begin
   if not frmMain.Supervisor then
   begin
     ckitbis.Checked := frmPOS.ckItbis;
-    ShowMessage('SOLO LOS SUPERVISORES PUEDEN CAMBIAR LA CONFIGURACION DE ITBIS');
     Exit;
   end;
 

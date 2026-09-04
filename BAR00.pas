@@ -8237,7 +8237,6 @@ UserInactiveTime := 0;
     finally
       FCambiandoItbis := False;
     end;
-    ShowMessage('SOLO LOS SUPERVISORES PUEDEN CAMBIAR LA CONFIGURACION DE ITBIS');
     Exit;
   end;
 
