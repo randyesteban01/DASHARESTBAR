@@ -139,7 +139,7 @@ var
 
 implementation
 
-uses BAR00, BAR04, BAR32, BAR16, BAR01, BAR28, BAR30, FacturacionElectronicaDGII_TLB,
+uses BAR00, BAR04, BAR32, BAR16, BAR01, BAR28, BAR30, FacturacionElectronicaDGII_TLB, ComObj,
   uContabilidadRestBar;
 
 {$R *.dfm}
@@ -1017,7 +1017,7 @@ function TfrmDividirPago.CobrarDivision(vBtn: TSpeedButton; const div_grupo: str
     ,MPagado ,vUsd ,vEur , vMonto ,vDevuelta: double;
   nuevoFac, tipoNcf: Integer;
   esUltimaDivision: Boolean;
-    Servicio: FacturaElectronicaService;
+    Servicio: OleVariant;
    resultado: WideString;
    ok: Boolean;
    msg: string;
@@ -1401,7 +1401,7 @@ begin
             dm.Query1.Parameters.ParamByName('emp').Value := DM.QEmpresaEmpresaID.Value;
             dm.Query1.Open;
             vl_emp_rnc := dm.Query1.FieldByName('emp_rnc').AsString;
-            Servicio := CoFacturaElectronicaService.Create;
+            Servicio := CreateOleObject('FacturacionElectronicaDGII.FacturaElectronicaService');
 
             if dm.QParametrosintegracion_luganis.Value then
               ShowMessage('Integraci�n Luganis no est� implementada para RestBar en la DLL; use DGII.')

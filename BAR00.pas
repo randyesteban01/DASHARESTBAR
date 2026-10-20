@@ -644,7 +644,7 @@ uses BAR02, BAR04, BAR08, BAR09, BAR01, BAR15, BAR16, BAR17,
   BAR63,
   BAR521,
    Types,DelphiZXingQRCode,
-  uOpcionesProducto, FacturacionElectronicaDGII_TLB,frxBarcode,
+  uOpcionesProducto, FacturacionElectronicaDGII_TLB, ComObj, frxBarcode,
   uContabilidadRestBar;
 
 {$R *.dfm}
@@ -4219,7 +4219,7 @@ end;
 
 procedure TfrmPOS.btcashClick(Sender: TObject);
 var   
-Servicio: FacturaElectronicaService;
+Servicio: OleVariant;
    resultado: WideString;
    ok: Boolean;
    msg: string;
@@ -4397,7 +4397,7 @@ else
             dm.Query1.Open;
             vl_encf := dm.Query1.FieldByName('eNCF').AsString;
 
-            Servicio := CoFacturaElectronicaService.Create;
+            Servicio := CreateOleObject('FacturacionElectronicaDGII.FacturaElectronicaService');
 
 
                 if dm.QParametrosintegracion_luganis.Value then
@@ -4656,7 +4656,7 @@ end;
 
 procedure TfrmPOS.bttarjetaClick(Sender: TObject);
 var   
-Servicio: FacturaElectronicaService;
+Servicio: OleVariant;
    resultado: WideString;
    ok: Boolean;
    msg: string;
@@ -4811,7 +4811,7 @@ else
             dm.Query1.Open;
             vl_encf := dm.Query1.FieldByName('eNCF').AsString;
 
-            Servicio := CoFacturaElectronicaService.Create;
+            Servicio := CreateOleObject('FacturacionElectronicaDGII.FacturaElectronicaService');
 
             if dm.QParametrosintegracion_luganis.Value then
               ShowMessage('Integraci�n Luganis no est� implementada para RestBar en la DLL; use DGII.')
@@ -5557,7 +5557,7 @@ var
   num, diasvence, periodo, sec, descuentocxc : integer;
   vence : tdatetime;
    consulta: String;
-Servicio: FacturaElectronicaService;
+Servicio: OleVariant;
    resultado: WideString;
    ok: Boolean;
    msg: string;
@@ -5748,7 +5748,7 @@ else
             dm.Query1.Open;
             vl_encf := dm.Query1.FieldByName('eNCF').AsString;
 
-            Servicio := CoFacturaElectronicaService.Create;
+            Servicio := CreateOleObject('FacturacionElectronicaDGII.FacturaElectronicaService');
 
             if dm.QParametrosintegracion_luganis.Value then
               ShowMessage('Integraci�n Luganis no est� implementada para RestBar en la DLL; use DGII.')
@@ -6087,7 +6087,7 @@ end;
 
 procedure TfrmPOS.btCombinadoClick(Sender: TObject);
 var   
-Servicio: FacturaElectronicaService;
+Servicio: OleVariant;
    resultado: WideString;
    ok: Boolean;
    msg: string;
@@ -6238,7 +6238,7 @@ else
             dm.Query1.Open;
             vl_encf := dm.Query1.FieldByName('eNCF').AsString;
 
-            Servicio := CoFacturaElectronicaService.Create;
+            Servicio := CreateOleObject('FacturacionElectronicaDGII.FacturaElectronicaService');
 
             if dm.QParametrosintegracion_luganis.Value then
               ShowMessage('Integraci�n Luganis no est� implementada para RestBar en la DLL; use DGII.')
@@ -8237,6 +8237,7 @@ UserInactiveTime := 0;
     finally
       FCambiandoItbis := False;
     end;
+    ShowMessage('SOLO LOS SUPERVISORES PUEDEN CAMBIAR LA CONFIGURACION DE ITBIS');
     Exit;
   end;
 
